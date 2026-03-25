@@ -1,0 +1,3341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Raphael Cuadra — AI Automation Specialist Philippines | roctechva.cloud</title>
+  <meta name="description" content="Raphael Cuadra builds smart automation systems for small businesses using n8n, Make.com, and Zapier. AI Automation Specialist based in the Philippines.">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="Raphael Cuadra">
+  <meta name="keywords" content="AI automation specialist Philippines, n8n automation, Make.com workflows, Zapier expert, business automation Philippines, workflow automation freelancer">
+  <!-- Open Graph -->
+  <meta property="og:type"        content="website">
+  <meta property="og:url"         content="https://roctechva.cloud">
+  <meta property="og:title"       content="Raphael Cuadra — AI Automation Specialist Philippines">
+  <meta property="og:description" content="I build automations that fix lost leads, missed follow-ups, and manual copy-paste — so your business runs even when you're not looking.">
+  <meta property="og:image"       content="https://roctechva.cloud/images/og-image.png">
+  <!-- Twitter Card -->
+  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:title"       content="Raphael Cuadra — AI Automation Specialist Philippines">
+  <meta name="twitter:description" content="Lost leads. Missed follow-ups. Hours wasted on copy-paste. I build automations that fix all of that.">
+  <meta name="twitter:image"       content="https://roctechva.cloud/images/og-image.png">
+  <link rel="canonical" href="https://roctechva.cloud">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* ───────────────────────────────────────────
+       1. RESET & TOKENS
+    ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* Desktop */
+      --bg:           #05080F;
+
+      /* Windows 11 surfaces */
+      --w-surface:    rgba(28, 28, 44, 0.88);
+      --w-surface-hi: rgba(38, 38, 56, 0.92);
+      --w-bar:        rgba(18, 18, 30, 0.96);
+      --w-border:     rgba(255, 255, 255, 0.09);
+      --w-radius:     14px;
+      --w-blur:       blur(32px) saturate(150%);
+      --w-shadow:     0 12px 48px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.07);
+
+      /* Accent — Windows 11 dark mode blue */
+      --accent:       #4CC2FF;
+      --accent-bg:    rgba(76, 194, 255, 0.12);
+      --accent-hover: #60CDFF;
+
+      /* Win button hover */
+      --btn-hover:    rgba(255, 255, 255, 0.07);
+      --close-hover:  #C42B1C;
+      --close-text:   #ffffff;
+
+      /* Text */
+      --t1:  rgba(255, 255, 255, 0.92);
+      --t2:  rgba(255, 255, 255, 0.58);
+      --t3:  rgba(255, 255, 255, 0.28);
+
+      /* Terminal */
+      --term:         #0C0D18;
+      --term-green:   #50FA7B;
+      --term-purple:  #BD93F9;
+      --term-blue:    #8BE9FD;
+      --term-comment: rgba(255,255,255,0.28);
+
+      /* Typography */
+      --f-win:     'Segoe UI Variable', 'Segoe UI', system-ui, -apple-system, sans-serif;
+      --f-display: 'Onest', 'Segoe UI Variable', sans-serif;
+      --f-mono:    'Cascadia Code', 'JetBrains Mono', 'Consolas', monospace;
+
+      /* Taskbar */
+      --taskbar-h: 52px;
+
+      /* Easing */
+      --ease:      cubic-bezier(0.4, 0, 0.2, 1);
+      --ease-out:  cubic-bezier(0, 0, 0.2, 1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--f-win);
+      color: var(--t1);
+      background: var(--bg);
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding-bottom: calc(var(--taskbar-h) + 40px);
+    }
+
+    img  { display: block; max-width: 100%; }
+    a    { text-decoration: none; color: inherit; }
+    ul   { list-style: none; }
+    button { cursor: pointer; font: inherit; background: none; border: none; }
+
+    /* Scrollbar — Windows style */
+    ::-webkit-scrollbar       { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.28); }
+
+
+    /* ───────────────────────────────────────────
+       2. DESKTOP BACKGROUND — Windows 11 Bloom
+    ─────────────────────────────────────────── */
+    .win-desktop-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background:
+        radial-gradient(ellipse 160% 100% at 10% 110%, rgba(0, 80, 200, 0.14) 0%, transparent 50%),
+        radial-gradient(ellipse 120% 90%  at 90%   0%, rgba(80, 0, 180, 0.10) 0%, transparent 52%),
+        radial-gradient(ellipse 100% 80%  at 55%  55%, rgba(0, 40, 130, 0.07) 0%, transparent 58%),
+        radial-gradient(ellipse 90%  70%  at 80%  90%, rgba(0, 100, 160, 0.07) 0%, transparent 50%),
+        radial-gradient(circle,  rgba(255,255,255,0.015) 1px, transparent 1px) 0 0 / 30px 30px,
+        #040710;
+    }
+
+
+    /* ───────────────────────────────────────────
+       3. PAGE LAYOUT
+    ─────────────────────────────────────────── */
+    .win-desktop {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 40px 32px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    /* ───────────────────────────────────────────
+       4. WINDOWS — base
+    ─────────────────────────────────────────── */
+    .win-window {
+      width: 100%;
+      border-radius: var(--w-radius);
+      border: 1px solid var(--w-border);
+      box-shadow: var(--w-shadow);
+      background: var(--w-surface);
+      backdrop-filter: var(--w-blur);
+      -webkit-backdrop-filter: var(--w-blur);
+      overflow: hidden;
+      transition:
+        transform     0.22s var(--ease),
+        opacity       0.22s var(--ease),
+        box-shadow    0.22s var(--ease);
+      scroll-margin-top: 24px;
+    }
+
+    @supports not (backdrop-filter: blur(1px)) {
+      .win-window { background: rgba(24, 24, 38, 0.98); }
+    }
+
+    /* Window states */
+    .win-window.is-minimized .win-body {
+      max-height: 0 !important;
+      overflow: hidden;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+      border-top: none;
+    }
+
+    .win-window.is-minimized {
+      border-radius: var(--w-radius) var(--w-radius) 0 0;
+    }
+
+    .win-window.is-maximized {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      bottom: var(--taskbar-h) !important;
+      max-width: none !important;
+      width: 100% !important;
+      z-index: 9000 !important;
+      border-radius: 0 !important;
+      overflow-y: auto !important;
+      margin: 0 !important;
+    }
+
+    .win-window.is-closing {
+      transform: scale(0.96);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .win-window.is-closed {
+      display: none;
+    }
+
+    .win-window.is-opening {
+      animation: win-open 0.2s var(--ease-out) forwards;
+    }
+
+    @keyframes win-open {
+      from { transform: scale(0.96); opacity: 0; }
+      to   { transform: scale(1);    opacity: 1; }
+    }
+
+
+    /* ───────────────────────────────────────────
+       5. TITLEBAR
+    ─────────────────────────────────────────── */
+    .win-titlebar {
+      height: 36px;
+      background: var(--w-bar);
+      display: flex;
+      align-items: center;
+      padding-left: 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      user-select: none;
+    }
+
+    .win-titlebar__app {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .win-titlebar__icon { font-size: 14px; opacity: 0.8; flex-shrink: 0; }
+
+    .win-titlebar__title {
+      font-family: var(--f-win);
+      font-size: 12.5px;
+      font-weight: 400;
+      color: var(--t2);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Win control buttons */
+    .win-controls {
+      display: flex;
+      flex-shrink: 0;
+      height: 100%;
+    }
+
+    .wbtn {
+      width: 46px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-family: var(--f-win);
+      color: var(--t2);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      transition: background 0.12s ease, color 0.12s ease;
+      -webkit-app-region: no-drag;
+    }
+
+    .wbtn:hover           { background: var(--btn-hover); color: var(--t1); }
+    .wbtn.wbtn-close:hover{ background: var(--close-hover); color: var(--close-text); }
+    .wbtn:last-child      { border-radius: 0 var(--w-radius) 0 0; }
+
+    .wbtn-max { font-size: 10px; }
+
+
+    /* ───────────────────────────────────────────
+       6. WINDOW BODY
+    ─────────────────────────────────────────── */
+    .win-body {
+      overflow: hidden;
+      max-height: 9999px;
+      transition: max-height 0.32s var(--ease), padding 0.32s var(--ease);
+    }
+
+    .win-body-inner {
+      padding: 28px 32px 32px;
+    }
+
+
+    /* ───────────────────────────────────────────
+       7. BUTTONS
+    ─────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 20px;
+      border-radius: 4px;
+      font-family: var(--f-win);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+      text-decoration: none;
+      white-space: nowrap;
+      border: none;
+    }
+
+    .btn--accent {
+      background: var(--accent);
+      color: #000;
+      box-shadow: 0 2px 12px rgba(76, 194, 255, 0.3);
+    }
+
+    .btn--accent:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 18px rgba(76, 194, 255, 0.45);
+    }
+
+    .btn--subtle {
+      background: rgba(255,255,255,0.07);
+      color: var(--t1);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .btn--subtle:hover {
+      background: rgba(255,255,255,0.11);
+      border-color: rgba(255,255,255,0.22);
+    }
+
+    .btn-arr { transition: transform 0.15s ease; }
+    .btn--accent:hover .btn-arr { transform: translateX(3px); }
+
+
+    /* ───────────────────────────────────────────
+       8. BADGES / TAGS
+    ─────────────────────────────────────────── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 3px;
+      padding: 3px 10px;
+      font-family: var(--f-mono);
+      font-size: 11.5px;
+      color: var(--t2);
+      white-space: nowrap;
+      transition: border-color 0.15s ease, color 0.15s ease;
+    }
+
+    .badge:hover { border-color: rgba(76, 194, 255, 0.35); color: var(--accent); }
+
+    .tag {
+      display: inline-block;
+      padding: 3px 8px;
+      background: rgba(76, 194, 255, 0.10);
+      border: 1px solid rgba(76, 194, 255, 0.22);
+      border-radius: 2px;
+      font-family: var(--f-mono);
+      font-size: 10.5px;
+      color: var(--accent);
+      white-space: nowrap;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-family: var(--f-mono);
+      font-size: 11.5px;
+      color: #4ADE80;
+      background: rgba(34, 197, 94, 0.08);
+      border: 1px solid rgba(34, 197, 94, 0.22);
+      border-radius: 3px;
+      padding: 4px 12px;
+    }
+
+    .status-badge::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      background: #22C55E;
+      border-radius: 50%;
+      animation: blink-dot 2s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes blink-dot {
+      0%,100% { opacity: 1; box-shadow: 0 0 0 0 rgba(34,197,94,0.5); }
+      50%      { opacity: .7; box-shadow: 0 0 0 5px rgba(34,197,94,0); }
+    }
+
+    .section-kicker {
+      font-family: var(--f-mono);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .section-heading {
+      font-family: var(--f-display);
+      font-size: clamp(22px, 2.8vw, 32px);
+      font-weight: 700;
+      color: var(--t1);
+      line-height: 1.2;
+      margin-bottom: 28px;
+    }
+
+
+    /* ───────────────────────────────────────────
+       9. HERO
+    ─────────────────────────────────────────── */
+    /* ── Hero — centered vertical stack ── */
+    .hero-body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 64px 20px;
+    }
+
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 5px 14px;
+      border-radius: 20px;
+      background: rgba(76, 194, 255, 0.07);
+      border: 1px solid rgba(76, 194, 255, 0.18);
+      font-family: var(--f-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--t2);
+      margin-bottom: 22px;
+    }
+
+    .hero-pill .blink-dot {
+      width: 7px; height: 7px;
+      background: #30D158;
+      border-radius: 50%;
+    }
+
+    .hero-h1 {
+      font-family: var(--f-display);
+      font-size: clamp(36px, 5.8vw, 62px);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      color: var(--t1);
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .hero-h1 .accent {
+      background: linear-gradient(135deg, var(--accent) 0%, #818CF8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .h1-dim { color: var(--t2); }
+
+    .hero-sub {
+      font-size: clamp(15px, 1.8vw, 17px);
+      color: var(--t2);
+      line-height: 1.75;
+      max-width: 560px;
+      text-align: center;
+      margin: 0 auto 28px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+
+    /* ───────────────────────────────────────────
+       10. ABOUT — Windows Settings layout
+    ─────────────────────────────────────────── */
+    .about-layout {
+      display: flex;
+      gap: 0;
+      min-height: 340px;
+    }
+
+    .about-nav {
+      width: 210px;
+      flex-shrink: 0;
+      background: rgba(255,255,255,0.02);
+      border-right: 1px solid rgba(255,255,255,0.05);
+      padding: 24px 0;
+    }
+
+    .about-nav-header {
+      padding: 0 18px 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      margin-bottom: 12px;
+    }
+
+    .about-avatar-circ {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: center top;
+      border: 2px solid var(--accent);
+      opacity: 0.9;
+    }
+
+    .about-avatar-ph {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background: var(--w-surface-hi);
+      border: 2px solid rgba(76,194,255,0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .about-nav-name {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--t1);
+      text-align: center;
+    }
+
+    .about-nav-role {
+      font-family: var(--f-mono);
+      font-size: 10.5px;
+      color: var(--t3);
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    .about-nav-items { padding: 0 8px; }
+
+    .about-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 4px;
+      font-size: 13px;
+      color: var(--t2);
+      cursor: default;
+      transition: background 0.12s ease, color 0.12s ease;
+    }
+
+    .about-nav-item:hover { background: var(--btn-hover); color: var(--t1); }
+    .about-nav-item.active {
+      background: var(--accent-bg);
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .about-nav-item-icon { font-size: 14px; opacity: 0.75; }
+
+    /* Main settings panel */
+    .about-panel {
+      flex: 1;
+      padding: 28px 28px 32px;
+      min-width: 0;
+    }
+
+    .about-panel-title {
+      font-family: var(--f-display);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--t1);
+      margin-bottom: 6px;
+    }
+
+    .about-panel-sub {
+      font-size: 13px;
+      color: var(--t3);
+      margin-bottom: 24px;
+      font-family: var(--f-mono);
+    }
+
+    .about-bio {
+      font-size: 14.5px;
+      color: var(--t2);
+      line-height: 1.8;
+      margin-bottom: 24px;
+    }
+
+    /* Settings rows (Windows Settings style) */
+    .settings-group {
+      background: var(--w-surface-hi);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .settings-row {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      gap: 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 13.5px;
+      transition: background 0.12s ease;
+    }
+
+    .settings-row:last-child { border-bottom: none; }
+    .settings-row:hover      { background: rgba(255,255,255,0.03); }
+
+    .settings-row-icon { font-size: 15px; flex-shrink: 0; opacity: 0.7; }
+    .settings-row-label { color: var(--t2); flex-shrink: 0; font-size: 12.5px; width: 90px; }
+    .settings-row-value { color: var(--t1); flex: 1; font-size: 13.5px; }
+
+    .about-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .about-badge-label {
+      font-family: var(--f-mono);
+      font-size: 11px;
+      color: var(--t3);
+      margin-bottom: 10px;
+    }
+
+
+    /* ───────────────────────────────────────────
+       11. PROJECTS — File Explorer
+    ─────────────────────────────────────────── */
+    .explorer-bar {
+      background: rgba(14,14,24,0.90);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      padding: 0 14px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      max-height: 60px;
+      overflow: hidden;
+      transition: max-height 0.32s var(--ease), padding 0.32s var(--ease);
+    }
+
+    .win-window.is-minimized .explorer-bar {
+      max-height: 0;
+      padding: 0;
+    }
+
+    .explorer-crumb {
+      font-family: var(--f-mono);
+      font-size: 11.5px;
+      color: var(--t3);
+      flex: 1;
+    }
+
+    .explorer-crumb strong { color: var(--accent); font-weight: 400; }
+
+    .explorer-count {
+      font-family: var(--f-mono);
+      font-size: 11px;
+      color: var(--t3);
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .project-card {
+      background: rgba(255,255,255,0.025);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 3px;
+      overflow: hidden;
+      transition: transform 0.2s var(--ease), box-shadow 0.2s ease, border-color 0.2s ease;
+      cursor: default;
+    }
+
+    .project-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+      border-color: rgba(76,194,255,0.28);
+    }
+
+    .project-card-img {
+      width: 100%;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      display: block;
+      background: #111220;
+      cursor: zoom-in;
+      transition: opacity 0.15s ease;
+    }
+
+    .project-card-img:hover { opacity: 0.88; }
+
+    .project-card-img-wrap {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-card-img-wrap::after {
+      content: '⊕';
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      color: rgba(255,255,255,0.9);
+      background: rgba(0,0,0,0.38);
+      opacity: 0;
+      transition: opacity 0.18s ease;
+      pointer-events: none;
+    }
+
+    .project-card-img-wrap:hover::after { opacity: 1; }
+
+    .project-card-ph {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: linear-gradient(135deg, #0F1024 0%, #0A0B18 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      opacity: 0.18;
+    }
+
+    .project-card-body { padding: 12px 14px 15px; }
+
+    .project-card-title {
+      font-family: var(--f-win);
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--t1);
+      margin-bottom: 7px;
+      line-height: 1.35;
+    }
+
+    .project-card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-bottom: 8px;
+    }
+
+    .project-card-desc {
+      font-size: 12px;
+      color: var(--t2);
+      line-height: 1.6;
+    }
+
+
+    /* ───────────────────────────────────────────
+       12. SERVICES — Windows 11 tiles
+    ─────────────────────────────────────────── */
+    .tiles-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    .tile {
+      background: var(--w-surface-hi);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-left-width: 3px;
+      border-radius: 3px;
+      padding: 20px 22px 22px;
+      transition: background 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+      cursor: default;
+    }
+
+    .tile:hover {
+      background: rgba(45,45,65,0.95);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(0,0,0,0.4);
+    }
+
+    .tile-blue   { border-left-color: #0078D4; }
+    .tile-purple { border-left-color: #8764B8; }
+    .tile-teal   { border-left-color: #00B4D8; }
+    .tile-indigo { border-left-color: #5C6BC0; }
+
+    .tile-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      margin-bottom: 14px;
+    }
+
+    .tile-blue   .tile-icon { background: rgba(0,120,212,0.14); }
+    .tile-purple .tile-icon { background: rgba(135,100,184,0.14); }
+    .tile-teal   .tile-icon { background: rgba(0,180,216,0.14); }
+    .tile-indigo .tile-icon { background: rgba(92,107,192,0.14); }
+
+    .tile-title {
+      font-family: var(--f-win);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--t1);
+      margin-bottom: 8px;
+    }
+
+    .tile-desc {
+      font-size: 13px;
+      color: var(--t2);
+      line-height: 1.65;
+    }
+
+    .services-cta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .services-cta-note { font-size: 12.5px; color: var(--t3); }
+
+
+    /* ───────────────────────────────────────────
+       13. CONTACT — Windows Terminal
+    ─────────────────────────────────────────── */
+    .win-terminal-bar {
+      height: 36px;
+      background: #1A1A2C;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      display: flex;
+      align-items: center;
+      padding: 0 0 0 14px;
+    }
+
+    .terminal-tabs {
+      display: flex;
+      align-items: stretch;
+      gap: 1px;
+      flex: 1;
+      height: 100%;
+    }
+
+    .terminal-tab {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 0 16px;
+      font-family: var(--f-win);
+      font-size: 12.5px;
+      color: var(--t2);
+      background: rgba(255,255,255,0.04);
+      border-right: 1px solid rgba(255,255,255,0.05);
+      cursor: default;
+    }
+
+    .terminal-tab.active {
+      background: var(--term);
+      color: var(--t1);
+    }
+
+    .terminal-tab-icon { font-size: 13px; opacity: 0.8; }
+
+    .contact-body {
+      background: var(--term);
+      padding: 40px 36px 40px;
+    }
+
+    .contact-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .contact-header .section-label {
+      display: block;
+      font-family: var(--f-win);
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+
+    .contact-header h2 {
+      font-family: var(--f-win);
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      color: var(--t1);
+      margin: 0 0 10px;
+      line-height: 1.2;
+    }
+
+    .contact-header p {
+      font-family: var(--f-win);
+      font-size: 15px;
+      color: var(--t3);
+      margin: 0;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    @media (max-width: 768px) {
+      .contact-grid { grid-template-columns: 1fr; }
+      .contact-calendly-wrap { min-height: 500px; }
+    }
+
+    .contact-left {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .contact-info-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 6px;
+      text-decoration: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .contact-info-card:hover {
+      border-color: rgba(0,210,211,0.3);
+      background: rgba(0,210,211,0.04);
+    }
+
+    .contact-info-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      background: rgba(0,210,211,0.1);
+      border: 1px solid rgba(0,210,211,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .contact-info-label {
+      font-family: var(--f-win);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--t3);
+      margin-bottom: 2px;
+    }
+
+    .contact-info-value {
+      font-family: var(--f-win);
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--t1);
+    }
+
+    .contact-socials-row {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .contact-socials-label {
+      font-family: var(--f-win);
+      font-size: 11px;
+      color: var(--t3);
+      padding: 0 2px;
+    }
+
+    .contact-socials-icons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .contact-social-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--t2);
+      text-decoration: none;
+      font-size: 16px;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+
+    .contact-social-btn:hover {
+      background: rgba(0,210,211,0.1);
+      border-color: rgba(0,210,211,0.3);
+      color: var(--accent);
+    }
+
+    .contact-cta-card {
+      margin-top: 4px;
+      padding: 20px 20px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .contact-cta-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .contact-cta-icon {
+      font-size: 18px;
+    }
+
+    .contact-cta-title {
+      font-family: var(--f-win);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--t1);
+    }
+
+    .contact-cta-desc {
+      font-family: var(--f-win);
+      font-size: 12.5px;
+      color: var(--t3);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .contact-book-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+      padding: 10px 20px;
+      background: var(--accent);
+      color: #0B0B15;
+      border-radius: 5px;
+      font-family: var(--f-win);
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      width: fit-content;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+
+    .contact-book-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+
+    .contact-right {
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: #fff;
+      min-height: 580px;
+    }
+
+    .contact-calendly-wrap {
+      min-height: 580px;
+      width: 100%;
+    }
+
+    .terminal {
+      font-family: var(--f-mono);
+      font-size: 13px;
+      line-height: 1.75;
+      margin-bottom: 28px;
+    }
+
+    .t-line  { display: flex; align-items: flex-start; gap: 6px; }
+    .t-ps    { color: var(--term-purple); flex-shrink: 0; }
+    .t-cmd   { color: rgba(255,255,255,0.88); }
+    .t-flag  { color: var(--term-blue); }
+    .t-str   { color: var(--term-green); }
+    .t-key   { color: rgba(255,255,255,0.5); }
+    .t-punc  { color: rgba(255,255,255,0.4); }
+    .t-cmt   { color: var(--term-comment); }
+
+    .t-cursor {
+      display: inline-block;
+      width: 8px;
+      height: 14px;
+      background: var(--term-purple);
+      vertical-align: middle;
+      border-radius: 1px;
+      animation: blink-c 1.1s step-end infinite;
+    }
+
+    @keyframes blink-c {
+      0%,100%{ opacity:1; } 50%{ opacity:0; }
+    }
+
+
+    /* ───────────────────────────────────────────
+       14. FOOTER
+    ─────────────────────────────────────────── */
+    .win-footer {
+      text-align: center;
+      padding: 16px 24px 32px;
+      font-family: var(--f-mono);
+      font-size: 11px;
+      color: var(--t3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .win-footer span { opacity: 0.5; }
+
+
+    /* ───────────────────────────────────────────
+       15. TASKBAR — Windows 11
+    ─────────────────────────────────────────── */
+    .win-taskbar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: var(--taskbar-h);
+      background: rgba(18, 18, 28, 0.88);
+      backdrop-filter: blur(40px) saturate(150%);
+      -webkit-backdrop-filter: blur(40px) saturate(150%);
+      border-top: 1px solid rgba(255,255,255,0.08);
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      gap: 0;
+    }
+
+    /* Start button */
+    .taskbar-start {
+      width: 44px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      transition: background 0.12s ease;
+      flex-shrink: 0;
+    }
+
+    .taskbar-start:hover { background: rgba(255,255,255,0.08); }
+    .taskbar-start:active{ background: rgba(255,255,255,0.13); }
+
+    /* Centered app buttons */
+    .taskbar-apps {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .taskbar-app {
+      width: 44px;
+      height: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      font-size: 20px;
+      position: relative;
+      transition: background 0.12s ease;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+    }
+
+    .taskbar-app:hover { background: rgba(255,255,255,0.07); }
+    .taskbar-app:active{ background: rgba(255,255,255,0.12); }
+
+    /* Active / state indicator dot */
+    .taskbar-app::after {
+      content: '';
+      position: absolute;
+      bottom: 3px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 4px;
+      height: 3px;
+      background: var(--accent);
+      border-radius: 2px;
+      opacity: 0;
+      transition: opacity 0.15s ease, width 0.15s ease;
+    }
+
+    .taskbar-app.is-open::after     { opacity: 1; }
+    .taskbar-app.is-minimized::after{ opacity: 1; width: 9px; }
+    .taskbar-app.is-closed          { opacity: 0.30; }
+
+    /* Taskbar tooltip */
+    .taskbar-app[data-label]::before {
+      content: attr(data-label);
+      position: absolute;
+      bottom: calc(100% + 10px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(28,28,44,0.98);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 3px;
+      padding: 4px 10px;
+      font-family: var(--f-win);
+      font-size: 12px;
+      color: var(--t1);
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.12s ease;
+    }
+
+    .taskbar-app:hover::before { opacity: 1; }
+
+    /* System tray */
+    .taskbar-tray {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: center;
+      flex-shrink: 0;
+      padding: 0 8px;
+      min-width: 72px;
+    }
+
+    .taskbar-time {
+      font-family: var(--f-win);
+      font-size: 12px;
+      color: var(--t1);
+      line-height: 1.3;
+    }
+
+    .taskbar-date {
+      font-family: var(--f-win);
+      font-size: 11.5px;
+      color: var(--t2);
+      line-height: 1.3;
+    }
+
+
+    /* ───────────────────────────────────────────
+       16. SCROLL REVEAL
+    ─────────────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition:
+        opacity   0.55s var(--ease-out),
+        transform 0.55s var(--ease-out);
+    }
+
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    .projects-grid .project-card:nth-child(1){ transition-delay: 0ms;   }
+    .projects-grid .project-card:nth-child(2){ transition-delay: 55ms;  }
+    .projects-grid .project-card:nth-child(3){ transition-delay: 110ms; }
+    .projects-grid .project-card:nth-child(4){ transition-delay: 55ms;  }
+    .projects-grid .project-card:nth-child(5){ transition-delay: 110ms; }
+    .projects-grid .project-card:nth-child(6){ transition-delay: 165ms; }
+    .projects-grid .project-card:nth-child(7){ transition-delay: 110ms; }
+    .projects-grid .project-card:nth-child(8){ transition-delay: 165ms; }
+    .projects-grid .project-card:nth-child(9){ transition-delay: 220ms; }
+
+    .tiles-grid .tile:nth-child(1){ transition-delay: 0ms;   }
+    .tiles-grid .tile:nth-child(2){ transition-delay: 70ms;  }
+    .tiles-grid .tile:nth-child(3){ transition-delay: 70ms;  }
+    .tiles-grid .tile:nth-child(4){ transition-delay: 140ms; }
+
+
+    /* ───────────────────────────────────────────
+       17. RESPONSIVE
+    ─────────────────────────────────────────── */
+    @media (max-width: 880px) {
+      .win-desktop { padding: 24px 16px 0; gap: 18px; }
+
+      .hero-body { padding: 48px 20px; }
+
+      .about-layout { flex-direction: column; }
+      .about-nav {
+        width: 100%;
+        flex-direction: row;
+        border-right: none;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 16px 20px;
+      }
+      .about-nav-header { flex-direction: row; border-bottom: none; margin-bottom: 0; padding: 0; }
+      .about-nav-items  { display: none; }
+
+      .projects-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 540px) {
+      .hero-h1 { font-size: 32px; }
+      .hero-body { padding: 36px 16px; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .tiles-grid    { grid-template-columns: 1fr; }
+      .win-titlebar__title { display: none; }
+      .taskbar-app { width: 40px; }
+      .taskbar-tray { min-width: 60px; }
+      .taskbar-date { display: none; }
+    }
+
+    .sr-only {
+      position: absolute; width: 1px; height: 1px;
+      padding: 0; margin: -1px; overflow: hidden;
+      clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+    }
+
+    /* ── Lightbox ─────────────────────────── */
+    .lb-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 999999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.84);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .lb-overlay.is-open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .lb-window {
+      background: rgba(18, 18, 30, 0.98);
+      border: 1px solid rgba(255, 255, 255, 0.11);
+      border-radius: 6px;
+      box-shadow: 0 28px 80px rgba(0, 0, 0, 0.88);
+      max-width: min(94vw, 1060px);
+      max-height: 92vh;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transform: scale(0.93);
+      transition: transform 0.22s var(--ease-out);
+    }
+
+    .lb-overlay.is-open .lb-window {
+      transform: scale(1);
+    }
+
+    .lb-bar {
+      height: 36px;
+      background: #0E0F1C;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      display: flex;
+      align-items: center;
+      padding: 0 0 0 14px;
+      flex-shrink: 0;
+      gap: 8px;
+    }
+
+    .lb-bar-icon { font-size: 13px; opacity: 0.7; }
+
+    .lb-bar-title {
+      flex: 1;
+      font-family: var(--f-win);
+      font-size: 12.5px;
+      color: var(--t2);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .lb-close {
+      width: 46px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: var(--t2);
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      border-radius: 0 6px 0 0;
+      transition: background 0.12s ease, color 0.12s ease;
+      flex-shrink: 0;
+    }
+
+    .lb-close:hover { background: var(--close-hover); color: #fff; }
+
+    .lb-img-wrap {
+      flex: 1;
+      overflow: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #080910;
+    }
+
+    .lb-img {
+      display: block;
+      max-width: 100%;
+      max-height: calc(92vh - 36px);
+      object-fit: contain;
+    }
+
+    .lb-img-area {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .lb-nav {
+      flex-shrink: 0;
+      width: 52px;
+      height: 100%;
+      background: rgba(255,255,255,0.04);
+      border: none;
+      color: var(--t2);
+      font-size: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+    .lb-nav:hover { background: rgba(255,255,255,0.09); color: var(--t1); }
+    .lb-nav[hidden] { display: none; }
+
+    .lb-counter {
+      font-family: var(--f-mono);
+      font-size: 11px;
+      color: var(--t3);
+      margin-left: auto;
+      padding-right: 8px;
+    }
+
+
+    /* ── Hero Stats ── */
+    .hero-stats {
+      display: flex;
+      gap: 28px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .hero-stat {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .hero-stat-num {
+      font-family: var(--f-display);
+      font-size: 32px;
+      font-weight: 900;
+      color: var(--accent);
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+
+    .hero-stat-suffix {
+      font-family: var(--f-display);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-left: 1px;
+    }
+
+    .hero-stat-label {
+      font-family: var(--f-mono);
+      font-size: 10.5px;
+      color: var(--t3);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 3px;
+    }
+
+    /* ── Pain Points / Sound Familiar section ── */
+    .pain-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .pain-card {
+      background: rgba(255, 80, 80, 0.05);
+      border: 1px solid rgba(255, 80, 80, 0.14);
+      border-radius: 6px;
+      padding: 16px 18px;
+      transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+      cursor: default;
+    }
+
+    .pain-card:hover {
+      background: rgba(255, 80, 80, 0.09);
+      border-color: rgba(255, 80, 80, 0.28);
+      transform: translateY(-2px);
+    }
+
+    .pain-card-icon {
+      font-size: 20px;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .pain-card-text {
+      font-size: 13.5px;
+      color: var(--t1);
+      line-height: 1.6;
+      font-weight: 500;
+    }
+
+    .pain-cta {
+      margin-top: 24px;
+      padding: 16px 20px;
+      background: rgba(76, 194, 255, 0.06);
+      border: 1px solid rgba(76, 194, 255, 0.18);
+      border-radius: 6px;
+      font-size: 14px;
+      color: var(--t2);
+      text-align: center;
+      line-height: 1.7;
+    }
+
+    .pain-cta strong { color: var(--accent); }
+
+    /* ── Process Section ── */
+    /* ── Gantt Chart ── */
+    .gantt-wrap {
+      overflow-x: auto;
+    }
+
+    .gantt-inner {
+      min-width: 640px;
+    }
+
+    .gantt-header {
+      display: flex;
+      align-items: center;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      margin-bottom: 4px;
+    }
+
+    .gantt-label-hd {
+      width: 220px;
+      flex-shrink: 0;
+      font-family: var(--f-mono);
+      font-size: 10.5px;
+      color: var(--t3);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .gantt-periods {
+      flex: 1;
+      display: flex;
+    }
+
+    .gantt-period {
+      flex: 1;
+      text-align: center;
+      font-family: var(--f-mono);
+      font-size: 10.5px;
+      color: var(--t3);
+      padding-bottom: 4px;
+      border-right: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .gantt-period:last-child { border-right: none; }
+
+    .gantt-row {
+      display: flex;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      transition: background 0.15s ease;
+    }
+
+    .gantt-row:last-of-type { border-bottom: none; }
+    .gantt-row:hover { background: rgba(255,255,255,0.02); border-radius: 4px; }
+
+    .gantt-label {
+      width: 220px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding-right: 20px;
+    }
+
+    .gantt-num {
+      font-family: var(--f-mono);
+      font-size: 10px;
+      color: var(--accent);
+      background: var(--accent-bg);
+      border-radius: 3px;
+      padding: 2px 6px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .gantt-phase {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--t1);
+      margin-bottom: 3px;
+    }
+
+    .gantt-phase-desc {
+      font-size: 11px;
+      color: var(--t3);
+      line-height: 1.5;
+    }
+
+    .gantt-timeline-row {
+      flex: 1;
+      position: relative;
+      height: 38px;
+      background: repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent calc(20% - 1px),
+        rgba(255,255,255,0.03) calc(20% - 1px),
+        rgba(255,255,255,0.03) 20%
+      );
+      border-radius: 3px;
+    }
+
+    .gantt-bar {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 24px;
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      font-size: 10.5px;
+      font-weight: 600;
+      color: rgba(0,0,0,0.75);
+      white-space: nowrap;
+      overflow: hidden;
+      transition: filter 0.15s ease, transform 0.15s ease;
+    }
+
+    .gantt-bar:hover {
+      filter: brightness(1.12);
+      transform: translateY(-50%) scaleY(1.08);
+    }
+
+    .gantt-cta {
+      text-align: center;
+      padding-top: 28px;
+    }
+
+    /* ── Case Study Cards ── */
+    .case-study-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .case-card {
+      background: var(--w-surface-hi);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 6px;
+      overflow: hidden;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      cursor: default;
+    }
+
+    .case-card:hover {
+      border-color: rgba(76,194,255,0.22);
+      box-shadow: 0 6px 28px rgba(0,0,0,0.4);
+    }
+
+    .case-card-header {
+      padding: 20px 24px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .case-card-icon {
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    .case-card-title {
+      font-family: var(--f-display);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--t1);
+    }
+
+    .case-card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 4px;
+    }
+
+    .case-card-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+
+    .case-col {
+      padding: 20px 24px;
+    }
+
+    .case-col:first-child {
+      border-right: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .case-col-label {
+      font-family: var(--f-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .case-col-label.before { color: rgba(255,100,100,0.8); }
+    .case-col-label.after  { color: #50FA7B; }
+
+    .case-col-text {
+      font-size: 13.5px;
+      color: var(--t2);
+      line-height: 1.75;
+    }
+
+    .case-card-flow {
+      padding: 14px 24px;
+      background: rgba(0,0,0,0.18);
+      border-top: 1px solid rgba(255,255,255,0.04);
+      font-family: var(--f-mono);
+      font-size: 11.5px;
+      color: var(--t3);
+      line-height: 1.7;
+    }
+
+    .case-card-flow strong { color: var(--accent); }
+
+    /* ── Contact Headline ── */
+    .contact-headline {
+      font-family: var(--f-display);
+      font-size: clamp(18px, 2.4vw, 26px);
+      font-weight: 700;
+      color: var(--t1);
+      line-height: 1.3;
+      margin-bottom: 8px;
+    }
+
+    .contact-subline {
+      font-size: 14px;
+      color: var(--t2);
+      margin-bottom: 24px;
+      line-height: 1.7;
+    }
+
+    /* Responsive additions */
+    @media (max-width: 880px) {
+      .pain-grid     { grid-template-columns: 1fr 1fr; }
+      .gantt-label { width: 160px; }
+      .gantt-label-hd { width: 160px; }
+      .tiles-grid    { grid-template-columns: 1fr 1fr; }
+      .case-card-body { grid-template-columns: 1fr; }
+      .case-col:first-child { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    }
+
+    @media (max-width: 540px) {
+      .pain-grid    { grid-template-columns: 1fr; }
+      .hero-stats   { gap: 18px; }
+      .hero-stat-num { font-size: 26px; }
+    }
+
+    /* ═══════════════════════════════════════════
+       OS THEME TOGGLE BUTTON
+    ═══════════════════════════════════════════ */
+    .os-toggle {
+      position: fixed;
+      top: 14px;
+      right: 14px;
+      z-index: 999997;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 15px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.13);
+      backdrop-filter: blur(16px) saturate(160%);
+      -webkit-backdrop-filter: blur(16px) saturate(160%);
+      font-family: var(--f-win);
+      font-size: 12px;
+      color: var(--t1);
+      cursor: pointer;
+      transition: background 0.18s ease, transform 0.15s ease, border-color 0.18s ease;
+      user-select: none;
+      white-space: nowrap;
+    }
+    .os-toggle:hover {
+      background: rgba(255,255,255,0.14);
+      border-color: rgba(255,255,255,0.22);
+      transform: scale(1.04);
+    }
+    .os-toggle__icon  { font-size: 15px; line-height: 1; }
+    .os-toggle__label { font-size: 11.5px; letter-spacing: 0.02em; opacity: 0.88; }
+
+
+    /* ═══════════════════════════════════════════
+       macOS 26 TAHOE — Liquid Glass Design System
+    ═══════════════════════════════════════════ */
+    body.mac-theme {
+      /* Liquid Glass surfaces — near-transparent, glass picks up bg colour */
+      --bg:           #04090f;
+      --w-surface:    rgba(255, 255, 255, 0.055);
+      --w-surface-hi: rgba(255, 255, 255, 0.08);
+      --w-bar:        rgba(255, 255, 255, 0.042);
+      --w-border:     rgba(255, 255, 255, 0.20);
+      --w-radius:     18px;
+      --w-blur:       blur(64px) saturate(240%) brightness(1.06);
+      /* Specular top edge + deep shadow = liquid glass */
+      --w-shadow:
+        0 36px 110px rgba(0,0,0,0.78),
+        inset 0 1px 0  rgba(255,255,255,0.32),
+        inset 0 0 0 0.5px rgba(255,255,255,0.10);
+      /* Tahoe blue — crisp macOS system blue */
+      --accent:       #0071E3;
+      --accent-bg:    rgba(0, 113, 227, 0.15);
+      --accent-hover: #0077ED;
+      --btn-hover:    rgba(255,255,255,0.10);
+      --close-hover:  transparent;
+      --close-text:   #fff;
+      --taskbar-h:    90px;
+      --f-win:        -apple-system, 'SF Pro Display', 'Helvetica Neue', system-ui, sans-serif;
+      --f-display:    -apple-system, 'SF Pro Display', 'Onest', sans-serif;
+      --f-mono:       'SF Mono', 'JetBrains Mono', 'Menlo', 'Monaco', monospace;
+    }
+
+    /* ── Lake Tahoe wallpaper — deep water, forest, mountain sky ── */
+    body.mac-theme .win-desktop-bg {
+      background:
+        /* Sierra Nevada mountain ridge */
+        radial-gradient(ellipse 160% 35% at 50%  42%, rgba(8, 28, 55, 0.95) 0%, transparent 60%),
+        /* Forest — left shore */
+        radial-gradient(ellipse  55% 50% at  0%  62%, rgba(10, 44, 22, 0.80) 0%, transparent 55%),
+        /* Forest — right shore */
+        radial-gradient(ellipse  50% 45% at 100% 58%, rgba(8,  38, 20, 0.75) 0%, transparent 50%),
+        /* Deep Tahoe water — crystal blue/teal */
+        radial-gradient(ellipse 140% 55% at 50% 100%, rgba(5, 65, 110, 0.90) 0%, transparent 55%),
+        /* Water shimmer */
+        radial-gradient(ellipse  80% 30% at 50%  88%, rgba(0, 90, 140, 0.50) 0%, transparent 50%),
+        /* Sky — pre-dawn deep blue */
+        radial-gradient(ellipse 120% 60% at 50%   0%, rgba(6, 18, 42,  0.98) 0%, transparent 65%),
+        /* Starlight haze */
+        radial-gradient(ellipse  60% 40% at 75%  18%, rgba(30, 50, 100, 0.30) 0%, transparent 50%),
+        linear-gradient(180deg, #030810 0%, #050e1c 30%, #061422 60%, #071a2c 100%);
+    }
+
+    /* ── Liquid Glass Scrollbar ── */
+    body.mac-theme ::-webkit-scrollbar       { width: 5px; height: 5px; }
+    body.mac-theme ::-webkit-scrollbar-track { background: transparent; }
+    body.mac-theme ::-webkit-scrollbar-thumb { border-radius: 3px; background: rgba(255,255,255,0.18); }
+    body.mac-theme ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.30); }
+
+    /* ── Liquid Glass Windows ── */
+    body.mac-theme .win-window {
+      border-radius: var(--w-radius);
+      /* Override background/border/shadow to full liquid glass */
+      background: var(--w-surface);
+      border: 1px solid var(--w-border);
+      box-shadow: var(--w-shadow);
+      backdrop-filter: var(--w-blur);
+      -webkit-backdrop-filter: var(--w-blur);
+    }
+
+    @supports not (backdrop-filter: blur(1px)) {
+      body.mac-theme .win-window { background: rgba(10, 20, 38, 0.95); }
+    }
+
+    /* ── Liquid Glass Titlebar ── */
+    body.mac-theme .win-titlebar {
+      height: 40px;
+      padding: 0 14px;
+      position: relative;
+      justify-content: flex-start;
+      background: rgba(255,255,255,0.04);
+      border-bottom: 1px solid rgba(255,255,255,0.10);
+    }
+
+    /* Terminal bar — relative anchor + glass */
+    body.mac-theme .win-terminal-bar {
+      position: relative;
+      background: rgba(255,255,255,0.04);
+      border-bottom: 1px solid rgba(255,255,255,0.10);
+    }
+
+    /* Centered title */
+    body.mac-theme .win-titlebar__app {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      pointer-events: none;
+      flex: unset;
+    }
+
+    body.mac-theme .win-titlebar__title {
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.72);
+      letter-spacing: 0.01em;
+    }
+
+    /* Traffic lights — left side via flex order */
+    body.mac-theme .win-controls {
+      order: -1;
+      position: static;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      height: 100%;
+      flex-shrink: 0;
+      margin: 0 8px 0 0;
+    }
+
+    /* Traffic light circles */
+    body.mac-theme .wbtn {
+      width: 13px;
+      height: 13px;
+      border-radius: 50% !important;
+      font-size: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: filter 0.12s ease;
+    }
+
+    body.mac-theme .wbtn-close { background: #FF5F57; box-shadow: 0 0 0 0.5px rgba(0,0,0,0.25), inset 0 0.5px 0 rgba(255,255,255,0.35); }
+    body.mac-theme .wbtn-min   { background: #FFBD2E; box-shadow: 0 0 0 0.5px rgba(0,0,0,0.25), inset 0 0.5px 0 rgba(255,255,255,0.35); }
+    body.mac-theme .wbtn-max   { background: #28C840; box-shadow: 0 0 0 0.5px rgba(0,0,0,0.25), inset 0 0.5px 0 rgba(255,255,255,0.35); }
+
+    body.mac-theme .wbtn:hover { filter: brightness(0.86); background: inherit; color: inherit; }
+
+    body.mac-theme .wbtn-close::after { content: '✕'; font-size: 7px; font-weight: 900; color: rgba(90,0,0,0.80); opacity: 0; transition: opacity 0.1s; }
+    body.mac-theme .wbtn-min::after   { content: '−'; font-size: 8px; font-weight: 900; color: rgba(90,50,0,0.80); opacity: 0; transition: opacity 0.1s; }
+    body.mac-theme .wbtn-max::after   { content: '+'; font-size: 8px; font-weight: 900; color: rgba(0,55,0,0.80);   opacity: 0; transition: opacity 0.1s; }
+
+    body.mac-theme .win-controls:hover .wbtn::after { opacity: 1; }
+    body.mac-theme .wbtn:last-child { border-radius: 50% !important; }
+
+    /* ── Liquid Glass Dock ── */
+    body.mac-theme .win-taskbar {
+      background: transparent;
+      border-top: none;
+      padding: 0 0 14px;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    body.mac-theme .taskbar-start { display: none; }
+
+    /* Floating liquid glass pill */
+    body.mac-theme .taskbar-apps {
+      gap: 2px;
+      padding: 9px 18px;
+      background: rgba(255,255,255,0.11);
+      border: 1px solid rgba(255,255,255,0.22);
+      border-radius: 22px;
+      backdrop-filter: blur(50px) saturate(220%) brightness(1.08);
+      -webkit-backdrop-filter: blur(50px) saturate(220%) brightness(1.08);
+      box-shadow:
+        0 12px 48px rgba(0,0,0,0.65),
+        inset 0 1px 0  rgba(255,255,255,0.38),
+        inset 0 -1px 0 rgba(255,255,255,0.06),
+        inset 1px 0 0  rgba(255,255,255,0.06),
+        inset -1px 0 0 rgba(255,255,255,0.06);
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    body.mac-theme .taskbar-app {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      font-size: 28px;
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.18s ease;
+      margin: 0 1px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    body.mac-theme .taskbar-app:hover {
+      background: rgba(255,255,255,0.08);
+      transform: translateY(-16px) scale(1.32);
+      filter: brightness(1.12);
+    }
+
+    body.mac-theme .taskbar-app:active { transform: translateY(-10px) scale(1.18); }
+
+    /* Dock active dot */
+    body.mac-theme .taskbar-app::after {
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      bottom: -7px;
+      background: rgba(255,255,255,0.70);
+    }
+
+    /* Dock tooltip — liquid glass style */
+    body.mac-theme .taskbar-app[data-label]::before {
+      bottom: calc(100% + 20px);
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.22);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 8px;
+      padding: 5px 13px;
+      font-size: 12px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.90);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.25);
+    }
+
+    /* Menu-bar style clock — liquid glass pill */
+    body.mac-theme .taskbar-tray {
+      position: fixed;
+      top: 10px;
+      left: 14px;
+      background: rgba(255,255,255,0.09);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 11px;
+      padding: 4px 14px;
+      backdrop-filter: blur(24px) saturate(200%);
+      -webkit-backdrop-filter: blur(24px) saturate(200%);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.22), 0 2px 12px rgba(0,0,0,0.35);
+      flex-direction: row;
+      gap: 6px;
+      align-items: center;
+      justify-content: flex-start;
+      min-width: unset;
+    }
+
+    body.mac-theme .taskbar-time,
+    body.mac-theme .taskbar-date { font-size: 12.5px; color: rgba(255,255,255,0.88); }
+
+    /* ── Buttons — Tahoe style ── */
+    body.mac-theme .btn { border-radius: 9px; }
+
+    body.mac-theme .btn--accent {
+      background: var(--accent);
+      box-shadow: 0 2px 16px rgba(0,113,227,0.45), inset 0 1px 0 rgba(255,255,255,0.22);
+    }
+
+    body.mac-theme .btn--accent:hover {
+      background: var(--accent-hover);
+      box-shadow: 0 4px 24px rgba(0,113,227,0.60), inset 0 1px 0 rgba(255,255,255,0.25);
+    }
+
+    body.mac-theme .btn--subtle {
+      background: rgba(255,255,255,0.09);
+      border-color: rgba(255,255,255,0.18);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.12);
+    }
+
+    body.mac-theme .btn--subtle:hover {
+      background: rgba(255,255,255,0.13);
+      border-color: rgba(255,255,255,0.26);
+    }
+
+    /* ── Badges & Tags — liquid glass ── */
+    body.mac-theme .badge {
+      border-radius: 7px;
+      background: rgba(255,255,255,0.07);
+      border-color: rgba(255,255,255,0.14);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.10);
+    }
+
+    body.mac-theme .badge:hover { border-color: rgba(0,113,227,0.45); color: var(--accent); }
+
+    body.mac-theme .tag {
+      border-radius: 6px;
+      border-color: rgba(0,113,227,0.30);
+      background: rgba(0,113,227,0.10);
+      color: var(--accent);
+    }
+
+    /* ── Project cards — glass ── */
+    body.mac-theme .project-card {
+      border-radius: 14px;
+      background: rgba(255,255,255,0.04);
+      border-color: rgba(255,255,255,0.10);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+
+    body.mac-theme .project-card:hover {
+      border-color: rgba(0,113,227,0.35);
+      box-shadow: 0 8px 36px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.10);
+    }
+
+    /* ── Service tiles — glass with top specular ── */
+    body.mac-theme .tile {
+      border-radius: 14px;
+      border-left-width: 1px;
+      border-top: 2px solid;
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.12);
+    }
+
+    body.mac-theme .tile:hover {
+      background: rgba(255,255,255,0.08);
+      box-shadow: 0 6px 28px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.14);
+    }
+
+    body.mac-theme .tile-blue   { border-top-color: #0071E3; border-left-color: rgba(255,255,255,0.08); }
+    body.mac-theme .tile-purple { border-top-color: #BF5AF2; border-left-color: rgba(255,255,255,0.08); }
+    body.mac-theme .tile-teal   { border-top-color: #30D158; border-left-color: rgba(255,255,255,0.08); }
+    body.mac-theme .tile-indigo { border-top-color: #5E5CE6; border-left-color: rgba(255,255,255,0.08); }
+
+    body.mac-theme .tile-blue   .tile-icon { background: rgba(0,113,227,0.14); }
+    body.mac-theme .tile-purple .tile-icon { background: rgba(191,90,242,0.14); }
+    body.mac-theme .tile-teal   .tile-icon { background: rgba(48,209,88,0.14);  }
+    body.mac-theme .tile-indigo .tile-icon { background: rgba(94,92,230,0.14);  }
+
+    /* ── Settings nav ── */
+    body.mac-theme .about-nav-item.active { background: rgba(0,113,227,0.16); color: var(--accent); }
+    body.mac-theme .about-nav-item:hover  { background: rgba(255,255,255,0.08); }
+
+    /* ── Settings rows ── */
+    body.mac-theme .settings-group {
+      border-radius: 12px;
+      background: rgba(255,255,255,0.04);
+      border-color: rgba(255,255,255,0.10);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+
+    /* ── Explorer / Finder bar ── */
+    body.mac-theme .explorer-bar {
+      background: rgba(255,255,255,0.04);
+      border-bottom-color: rgba(255,255,255,0.08);
+    }
+
+    /* ── Terminal (zsh) bar — dark glass ── */
+    body.mac-theme .win-terminal-bar {
+      background: rgba(0,0,0,0.28);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    body.mac-theme .terminal-tab.active {
+      background: rgba(255,255,255,0.06);
+      border-radius: 6px 6px 0 0;
+    }
+
+    body.mac-theme .contact-body {
+      background: rgba(0,0,0,0.35);
+      backdrop-filter: blur(40px);
+      -webkit-backdrop-filter: blur(40px);
+    }
+
+    /* zsh prompt — Tahoe green */
+    body.mac-theme .t-ps     { color: #30D158; }
+    body.mac-theme .t-cursor { background: #30D158; }
+
+    /* ── Lightbox — liquid glass ── */
+    body.mac-theme .lb-window {
+      border-radius: 18px;
+      background: rgba(255,255,255,0.07);
+      border-color: rgba(255,255,255,0.20);
+      backdrop-filter: blur(60px) saturate(200%);
+      -webkit-backdrop-filter: blur(60px) saturate(200%);
+      box-shadow: 0 32px 100px rgba(0,0,0,0.80), inset 0 1px 0 rgba(255,255,255,0.28);
+    }
+
+    body.mac-theme .lb-bar   { background: rgba(255,255,255,0.04); border-radius: 18px 18px 0 0; border-bottom-color: rgba(255,255,255,0.08); }
+    body.mac-theme .lb-close { border-radius: 0 18px 0 0; }
+    body.mac-theme .lb-close:hover { background: rgba(255,255,255,0.08); color: var(--t1); }
+
+    body.mac-theme .lb-nav        { background: rgba(255,255,255,0.03); }
+    body.mac-theme .lb-nav:hover  { background: rgba(255,255,255,0.08); }
+    body.mac-theme .lb-prev       { border-radius: 0 0 0 18px; }
+    body.mac-theme .lb-next       { border-radius: 0 0 18px 0; }
+
+    body.mac-theme .about-avatar-circ { border-color: var(--accent); }
+
+    /* ── Tahoe gradient on H1 accent ── */
+    body.mac-theme .hero-h1 .accent {
+      background: linear-gradient(135deg, #0071E3 0%, #30D158 50%, #5E5CE6 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+
+    /* ── Status badge ── */
+    body.mac-theme .status-badge { border-color: rgba(48,209,88,0.32); background: rgba(48,209,88,0.08); color: #30D158; }
+    body.mac-theme .status-badge::before { background: #30D158; }
+
+    /* ── Contact links ── */
+    body.mac-theme .contact-link:hover { background: rgba(0,113,227,0.08); border-color: rgba(0,113,227,0.30); color: var(--accent); }
+
+    /* Tahoe — pain cards */
+    body.mac-theme .pain-card {
+      background: rgba(255,80,80,0.04);
+      border-color: rgba(255,80,80,0.18);
+      border-radius: 10px;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+
+    body.mac-theme .pain-cta {
+      border-radius: 10px;
+      background: rgba(0,113,227,0.07);
+      border-color: rgba(0,113,227,0.22);
+    }
+
+    /* Tahoe — process steps */
+    body.mac-theme .process-step {
+      border-radius: 12px;
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-color: rgba(255,255,255,0.10);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.10);
+    }
+
+    /* Tahoe — case cards */
+    body.mac-theme .case-card {
+      border-radius: 14px;
+      background: rgba(255,255,255,0.045);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-color: rgba(255,255,255,0.10);
+    }
+
+    /* ── Section kicker & footer ── */
+    body.mac-theme .section-kicker { color: var(--accent); }
+    body.mac-theme .win-footer { font-family: var(--f-win); }
+  </style>
+</head>
+<body>
+
+<!-- Desktop wallpaper -->
+<div class="win-desktop-bg" aria-hidden="true"></div>
+
+<!-- ═══════════════════════════════════════
+     PAGE CONTENT
+═══════════════════════════════════════ -->
+<main class="win-desktop" id="page-top">
+
+
+  <!-- ═══════════════════════════════════
+       HERO — Windows window
+  ═══════════════════════════════════ -->
+  <section class="win-window reveal" id="hero" style="scroll-margin-top:24px">
+
+    <div class="win-titlebar">
+      <div class="win-titlebar__app">
+        <span class="win-titlebar__icon" aria-hidden="true">🏠</span>
+        <span class="win-titlebar__title">Portfolio — Raphael Cuadra</span>
+      </div>
+      <div class="win-controls" aria-hidden="true">
+        <button class="wbtn wbtn-min"   title="Minimize" aria-label="Minimize">&#x2212;</button>
+        <button class="wbtn wbtn-max"   title="Maximize" aria-label="Maximize">□</button>
+        <button class="wbtn wbtn-close" title="Close"    aria-label="Close">&#x2715;</button>
+      </div>
+    </div>
+
+    <div class="win-body">
+      <div class="win-body-inner hero-body">
+
+        <!-- Pill badge -->
+        <p class="hero-pill" aria-label="AI Automation Specialist · Philippines">
+          <span class="blink-dot" aria-hidden="true"></span>
+          AI Automation Specialist &middot; Philippines
+        </p>
+
+        <!-- Headline -->
+        <h1 class="hero-h1">
+          <span class="h1-dim">Your Business.</span><br>
+          <span class="accent">Automated.</span><br>
+          <span class="h1-dim">Let's Build It.</span>
+        </h1>
+
+        <!-- Subtext -->
+        <p class="hero-sub">
+          Systems powered by AI — built entirely around your business.
+        </p>
+
+        <!-- CTAs -->
+        <div class="hero-actions">
+          <a href="#contact" class="btn btn--accent">
+            Let's Work Together <span class="btn-arr">→</span>
+          </a>
+          <a href="#projects" class="btn btn--subtle">View My Projects</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════
+       ABOUT — Windows Settings
+  ═══════════════════════════════════ -->
+  <section class="win-window reveal" id="about" style="scroll-margin-top:24px">
+
+    <div class="win-titlebar">
+      <div class="win-titlebar__app">
+        <span class="win-titlebar__icon" aria-hidden="true">⚙️</span>
+        <span class="win-titlebar__title">Settings — Raphael Cuadra</span>
+      </div>
+      <div class="win-controls" aria-hidden="true">
+        <button class="wbtn wbtn-min"   title="Minimize" aria-label="Minimize">&#x2212;</button>
+        <button class="wbtn wbtn-max"   title="Maximize" aria-label="Maximize">□</button>
+        <button class="wbtn wbtn-close" title="Close"    aria-label="Close">&#x2715;</button>
+      </div>
+    </div>
+
+    <div class="win-body">
+      <div class="about-layout">
+
+        <!-- Left nav -->
+        <aside class="about-nav" aria-label="Settings navigation">
+          <div class="about-nav-header">
+            <img class="about-avatar-circ"
+                 src="images/rocprofilepicture.png"
+                 alt="Raphael Cuadra"
+                 width="96" height="96"
+                 loading="lazy">
+            <div>
+              <div class="about-nav-name">Raphael Cuadra</div>
+              <div class="about-nav-role">AI Automation Specialist</div>
+            </div>
+          </div>
+
+          <div class="about-nav-items" role="list">
+            <div class="about-nav-item active" role="listitem">
+              <span class="about-nav-item-icon">👤</span> Overview
+            </div>
+            <div class="about-nav-item" role="listitem">
+              <span class="about-nav-item-icon">🔧</span> Tools & Stack
+            </div>
+            <div class="about-nav-item" role="listitem">
+              <span class="about-nav-item-icon">🌐</span> roctechva.cloud
+            </div>
+          </div>
+        </aside>
+
+        <!-- Main panel -->
+        <div class="about-panel">
+          <h2 class="about-panel-title" id="about-h2">About Raphael</h2>
+          <p class="about-panel-sub">System &rsaquo; About</p>
+
+          <p class="about-bio">
+            Senior Process Expert with 8+ years turning manual, repetitive workflows into
+            automated systems that run themselves — from reports and data analysis to
+            end-to-end business processes.
+            <br><br>
+            Most slow processes don't need more people — they need a better system.
+            If yours still depends on someone doing by hand what a system could handle,
+            I'd like to help fix that.
+          </p>
+
+          <div class="settings-group" role="list">
+            <div class="settings-row" role="listitem">
+              <span class="settings-row-icon">📍</span>
+              <span class="settings-row-label">Location</span>
+              <span class="settings-row-value">Philippines — Remote-first</span>
+            </div>
+            <div class="settings-row" role="listitem">
+              <span class="settings-row-icon">💼</span>
+              <span class="settings-row-label">Status</span>
+              <span class="settings-row-value">
+                <span class="status-badge" style="font-size:11px;padding:3px 10px">Open to freelance &amp; full-time</span>
+              </span>
+            </div>
+            <div class="settings-row" role="listitem">
+              <span class="settings-row-icon">🎯</span>
+              <span class="settings-row-label">Focus</span>
+              <span class="settings-row-value">Workflow Automation · AI Integration · CRM</span>
+            </div>
+            <div class="settings-row" role="listitem">
+              <span class="settings-row-icon">🌐</span>
+              <span class="settings-row-label">Domain</span>
+              <span class="settings-row-value">roctechva.cloud</span>
+            </div>
+          </div>
+
+          <p class="about-badge-label">// tools &amp; platforms</p>
+          <div class="about-badges">
+            <span class="badge">n8n</span>
+            <span class="badge">Make.com</span>
+            <span class="badge">Zapier</span>
+            <span class="badge">Claude AI</span>
+            <span class="badge">ChatGPT</span>
+            <span class="badge">GoHighLevel</span>
+            <span class="badge">Google Sheets</span>
+            <span class="badge">Apps Script</span>
+            <span class="badge">Telegram Bot API</span>
+            <span class="badge">Asana</span>
+            <span class="badge">Airtable</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+
+
+  <!-- ═══════════════════════════════════
+       PROJECTS — File Explorer
+  ═══════════════════════════════════ -->
+  <section class="win-window reveal" id="projects" style="scroll-margin-top:24px">
+
+    <div class="win-titlebar">
+      <div class="win-titlebar__app">
+        <span class="win-titlebar__icon" aria-hidden="true">📁</span>
+        <span class="win-titlebar__title" id="projects-titlebar-title">My Projects — File Explorer</span>
+      </div>
+      <div class="win-controls" aria-hidden="true">
+        <button class="wbtn wbtn-min"   title="Minimize" aria-label="Minimize">&#x2212;</button>
+        <button class="wbtn wbtn-max"   title="Maximize" aria-label="Maximize">□</button>
+        <button class="wbtn wbtn-close" title="Close"    aria-label="Close">&#x2715;</button>
+      </div>
+    </div>
+
+    <div class="explorer-bar" aria-hidden="true">
+      <span class="explorer-crumb">
+        This PC &rsaquo; <strong>Automation Projects</strong> &rsaquo; All
+      </span>
+      <span class="explorer-count">10 projects</span>
+    </div>
+
+    <div class="win-body">
+      <div class="win-body-inner">
+        <h2 class="sr-only" id="projects-h2">Projects</h2>
+
+        <div class="projects-grid">
+
+          <div class="project-card reveal">
+            <div class="project-card-img-wrap" data-lb-images='["images/Automated Account Transactions Report Attachment on Task Completion.png"]' data-lb-title="Auto-Attach Reports on Task Completion">
+              <img class="project-card-img" src="images/Automated Account Transactions Report Attachment on Task Completion.png" alt="Auto-Attach Reports on Task Completion" loading="lazy">
+            </div>
+            <div class="project-card-body">
+              <div class="project-card-title">Auto-Attach Reports on Task Completion</div>
+              <div class="project-card-tags"><span class="tag">Reporting</span><span class="tag">Task Management</span></div>
+              <div class="project-card-desc">When a task is marked complete, the system automatically generates and attaches the relevant account transactions report — no manual export needed.</div>
+            </div>
+          </div>
+
+          <div class="project-card reveal">
+            <div class="project-card-img-wrap" data-lb-images='["images/Make Project Auto Sort Gmail Attachments on Drive.png"]' data-lb-title="Auto-Sort Gmail Attachments to Drive">
+              <img class="project-card-img" src="images/Make Project Auto Sort Gmail Attachments on Drive.png" alt="Auto-Sort Gmail Attachments to Drive" loading="lazy">
+            </div>
+            <div class="project-card-body">
+              <div class="project-card-title">Auto-Sort Gmail Attachments to Drive</div>
+              <div class="project-card-tags"><span class="tag">Make.com</span><span class="tag">Gmail</span><span class="tag">Google Drive</span></div>
+              <div class="project-card-desc">Incoming email attachments are automatically detected, categorised, and filed into the correct Drive folders — eliminating manual downloads and sorting.</div>
+            </div>
+          </div>
+
+          <div class="project-card reveal">
+            <div class="project-card-img-wrap" data-lb-images='["images/Project ASANA CRM automation.png"]' data-lb-title="Asana CRM Automation">
+              <img class="project-card-img" src="images/Project ASANA CRM automation.png" alt="Asana CRM Automation" loading="lazy">
+            </div>
+            <div class="project-card-body">
+              <div class="project-card-title">Asana CRM Automation</div>
+              <div class="project-card-tags"><span class="tag">Asana</span><span class="tag">CRM</span></div>
+              <div class="project-card-desc">New leads and client updates automatically create and assign tasks in Asana, keeping the team aligned without anyone having to copy data manually.</div>
+            </div>
+          </div>
+
+          <div class="project-card reveal">
+            <div class="project-card-img-wrap" data-lb-images='["images/Social Media content repurposing video.png"]' data-lb-title="Social Media Content Repurposing">
+              <img class="project-card-img" src="images/Social Media content repurposing video.png" alt="Social Media Content Repurposing" loading="lazy">
+            </div>
+            <div class="project-card-body">
+              <div class="project-card-title">Social Media Content Repurposing</div>
+              <div class="project-card-tags"><span class="tag">AI</span><span class="tag">Social Media</span><span class="tag">Content</span></div>
+              <div class="project-card-desc">Takes a single piece of content — a video or post — and uses AI to automatically reformat and repurpose it across multiple platforms.</div>
+            </div>
+          </div>
+
+          <div class="project-card reveal">
+            <div class="project-card-img-wrap" data-lb-images='["images/Zapier Lead Enrichment.png"]' data-lb-title="Automated Lead Enrichment">
+              <img class="project-card-img" src="images/Zapier Lead Enrichment.png" alt="Automated Lead Enrichment" loading="lazy">
+            </div>
+            <div class="project-card-body">
+              <div class="project-card-title">Automated Lead Enrichment</div>
+              <div class="project-card-tags"><span class="tag">Zapier</span><span class="tag">CRM</span><span class="tag">Leads</span></div>
+              <div class="project-card-desc">Every new lead is automatically enriched with additional data and routed to the right place — so the sales team always has context before making contact.</div>
+            </div>
+          </div>
+
+          <div class="project-card reveal">
+            <div class="project-card-img-wrap" data-lb-images='["images/Zapier Project HR Onboarding 1.png","images/Zapier Project HR Onboarding 2.png"]' data-lb-title="HR Onboarding Workflow">
+              <img class="project-card-img" src="images/Zapier Project HR Onboarding 1.png" alt="HR Onboarding Workflow" loading="lazy">
+            </div>
+            <div class="project-card-body">
+              <div class="project-card-title">HR Onboarding Workflow</div>
+              <div class="project-card-tags"><span class="tag">Zapier</span><span class="tag">HR</span><span class="tag">Onboarding</span></div>
+              <div class="project-card-desc">New hire triggers a full onboarding sequence — account setup, task assignments, and welcome notifications — all running automatically from day one.</div>
+            </div>
+          </div>
+
+          <div class="project-card reveal">
+            <div class="project-card-img-wrap" data-lb-images='["images/n8n ASMR Content generator.png"]' data-lb-title="AI Content Generator">
+              <img class="project-card-img" src="images/n8n ASMR Content generator.png" alt="AI Content Generator" loading="lazy">
+            </div>
+            <div class="project-card-body">
+              <div class="project-card-title">AI Content Generator</div>
+              <div class="project-card-tags"><span class="tag">n8n</span><span class="tag">AI</span><span class="tag">Content</span></div>
+              <div class="project-card-desc">An AI-powered workflow that generates structured content on demand — reducing the time spent writing from scratch for recurring content needs.</div>
+            </div>
+          </div>
+
+          <div class="project-card reveal">
+            <div class="project-card-img-wrap" data-lb-images='["images/n8n Automated AI Facebook Post Workflow.png"]' data-lb-title="AI Facebook Post Workflow">
+              <img class="project-card-img" src="images/n8n Automated AI Facebook Post Workflow.png" alt="AI Facebook Post Workflow" loading="lazy">
+            </div>
+            <div class="project-card-body">
+              <div class="project-card-title">AI Facebook Post Workflow</div>
+              <div class="project-card-tags"><span class="tag">n8n</span><span class="tag">AI</span><span class="tag">Facebook</span></div>
+              <div class="project-card-desc">AI drafts and schedules Facebook posts automatically based on a defined content strategy — keeping the page active without daily manual effort.</div>
+            </div>
+          </div>
+
+          <div class="project-card reveal">
+            <div class="project-card-img-wrap" data-lb-images='["images/n8n project Facebook AI Agent.png"]' data-lb-title="Facebook AI Agent">
+              <img class="project-card-img" src="images/n8n project Facebook AI Agent.png" alt="Facebook AI Agent" loading="lazy">
+            </div>
+            <div class="project-card-body">
+              <div class="project-card-title">Facebook AI Agent</div>
+              <div class="project-card-tags"><span class="tag">n8n</span><span class="tag">AI Agent</span><span class="tag">Facebook</span></div>
+              <div class="project-card-desc">An AI agent that monitors Facebook activity and responds to common interactions automatically — handling routine engagement so you don't have to.</div>
+            </div>
+          </div>
+
+          <div class="project-card reveal">
+            <div class="project-card-img-wrap" data-lb-images='["images/n8n simple order to invoice billing.png"]' data-lb-title="Order to Invoice Automation">
+              <img class="project-card-img" src="images/n8n simple order to invoice billing.png" alt="Order to Invoice Automation" loading="lazy">
+            </div>
+            <div class="project-card-body">
+              <div class="project-card-title">Order to Invoice Automation</div>
+              <div class="project-card-tags"><span class="tag">n8n</span><span class="tag">Billing</span><span class="tag">Operations</span></div>
+              <div class="project-card-desc">When an order comes in, an invoice is automatically generated and sent — removing the manual billing step and speeding up the payment cycle.</div>
+            </div>
+          </div>
+
+        </div><!-- /.projects-grid -->
+      </div>
+    </div>
+  </section>
+
+
+
+
+
+  <!-- ═══════════════════════════════════
+       PROCESS — How I Work
+  ═══════════════════════════════════ -->
+  <section class="win-window reveal" id="process" style="scroll-margin-top:24px">
+
+    <div class="win-titlebar">
+      <div class="win-titlebar__app">
+        <span class="win-titlebar__icon" aria-hidden="true" data-win-icon="📋" data-mac-icon="📋">📋</span>
+        <span class="win-titlebar__title">How I Work — No Surprises</span>
+      </div>
+      <div class="win-controls" aria-hidden="true">
+        <button class="wbtn wbtn-min"   title="Minimize" aria-label="Minimize">&#x2212;</button>
+        <button class="wbtn wbtn-max"   title="Maximize" aria-label="Maximize">□</button>
+        <button class="wbtn wbtn-close" title="Close"    aria-label="Close">&#x2715;</button>
+      </div>
+    </div>
+
+    <div class="win-body">
+      <div class="win-body-inner">
+        <p class="section-kicker">How It Works</p>
+        <h2 class="section-heading" id="process-h2" style="margin-bottom:28px">Project Timeline</h2>
+
+        <div class="gantt-wrap">
+          <div class="gantt-inner">
+
+            <!-- Header -->
+            <div class="gantt-header">
+              <div class="gantt-label-hd">Phase</div>
+              <div class="gantt-periods">
+                <div class="gantt-period">Kickoff</div>
+                <div class="gantt-period">Planning</div>
+                <div class="gantt-period">Execution</div>
+                <div class="gantt-period">Delivery</div>
+                <div class="gantt-period">Post-Launch</div>
+              </div>
+            </div>
+
+            <!-- Row 1 -->
+            <div class="gantt-row reveal">
+              <div class="gantt-label">
+                <span class="gantt-num">01</span>
+                <div>
+                  <div class="gantt-phase">Discovery Call</div>
+                  <div class="gantt-phase-desc">Map your workflow, identify bottlenecks</div>
+                </div>
+              </div>
+              <div class="gantt-timeline-row">
+                <div class="gantt-bar" style="left:1%;width:17%;background:linear-gradient(90deg,#0078D4,#2899F5)">Discovery</div>
+              </div>
+            </div>
+
+            <!-- Row 2 -->
+            <div class="gantt-row reveal">
+              <div class="gantt-label">
+                <span class="gantt-num">02</span>
+                <div>
+                  <div class="gantt-phase">Blueprint Design</div>
+                  <div class="gantt-phase-desc">Full solution mapped before any build</div>
+                </div>
+              </div>
+              <div class="gantt-timeline-row">
+                <div class="gantt-bar" style="left:17%;width:22%;background:linear-gradient(90deg,#8764B8,#A78BD4)">Blueprint</div>
+              </div>
+            </div>
+
+            <!-- Row 3 -->
+            <div class="gantt-row reveal">
+              <div class="gantt-label">
+                <span class="gantt-num">03</span>
+                <div>
+                  <div class="gantt-phase">Build &amp; Stress-Test</div>
+                  <div class="gantt-phase-desc">Built, tested, and broken before you see it</div>
+                </div>
+              </div>
+              <div class="gantt-timeline-row">
+                <div class="gantt-bar" style="left:37%;width:34%;background:linear-gradient(90deg,#00B4D8,#00D4FF)">Build &amp; Test</div>
+              </div>
+            </div>
+
+            <!-- Row 4 -->
+            <div class="gantt-row reveal">
+              <div class="gantt-label">
+                <span class="gantt-num">04</span>
+                <div>
+                  <div class="gantt-phase">Deploy &amp; Hand Over</div>
+                  <div class="gantt-phase-desc">Live system + full walkthrough + docs</div>
+                </div>
+              </div>
+              <div class="gantt-timeline-row">
+                <div class="gantt-bar" style="left:68%;width:20%;background:linear-gradient(90deg,#5C6BC0,#7986CB)">Deploy</div>
+              </div>
+            </div>
+
+            <!-- Row 5 -->
+            <div class="gantt-row reveal">
+              <div class="gantt-label">
+                <span class="gantt-num">05</span>
+                <div>
+                  <div class="gantt-phase">Check In &amp; Refine</div>
+                  <div class="gantt-phase-desc">Available post-launch to tune and support</div>
+                </div>
+              </div>
+              <div class="gantt-timeline-row">
+                <div class="gantt-bar" style="left:80%;width:19%;background:linear-gradient(90deg,#4CC2FF,#80D8FF)">Support</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <p style="font-family:var(--f-mono);font-size:11px;color:var(--t3);margin-top:14px;">
+          * Timeline varies depending on project scope and complexity.
+        </p>
+
+        <div class="gantt-cta">
+          <a href="#contact" class="btn btn--accent">
+            Start with a Free Discovery Call <span class="btn-arr">→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════
+       CONTACT — Windows Terminal
+  ═══════════════════════════════════ -->
+  <section class="win-window reveal" id="contact" style="scroll-margin-top:24px">
+
+    <!-- Custom terminal tab bar -->
+    <div class="win-terminal-bar">
+      <div class="terminal-tabs">
+        <div class="terminal-tab active">
+          <span class="terminal-tab-icon">⚡</span>
+          PowerShell
+        </div>
+        <div class="terminal-tab">
+          <span class="terminal-tab-icon">+</span>
+        </div>
+      </div>
+      <div class="win-controls" aria-hidden="true">
+        <button class="wbtn wbtn-min"   title="Minimize" aria-label="Minimize">&#x2212;</button>
+        <button class="wbtn wbtn-max"   title="Maximize" aria-label="Maximize">□</button>
+        <button class="wbtn wbtn-close" title="Close"    aria-label="Close">&#x2715;</button>
+      </div>
+    </div>
+
+    <div class="win-body contact-body">
+
+      <!-- Header -->
+      <div class="contact-header">
+        <span class="section-label">Contact</span>
+        <h2>Let's Work Together</h2>
+        <p>Have a project in mind? Book a free discovery call or get in touch.</p>
+      </div>
+
+      <!-- Two-column layout -->
+      <div class="contact-grid">
+
+        <!-- LEFT — info + CTA -->
+        <div class="contact-left">
+
+          <a href="mailto:rocuadra.tva@gmail.com" class="contact-info-card">
+            <div class="contact-info-icon">✉</div>
+            <div>
+              <div class="contact-info-label">Email</div>
+              <div class="contact-info-value">rocuadra.tva@gmail.com</div>
+            </div>
+          </a>
+
+          <div class="contact-info-card">
+            <div class="contact-info-icon">📍</div>
+            <div>
+              <div class="contact-info-label">Location</div>
+              <div class="contact-info-value">Philippines (Remote)</div>
+            </div>
+          </div>
+
+          <div class="contact-socials-row">
+            <span class="contact-socials-label">Connect with me</span>
+            <div class="contact-socials-icons">
+              <a href="https://github.com/" target="_blank" rel="noopener noreferrer" class="contact-social-btn" aria-label="GitHub">
+                <!-- GitHub icon -->
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+              </a>
+              <a href="https://linkedin.com/in/" target="_blank" rel="noopener noreferrer" class="contact-social-btn" aria-label="LinkedIn">
+                <!-- LinkedIn icon -->
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+              </a>
+              <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer" class="contact-social-btn" aria-label="Twitter / X">
+                <!-- X / Twitter icon -->
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Booking CTA card -->
+          <div class="contact-cta-card">
+            <div class="contact-cta-header">
+              <span class="contact-cta-icon">📅</span>
+              <span class="contact-cta-title">Free 30-min Discovery Call</span>
+            </div>
+            <p class="contact-cta-desc">Let's discuss how automation can transform your business operations.</p>
+            <a href="https://calendly.com/rocuadra-tva/30min" target="_blank" rel="noopener noreferrer" class="contact-book-btn">
+              Book a Call &nbsp;→
+            </a>
+          </div>
+
+        </div>
+
+        <!-- RIGHT — Calendly inline embed -->
+        <div class="contact-right">
+          <!-- Calendly inline widget -->
+          <div class="contact-calendly-wrap calendly-inline-widget"
+               data-url="https://calendly.com/rocuadra-tva/30min?hide_gdpr_banner=1&background_color=ffffff&text_color=1a1a2e&primary_color=00d2d3&timezone=Asia%2FManila"
+               style="min-width:320px;height:580px;"></div>
+          <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+        </div>
+
+      </div><!-- /.contact-grid -->
+
+    </div>
+  </section>
+
+
+  <!-- Footer -->
+  <footer class="win-footer reveal" role="contentinfo">
+    <span>© 2026 Raphael Cuadra</span>
+    <span>·</span>
+    <span>AI Automation Specialist · Philippines</span>
+    <span>·</span>
+    <span>roctechva.cloud</span>
+  </footer>
+
+</main>
+
+
+<!-- ═══════════════════════════════════════
+     LIGHTBOX
+═══════════════════════════════════════ -->
+<div class="lb-overlay" id="lb-overlay" role="dialog" aria-modal="true" aria-label="Project image viewer" aria-hidden="true">
+  <div class="lb-window">
+    <div class="lb-bar">
+      <span class="lb-bar-icon" aria-hidden="true">🖼️</span>
+      <span class="lb-bar-title" id="lb-title">Project Screenshot</span>
+      <span class="lb-counter" id="lb-counter"></span>
+      <button class="lb-close" id="lb-close" aria-label="Close image viewer">&#x2715;</button>
+    </div>
+    <div class="lb-img-area">
+      <button class="lb-nav lb-prev" id="lb-prev" aria-label="Previous image">&#8249;</button>
+      <div class="lb-img-wrap">
+        <img class="lb-img" id="lb-img" src="" alt="">
+      </div>
+      <button class="lb-nav lb-next" id="lb-next" aria-label="Next image">&#8250;</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     TASKBAR — Windows 11
+═══════════════════════════════════════ -->
+<nav class="win-taskbar" id="taskbar" role="navigation" aria-label="Page navigation">
+
+  <!-- Start -->
+  <button class="taskbar-start" aria-label="Start" title="Home">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="white">
+      <path d="M0 2.1l6.4-.9v6.3H0V2.1zm7.2-1L16 0v7.5H7.2V1.1zM0 8.5h6.4V14.8l-6.4-.9V8.5zm7.2 0H16v7.5l-8.8-1.2V8.5z"/>
+    </svg>
+  </button>
+
+  <!-- Centered app icons -->
+  <div class="taskbar-apps">
+    <button class="taskbar-app is-open" data-window="hero"     data-label="Home"     aria-label="Home">🏠     <span class="dock__dot" aria-hidden="true"></span></button>
+    <button class="taskbar-app is-open" data-window="about"    data-label="About"    aria-label="About">⚙️    <span class="dock__dot" aria-hidden="true"></span></button>
+    <button class="taskbar-app is-open" data-window="projects" data-label="Projects" aria-label="Projects">📁 <span class="dock__dot" aria-hidden="true"></span></button>
+    <button class="taskbar-app is-open" data-window="process" data-label="Process"  aria-label="Process">📋 <span class="dock__dot" aria-hidden="true"></span></button>
+    <button class="taskbar-app is-open" data-window="contact"  data-label="Contact"  aria-label="Contact">✉️  <span class="dock__dot" aria-hidden="true"></span></button>
+  </div>
+
+  <!-- System tray -->
+  <div class="taskbar-tray" aria-live="polite">
+    <span class="taskbar-time" id="tb-time"></span>
+    <span class="taskbar-date" id="tb-date"></span>
+  </div>
+
+</nav>
+
+
+<!-- ═══════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════ -->
+<script>
+(function () {
+  'use strict';
+
+  /* ══════════════════════════════════════
+     WINDOW MANAGER
+  ══════════════════════════════════════ */
+  const state = {};
+
+  function getWin(id) { return document.getElementById(id); }
+  function getBtn(id) { return document.querySelector(`.taskbar-app[data-window="${id}"]`); }
+
+  function syncTaskbar(id) {
+    const btn = getBtn(id);
+    if (!btn) return;
+    const s = state[id];
+    btn.classList.toggle('is-open',      !s.closed && !s.minimized);
+    btn.classList.toggle('is-minimized',  s.minimized && !s.closed);
+    btn.classList.toggle('is-closed',     s.closed);
+  }
+
+  /* ── init ──────────────────────────── */
+  function initWindow(win) {
+    const id = win.id;
+    if (!id) return;
+    state[id] = { minimized: false, maximized: false, closed: false };
+    win.querySelector('.wbtn-min')  ?.addEventListener('click', () => doMinimize(id));
+    win.querySelector('.wbtn-max')  ?.addEventListener('click', () => doMaximize(id));
+    win.querySelector('.wbtn-close')?.addEventListener('click', () => doClose(id));
+  }
+
+  /* ── minimize ─────────────────────── */
+  function doMinimize(id) {
+    const win = getWin(id);
+    const s   = state[id];
+    if (s.closed) return;
+
+    if (!s.minimized) {
+      /* Collapse: set current height so CSS transition has a from-value */
+      const body = win.querySelector('.win-body');
+      if (body) {
+        body.style.maxHeight = body.scrollHeight + 'px';
+        /* Next frame: animate to 0 */
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          body.style.maxHeight = '0';
+        }));
+      }
+      s.minimized = true;
+      win.classList.add('is-minimized');
+    } else {
+      doRestore(id);
+    }
+    syncTaskbar(id);
+  }
+
+  /* ── maximize ─────────────────────── */
+  function doMaximize(id) {
+    const win = getWin(id);
+    const s   = state[id];
+    if (s.closed || s.minimized) return;
+
+    s.maximized = !s.maximized;
+    win.classList.toggle('is-maximized', s.maximized);
+
+    const maxBtn = win.querySelector('.wbtn-max');
+    if (maxBtn) maxBtn.textContent = s.maximized ? '❐' : '□';
+  }
+
+  /* ── close ───────────────────────── */
+  function doClose(id) {
+    const win = getWin(id);
+    const s   = state[id];
+    if (s.closed) return;
+
+    /* If minimized, restore body height before closing so animation is visible */
+    if (s.minimized) {
+      s.minimized = false;
+      win.classList.remove('is-minimized');
+      const body = win.querySelector('.win-body');
+      if (body) body.style.maxHeight = '';
+    }
+
+    s.closed = true;
+    win.style.transition = 'transform 0.2s ease, opacity 0.2s ease';
+    win.style.transform  = 'scale(0.96)';
+    win.style.opacity    = '0';
+
+    setTimeout(() => {
+      win.classList.add('is-closed');
+      win.style.transform  = '';
+      win.style.opacity    = '';
+      win.style.transition = '';
+    }, 215);
+
+    syncTaskbar(id);
+  }
+
+  /* ── restore ──────────────────────── */
+  function doRestore(id) {
+    const win = getWin(id);
+    const s   = state[id];
+
+    /* Un-close */
+    if (s.closed) {
+      s.closed = false;
+      win.classList.remove('is-closed');
+      /* Short open animation */
+      win.style.transition = 'transform 0.2s ease, opacity 0.2s ease';
+      win.style.transform  = 'scale(0.96)';
+      win.style.opacity    = '0';
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        win.style.transform = 'scale(1)';
+        win.style.opacity   = '1';
+        setTimeout(() => { win.style.transition = ''; win.style.transform = ''; win.style.opacity = ''; }, 215);
+      }));
+    }
+
+    /* Un-minimize */
+    if (s.minimized) {
+      s.minimized = false;
+      win.classList.remove('is-minimized');
+      const body = win.querySelector('.win-body');
+      if (body) {
+        /* Animate open: large fixed value so transition has a target */
+        body.style.maxHeight = '9999px';
+        setTimeout(() => { body.style.maxHeight = ''; }, 350);
+      }
+    }
+
+    /* Un-maximize */
+    if (s.maximized) {
+      s.maximized = false;
+      win.classList.remove('is-maximized');
+      const maxBtn = win.querySelector('.wbtn-max');
+      if (maxBtn) maxBtn.textContent = '□';
+    }
+
+    syncTaskbar(id);
+    setTimeout(() => win.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 60);
+  }
+
+  /* ── taskbar click ────────────────── */
+  document.querySelectorAll('.taskbar-app').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.dataset.window;
+      if (!id || !state[id]) return;
+      const s = state[id];
+      if (s.closed || s.minimized) {
+        doRestore(id);
+      } else {
+        getWin(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  document.querySelector('.taskbar-start')?.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  /* ── boot all windows ─────────────── */
+  document.querySelectorAll('.win-window').forEach(win => initWindow(win));
+
+
+  /* ══════════════════════════════════════
+     LIGHTBOX
+  ══════════════════════════════════════ */
+  const lbOverlay = document.getElementById('lb-overlay');
+  const lbImg     = document.getElementById('lb-img');
+  const lbTitle   = document.getElementById('lb-title');
+  const lbClose   = document.getElementById('lb-close');
+  const lbPrev    = document.getElementById('lb-prev');
+  const lbNext    = document.getElementById('lb-next');
+  const lbCounter = document.getElementById('lb-counter');
+
+  /* Build flat gallery from all project cards */
+  const lbGallery = []; /* [{ src, title }] */
+  document.querySelectorAll('.project-card-img-wrap').forEach(wrap => {
+    const images = wrap.dataset.lbImages ? JSON.parse(wrap.dataset.lbImages) : [];
+    const title  = wrap.dataset.lbTitle || '';
+    images.forEach(src => lbGallery.push({ src, title }));
+  });
+
+  let lbIndex = 0;
+
+  function showLbSlide(i) {
+    lbIndex = i;
+    const { src, title } = lbGallery[i];
+    lbImg.src             = src;
+    lbImg.alt             = title;
+    lbTitle.textContent   = title;
+    lbCounter.textContent = `${i + 1} / ${lbGallery.length}`;
+    lbPrev.hidden = i === 0;
+    lbNext.hidden = i === lbGallery.length - 1;
+  }
+
+  function openLightbox(startIndex) {
+    lbOverlay.classList.add('is-open');
+    lbOverlay.removeAttribute('aria-hidden');
+    showLbSlide(startIndex);
+    lbClose.focus();
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    lbOverlay.classList.remove('is-open');
+    lbOverlay.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    setTimeout(() => { lbImg.src = ''; }, 220);
+  }
+
+  lbPrev?.addEventListener('click', () => { if (lbIndex > 0) showLbSlide(lbIndex - 1); });
+  lbNext?.addEventListener('click', () => { if (lbIndex < lbGallery.length - 1) showLbSlide(lbIndex + 1); });
+
+  /* Trigger: click opens at the first image of that card */
+  let galleryOffset = 0;
+  document.querySelectorAll('.project-card-img-wrap').forEach(wrap => {
+    const count      = wrap.dataset.lbImages ? JSON.parse(wrap.dataset.lbImages).length : 0;
+    const startIndex = galleryOffset;
+    galleryOffset   += count;
+    wrap.style.cursor = 'zoom-in';
+    wrap.addEventListener('click', () => {
+      if (!count) return;
+      openLightbox(startIndex);
+    });
+  });
+
+  /* Close via button, backdrop click, or ESC / arrow keys */
+  lbClose?.addEventListener('click', closeLightbox);
+
+  lbOverlay?.addEventListener('click', e => {
+    if (e.target === lbOverlay) closeLightbox();
+  });
+
+  document.addEventListener('keydown', e => {
+    if (!lbOverlay?.classList.contains('is-open')) return;
+    if (e.key === 'Escape')      closeLightbox();
+    if (e.key === 'ArrowLeft'  && lbIndex > 0)                   showLbSlide(lbIndex - 1);
+    if (e.key === 'ArrowRight' && lbIndex < lbImages.length - 1) showLbSlide(lbIndex + 1);
+  });
+
+  /* Swipe left / right on touch devices */
+  let lbTouchX = null;
+  lbOverlay?.addEventListener('touchstart', e => {
+    lbTouchX = e.touches[0].clientX;
+  }, { passive: true });
+  lbOverlay?.addEventListener('touchend', e => {
+    if (lbTouchX === null) return;
+    const dx = e.changedTouches[0].clientX - lbTouchX;
+    lbTouchX = null;
+    if (Math.abs(dx) < 40) return;
+    if (dx < 0 && lbIndex < lbImages.length - 1) showLbSlide(lbIndex + 1);
+    if (dx > 0 && lbIndex > 0)                   showLbSlide(lbIndex - 1);
+  }, { passive: true });
+
+
+  /* ══════════════════════════════════════
+     SCROLL REVEAL
+  ══════════════════════════════════════ */
+  const revObs = new IntersectionObserver(
+    entries => entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); revObs.unobserve(e.target); }
+    }),
+    { threshold: 0.08, rootMargin: '0px 0px -28px 0px' }
+  );
+  document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+
+  /* Active taskbar dot */
+  const actObs = new IntersectionObserver(
+    entries => entries.forEach(e => {
+      if (e.isIntersecting) {
+        document.querySelectorAll('.taskbar-app').forEach(b => b.classList.remove('is-current'));
+        document.querySelector(`.taskbar-app[data-window="${e.target.id}"]`)?.classList.add('is-current');
+      }
+    }),
+    { threshold: 0.35 }
+  );
+  document.querySelectorAll('section[id]').forEach(s => actObs.observe(s));
+
+  /* Smooth scroll anchors */
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const t = document.querySelector(a.getAttribute('href'));
+      if (!t) return;
+      e.preventDefault();
+      t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  /* ══════════════════════════════════════
+     TASKBAR CLOCK
+  ══════════════════════════════════════ */
+  function tick() {
+    const now  = new Date();
+    const tEl  = document.getElementById('tb-time');
+    const dEl  = document.getElementById('tb-date');
+    if (tEl) tEl.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    if (dEl) dEl.textContent = now.toLocaleDateString([], { month: 'numeric', day: 'numeric', year: 'numeric' });
+  }
+  tick();
+  setInterval(tick, 1000);
+
+
+  /* ══════════════════════════════════════
+     TYPING EFFECT — Terminal
+  ══════════════════════════════════════ */
+  (function () {
+    const el = document.getElementById('typed-cmd-text');
+    if (!el) return;
+    const cursor = document.querySelector('.t-cursor');
+
+    function typeSequence(sequences, onDone) {
+      let si = 0;
+      function next() {
+        if (si >= sequences.length) { if (onDone) onDone(); return; }
+        const { text, delay } = sequences[si++];
+        setTimeout(() => {
+          let i = 0;
+          const t = setInterval(() => {
+            el.textContent += text[i++];
+            if (i >= text.length) { clearInterval(t); setTimeout(next, 400); }
+          }, 55);
+        }, delay);
+      }
+      next();
+    }
+
+    /* Wait for contact section to be visible */
+    const contactSec = document.getElementById('contact');
+    if (!contactSec) return;
+    const tObs = new IntersectionObserver(entries => {
+      if (!entries[0].isIntersecting) return;
+      tObs.disconnect();
+      el.textContent = '';
+      setTimeout(() => {
+        typeSequence([
+          { text: 'Get-Contact', delay: 300 },
+          { text: ' -Hire',      delay: 0 },
+          { text: ' -Remote',    delay: 0 },
+        ]);
+      }, 500);
+    }, { threshold: 0.3 });
+    tObs.observe(contactSec);
+  })();
+
+})();
+</script>
+
+
+<!-- ═══════════════════════════════════════
+     OS THEME TOGGLE
+═══════════════════════════════════════ -->
+<button class="os-toggle" id="os-toggle" aria-label="Switch OS theme" title="Toggle macOS / Windows theme">
+  <span class="os-toggle__icon" id="os-toggle-icon">🍎</span>
+  <span class="os-toggle__label" id="os-toggle-label">macOS Mode</span>
+</button>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ══════════════════════════════════════
+     macOS THEME TOGGLE
+  ══════════════════════════════════════ */
+  const PREF_KEY = 'portfolio-os-theme';
+  const body     = document.body;
+  const btn      = document.getElementById('os-toggle');
+  const icon     = document.getElementById('os-toggle-icon');
+  const lbl      = document.getElementById('os-toggle-label');
+
+  /* Content swaps by window ID */
+  const WIN_TITLES = {
+    hero:     'Portfolio — Raphael Cuadra',
+    about:    'Settings — Raphael Cuadra',
+    projects: 'My Projects — File Explorer',
+    services: 'Services — Windows Apps',
+  };
+
+  const MAC_TITLES = {
+    hero:     'Portfolio — Raphael Cuadra',
+    about:    'System Preferences — Raphael Cuadra',
+    projects: 'Finder — My Projects',
+    services: 'Services — Launchpad',
+  };
+
+  function applyTheme(isMac) {
+    body.classList.toggle('mac-theme', isMac);
+
+    /* Toggle button label */
+    icon.textContent = isMac ? '⊞' : '🍎';
+    lbl.textContent  = isMac ? 'Windows Mode' : 'macOS Mode';
+
+    /* Swap window titles */
+    const map = isMac ? MAC_TITLES : WIN_TITLES;
+    Object.entries(map).forEach(([id, text]) => {
+      const win = document.getElementById(id);
+      if (!win) return;
+      const titleEl = win.querySelector('.win-titlebar__title');
+      if (titleEl) titleEl.textContent = text;
+    });
+
+    /* Swap terminal tab label */
+    const termTab = document.querySelector('.win-terminal-bar .terminal-tab.active');
+    if (termTab) {
+      termTab.innerHTML = isMac
+        ? '<span class="terminal-tab-icon">🖥️</span> zsh'
+        : '<span class="terminal-tab-icon">⚡</span> PowerShell';
+    }
+
+    /* Swap terminal prompts */
+    document.querySelectorAll('.t-ps').forEach(el => {
+      el.textContent = isMac
+        ? 'raphael@MacBook-Pro ~ %'
+        : 'PS C:\\Users\\Raphael>';
+    });
+
+    /* Swap File Explorer breadcrumb */
+    const crumb = document.querySelector('.explorer-crumb');
+    if (crumb) {
+      crumb.innerHTML = isMac
+        ? 'Finder \u203A <strong>Automation Projects</strong> \u203A All'
+        : 'This PC \u203A <strong>Automation Projects</strong> \u203A All';
+    }
+
+    /* Swap About panel sub-title */
+    const panelSub = document.querySelector('.about-panel-sub');
+    if (panelSub) {
+      panelSub.textContent = isMac
+        ? 'System Preferences \u203A About'
+        : 'System \u203A About';
+    }
+
+    /* Persist preference */
+    try { localStorage.setItem(PREF_KEY, isMac ? 'mac' : 'win'); } catch (_) {}
+
+    /* Swap all data-win-icon / data-mac-icon elements */
+    document.querySelectorAll('[data-win-icon]').forEach(el => {
+      el.textContent = isMac
+        ? (el.dataset.macIcon || el.textContent)
+        : (el.dataset.winIcon || el.textContent);
+    });
+  }
+
+  /* Load saved preference */
+  let isMac = false;
+  try { isMac = localStorage.getItem(PREF_KEY) === 'mac'; } catch (_) {}
+
+  /* Apply on load (skip if default Windows) */
+  if (isMac) applyTheme(true);
+
+  /* Toggle on click */
+  btn.addEventListener('click', () => {
+    isMac = !isMac;
+    applyTheme(isMac);
+  });
+
+})();
+</script>
+
+</body>
+</html>
