@@ -1015,7 +1015,7 @@
       color: #14a800;
     }
 
-    .calendly-wrap {
+    .ghl-booking-wrap {
       background: var(--card-bg);
       border: 2px solid var(--card-border);
       overflow: hidden;
@@ -1024,14 +1024,9 @@
       min-height: 700px;
     }
 
-    .calendly-wrap .calendly-inline-widget {
+    .ghl-booking-wrap iframe {
       flex: 1;
-      min-width: 320px;
-      height: 100% !important;
       min-height: 700px;
-    }
-
-    .calendly-wrap iframe {
       overflow: hidden !important;
       display: block;
     }
@@ -1416,11 +1411,11 @@
     .lf-tab-panel.is-active { display: block; }
 
     /* Calendly panel sizing */
-    .lf-calendly-wrap {
+    .lf-ghl-wrap {
       min-height: 580px;
     }
-    .lf-calendly-wrap .calendly-inline-widget {
-      min-width: 100%; height: 580px;
+    .lf-ghl-wrap iframe {
+      width: 100%; height: 580px; border: none; overflow: hidden;
     }
 
     .lf-modal__bar {
@@ -1650,7 +1645,7 @@
       padding-top: 40px;
     }
     .calendly-block__header { margin-bottom: 24px; }
-    .calendly-wrap {
+    .ghl-booking-wrap {
       background: var(--card-bg);
       border: 2px solid var(--card-border);
       overflow: hidden;
@@ -2284,26 +2279,13 @@
 
         </div>
 
-        <!-- ── CALENDLY (right column) ── -->
-        <div class="calendly-wrap reveal">
-          <div class="calendly-inline-widget"
-               data-url="https://calendly.com/rocuadra-tva/30min?hide_gdpr_banner=1&background_color=1E1E1E&text_color=ffffff&primary_color=F26C38"
-               style="min-width:320px;height:700px;"></div>
-          <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
-          <script>
-            (function() {
-              var wrap = document.querySelector('.calendly-wrap');
-              var observer = new MutationObserver(function() {
-                var iframe = wrap.querySelector('iframe');
-                if (iframe) {
-                  iframe.setAttribute('scrolling', 'no');
-                  iframe.style.overflow = 'hidden';
-                  observer.disconnect();
-                }
-              });
-              observer.observe(wrap, { childList: true, subtree: true });
-            })();
-          </script>
+        <!-- ── GHL BOOKING (right column) ── -->
+        <div class="ghl-booking-wrap reveal">
+          <iframe src="https://api.leadconnectorhq.com/widget/booking/iY3lKDWKRgRN9Gvlhnso"
+            style="width:100%;border:none;overflow:hidden;min-height:700px;"
+            scrolling="no"
+            id="ghl-booking-contact"></iframe>
+          <script src="https://link.msgsndr.com/js/form_embed.js" type="text/javascript"></script>
         </div>
 
       </div>
@@ -2563,14 +2545,14 @@
 
       </div>
 
-      <!-- Tab Panel: Calendly -->
+      <!-- Tab Panel: GHL Booking -->
       <div class="lf-tab-panel" id="lf-panel-book">
-        <div class="lf-calendly-wrap">
-          <div class="calendly-inline-widget"
-               data-url="https://calendly.com/rocuadra-tva/30min?hide_gdpr_banner=1&background_color=1a1a1a&text_color=ffffff&primary_color=F26C38"
-               style="min-width:100%;height:580px;">
-          </div>
-          <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+        <div class="lf-ghl-wrap">
+          <iframe src="https://api.leadconnectorhq.com/widget/booking/iY3lKDWKRgRN9Gvlhnso"
+            style="width:100%;border:none;overflow:hidden;height:580px;"
+            scrolling="no"
+            id="ghl-booking-modal"></iframe>
+          <script src="https://link.msgsndr.com/js/form_embed.js" type="text/javascript"></script>
         </div>
       </div>
 
