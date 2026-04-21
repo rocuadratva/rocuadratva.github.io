@@ -2,7 +2,6 @@
   'use strict';
 
   var WEBHOOK_URL = 'https://n8n.srv1326537.hstgr.cloud/webhook/ghl-appointment-bot';
-  var OPENING_MSG = "Hi! I'm Raphael's AI assistant. I can book, reschedule, or cancel your discovery call. How can I help?";
 
   var sessionId = sessionStorage.getItem('rc_chat_sid');
   if (!sessionId) {
@@ -13,7 +12,7 @@
     sessionStorage.setItem('rc_chat_sid', sessionId);
   }
 
-  var state = { open: false, waiting: false };
+  var state = { open: false, waiting: false, step: 'intent', intent: '', name: '', email: '', slot: '' };
 
   /* ── CSS ── */
   var style = document.createElement('style');
@@ -63,6 +62,11 @@
     '#rc-send:hover{filter:brightness(1.15);transform:scale(1.05)}',
     '#rc-send:disabled{opacity:.4;cursor:default;transform:none}',
 
+    /* Option pills */
+    '.rc-options{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;align-self:flex-start;max-width:90%}',
+    '.rc-opt{padding:7px 16px;border-radius:999px;background:#2A2A2A;border:1px solid rgba(255,255,255,.15);color:#fff;cursor:pointer;font-size:12px;font-family:inherit;transition:border-color .15s,color .15s}',
+    '.rc-opt:hover{border-color:#F26C38;color:#F26C38}',
+
     /* Mobile */
     '@media(max-width:420px){#rc-panel{width:calc(100vw - 32px);right:-8px}}'
   ].join('');
@@ -90,7 +94,7 @@
         '<div id="rc-typing"><span class="rc-dot"></span><span class="rc-dot"></span><span class="rc-dot"></span></div>',
       '</div>',
       '<div id="rc-input-row">',
-        '<input id="rc-input" type="text" placeholder="Type a message..." autocomplete="off">',
+        '<input id="rc-input" type="text" placeholder="Type here..." autocomplete="off">',
         '<button id="rc-send" aria-label="Send">',
           '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">',
             '<path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/>',
@@ -105,6 +109,7 @@
   var panel    = document.getElementById('rc-panel');
   var messages = document.getElementById('rc-messages');
   var typing   = document.getElementById('rc-typing');
+  var inputRow = document.getElementById('rc-input-row');
   var input    = document.getElementById('rc-input');
   var sendBtn  = document.getElementById('rc-send');
   var closeBtn = document.getElementById('rc-close');
@@ -122,6 +127,34 @@
     scrollBottom();
   }
 
+  function renderOptions(items, onPick) {
+    var wrap = document.createElement('div');
+    wrap.className = 'rc-options';
+    items.forEach(function (label) {
+      var btn = document.createElement('button');
+      btn.className = 'rc-opt';
+      btn.textContent = label;
+      btn.addEventListener('click', function () {
+        wrap.remove();
+        onPick(label);
+      });
+      wrap.appendChild(btn);
+    });
+    messages.insertBefore(wrap, typing);
+    scrollBottom();
+  }
+
+  function showInput(placeholder) {
+    inputRow.style.display = 'flex';
+    input.placeholder = placeholder || 'Type here...';
+    input.value = '';
+    input.focus();
+  }
+
+  function hideInput() {
+    inputRow.style.display = 'none';
+  }
+
   function setWaiting(val) {
     state.waiting = val;
     sendBtn.disabled = val;
@@ -130,47 +163,171 @@
     scrollBottom();
   }
 
-  /* ── Toggle panel ── */
-  function togglePanel() {
-    state.open = !state.open;
-    panel.classList.toggle('rc-open', state.open);
-    panel.setAttribute('aria-hidden', String(!state.open));
-    if (state.open) input.focus();
+  /* ── Flow ── */
+  function startFlow() {
+    appendMsg("Hi! I'm Raphael's AI assistant. How can I help you today?", 'ai');
+    showIntentOptions();
   }
 
-  bubble.addEventListener('click', togglePanel);
-  closeBtn.addEventListener('click', togglePanel);
+  function showIntentOptions() {
+    state.step = 'intent';
+    hideInput();
+    renderOptions(['📅 Book a Call', '❌ Cancel Appointment', '🔄 Reschedule'], function (label) {
+      if (label.indexOf('Book') !== -1) {
+        state.intent = 'book';
+        appendMsg('Book a Call', 'user');
+        askName();
+      } else if (label.indexOf('Cancel') !== -1) {
+        state.intent = 'cancel';
+        appendMsg('Cancel Appointment', 'user');
+        askEmail();
+      } else {
+        state.intent = 'reschedule';
+        appendMsg('Reschedule', 'user');
+        askEmail();
+      }
+    });
+  }
 
-  /* ── Send message ── */
-  function send() {
-    var text = input.value.trim();
-    if (!text || state.waiting) return;
-    input.value = '';
-    appendMsg(text, 'user');
+  function askName() {
+    state.step = 'name';
+    appendMsg("Great! What's your name?", 'ai');
+    showInput("Your name...");
+  }
+
+  function askEmail() {
+    state.step = 'email';
+    var prompt = state.intent === 'book'
+      ? 'Nice to meet you, ' + state.name + '! What\u2019s your email address?'
+      : 'What\u2019s the email address on your appointment?';
+    appendMsg(prompt, 'ai');
+    showInput("your@email.com");
+  }
+
+  function askSlot() {
+    state.step = 'slot';
+    hideInput();
+    appendMsg("Let me pull up available times...", 'ai');
     setWaiting(true);
 
     fetch(WEBHOOK_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: text, sessionId: sessionId })
+      body: JSON.stringify({ intent: 'get_slots', sessionId: sessionId })
     })
       .then(function (res) { return res.json(); })
       .then(function (data) {
         setWaiting(false);
-        appendMsg(data.reply || 'Sorry, I didn\'t get a response. Please try again.', 'ai');
+        var slots = Array.isArray(data.slots) && data.slots.length ? data.slots : null;
+        if (!slots) {
+          appendMsg("I couldn\u2019t load available slots right now. Please type your preferred date and time (e.g. Apr 25, 10am).", 'ai');
+          showInput("e.g. Apr 25, 10am");
+          state.step = 'slot-text';
+          return;
+        }
+        appendMsg("Here are the next available times:", 'ai');
+        renderOptions(slots.slice(0, 5), function (label) {
+          state.slot = label;
+          appendMsg(label, 'user');
+          confirmAndSubmit();
+        });
       })
       .catch(function () {
         setWaiting(false);
-        appendMsg('Sorry, something went wrong. Please try again.', 'ai');
+        appendMsg("Please type your preferred date and time (e.g. Apr 25, 10am).", 'ai');
+        showInput("e.g. Apr 25, 10am");
+        state.step = 'slot-text';
       });
   }
 
-  sendBtn.addEventListener('click', send);
+  function askCancelConfirm() {
+    state.step = 'cancel-confirm';
+    hideInput();
+    appendMsg("Ready to cancel the appointment linked to " + state.email + "?", 'ai');
+    renderOptions(['Yes, cancel it', 'No, go back'], function (label) {
+      if (label.indexOf('Yes') !== -1) {
+        appendMsg('Yes, cancel it', 'user');
+        confirmAndSubmit();
+      } else {
+        appendMsg('No, go back', 'user');
+        showIntentOptions();
+      }
+    });
+  }
+
+  function confirmAndSubmit() {
+    state.step = 'done';
+    hideInput();
+    setWaiting(true);
+
+    var payload = { sessionId: sessionId, intent: state.intent, email: state.email };
+    if (state.intent === 'book') { payload.name = state.name; payload.slot = state.slot; }
+    if (state.intent === 'reschedule') { payload.slot = state.slot; }
+
+    fetch(WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        setWaiting(false);
+        appendMsg(data.reply || 'All done! You\u2019ll receive a confirmation shortly.', 'ai');
+        appendMsg("Need anything else?", 'ai');
+        showIntentOptions();
+      })
+      .catch(function () {
+        setWaiting(false);
+        appendMsg('Something went wrong. Please try again.', 'ai');
+        showIntentOptions();
+      });
+  }
+
+  /* ── Input submission ── */
+  function handleSubmit() {
+    var text = input.value.trim();
+    if (!text || state.waiting) return;
+    input.value = '';
+    appendMsg(text, 'user');
+
+    if (state.step === 'name') {
+      state.name = text;
+      askEmail();
+    } else if (state.step === 'email') {
+      if (!text.includes('@')) {
+        appendMsg("That doesn\u2019t look like a valid email. Please try again.", 'ai');
+        return;
+      }
+      state.email = text;
+      if (state.intent === 'book' || state.intent === 'reschedule') {
+        askSlot();
+      } else {
+        askCancelConfirm();
+      }
+    } else if (state.step === 'slot-text') {
+      state.slot = text;
+      confirmAndSubmit();
+    }
+  }
+
+  sendBtn.addEventListener('click', handleSubmit);
   input.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSubmit(); }
   });
 
-  /* ── Opening message ── */
-  appendMsg(OPENING_MSG, 'ai');
+  /* ── Toggle panel ── */
+  function togglePanel() {
+    state.open = !state.open;
+    panel.classList.toggle('rc-open', state.open);
+    panel.setAttribute('aria-hidden', String(!state.open));
+    if (state.open && state.step === 'intent' && messages.querySelectorAll('.rc-msg').length === 0) {
+      startFlow();
+    } else if (state.open) {
+      input.focus();
+    }
+  }
+
+  bubble.addEventListener('click', togglePanel);
+  closeBtn.addEventListener('click', togglePanel);
 
 })();
