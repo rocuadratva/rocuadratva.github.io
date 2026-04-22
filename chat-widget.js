@@ -15,24 +15,35 @@
   var state = { open: false, waiting: false, step: 'intent', intent: '', name: '', email: '', slot: '', timezone: '' };
 
   var TIMEZONES = [
-    { label: 'UTC−10 · Hawaii',                value: 'Pacific/Honolulu' },
-    { label: 'UTC−8  · Pacific Time (US)',      value: 'America/Los_Angeles' },
-    { label: 'UTC−7  · Mountain Time (US)',     value: 'America/Denver' },
-    { label: 'UTC−6  · Central Time (US)',      value: 'America/Chicago' },
-    { label: 'UTC−5  · Eastern Time (US)',      value: 'America/New_York' },
-    { label: 'UTC−4  · Atlantic / Toronto',     value: 'America/Halifax' },
-    { label: 'UTC−3  · São Paulo / Buenos Aires', value: 'America/Sao_Paulo' },
-    { label: 'UTC+0  · London / Lisbon',        value: 'Europe/London' },
-    { label: 'UTC+1  · Paris / Berlin',         value: 'Europe/Paris' },
-    { label: 'UTC+2  · Cairo / Athens',         value: 'Europe/Athens' },
-    { label: 'UTC+3  · Moscow / Nairobi',       value: 'Europe/Moscow' },
-    { label: 'UTC+4  · Dubai / Baku',           value: 'Asia/Dubai' },
-    { label: 'UTC+5:30 · India',                value: 'Asia/Kolkata' },
-    { label: 'UTC+7  · Bangkok / Jakarta',      value: 'Asia/Bangkok' },
-    { label: 'UTC+8  · Philippines / Singapore',value: 'Asia/Manila' },
-    { label: 'UTC+9  · Japan / Korea',          value: 'Asia/Tokyo' },
-    { label: 'UTC+10 · Sydney / Melbourne',     value: 'Australia/Sydney' },
-    { label: 'UTC+12 · Auckland',               value: 'Pacific/Auckland' }
+    { label: 'UTC−10 · Hawaii',                 value: 'Pacific/Honolulu' },
+    { label: 'UTC−8  · Pacific Time (US)',       value: 'America/Los_Angeles' },
+    { label: 'UTC−7  · Mountain Time (US)',      value: 'America/Denver' },
+    { label: 'UTC−6  · Central Time (US)',       value: 'America/Chicago' },
+    { label: 'UTC−5  · Eastern Time (US)',       value: 'America/New_York' },
+    { label: 'UTC−4  · Atlantic / Toronto',      value: 'America/Halifax' },
+    { label: 'UTC−3  · São Paulo / Buenos Aires',value: 'America/Sao_Paulo' },
+    { label: 'UTC+0  · London / Lisbon',         value: 'Europe/London' },
+    { label: 'UTC+1  · Paris / Berlin',          value: 'Europe/Paris' },
+    { label: 'UTC+2  · Cairo / Athens',          value: 'Europe/Athens' },
+    { label: 'UTC+3  · Moscow / Nairobi',        value: 'Europe/Moscow' },
+    { label: 'UTC+4  · Dubai / Baku',            value: 'Asia/Dubai' },
+    { label: 'UTC+5:30 · India',                 value: 'Asia/Kolkata' },
+    { label: 'UTC+7  · Bangkok / Jakarta',       value: 'Asia/Bangkok' },
+    { label: 'UTC+8  · Philippines / Singapore', value: 'Asia/Manila' },
+    { label: 'UTC+9  · Japan / Korea',           value: 'Asia/Tokyo' },
+    { label: 'UTC+10 · Sydney / Melbourne',      value: 'Australia/Sydney' },
+    { label: 'UTC+12 · Auckland',                value: 'Pacific/Auckland' }
+  ];
+
+  var TIME_SLOTS = [
+    { label: '9:00 AM',  hour: 9  },
+    { label: '10:00 AM', hour: 10 },
+    { label: '11:00 AM', hour: 11 },
+    { label: '1:00 PM',  hour: 13 },
+    { label: '2:00 PM',  hour: 14 },
+    { label: '3:00 PM',  hour: 15 },
+    { label: '4:00 PM',  hour: 16 },
+    { label: '5:00 PM',  hour: 17 }
   ];
 
   function getTzLabel(tz) {
@@ -52,21 +63,17 @@
     } catch (e) { return iso; }
   }
 
+  function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
   /* ── CSS ── */
   var style = document.createElement('style');
   style.textContent = [
     '#rc-chat-widget{position:fixed;bottom:24px;right:24px;z-index:99999;font-family:"Inter",system-ui,sans-serif}',
-
-    /* Bubble */
     '#rc-bubble{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#F26C38,#D72F58);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 0 10px rgba(242,108,56,.45),0 0 28px rgba(242,108,56,.18);animation:rc-pulse 2.5s ease-in-out infinite;transition:transform .2s,filter .2s}',
     '#rc-bubble:hover{transform:translateY(-2px);filter:brightness(1.1);animation-play-state:paused}',
     '@keyframes rc-pulse{0%,100%{box-shadow:0 0 10px rgba(242,108,56,.45),0 0 28px rgba(242,108,56,.18)}50%{box-shadow:0 0 22px rgba(242,108,56,.75),0 0 55px rgba(215,47,88,.35)}}',
-
-    /* Panel */
     '#rc-panel{position:absolute;bottom:68px;right:0;width:360px;height:520px;background:#1E1E1E;border:1px solid rgba(255,255,255,.15);border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.6),0 0 40px rgba(242,108,56,.08);display:flex;flex-direction:column;overflow:hidden;opacity:0;pointer-events:none;transform:translateY(12px) scale(.97);transition:opacity .25s,transform .25s}',
     '#rc-panel.rc-open{opacity:1;pointer-events:all;transform:translateY(0) scale(1)}',
-
-    /* Header */
     '#rc-header{display:flex;align-items:center;gap:10px;padding:14px 16px;background:#252525;border-bottom:1px solid rgba(255,255,255,.08);flex-shrink:0}',
     '#rc-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#F26C38,#D72F58);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px;font-weight:700;color:#fff}',
     '#rc-header-text{flex:1}',
@@ -74,8 +81,6 @@
     '#rc-header-sub{font-size:11px;color:#A1A1A1;margin-top:1px}',
     '#rc-close{background:none;border:none;cursor:pointer;color:rgba(255,255,255,.4);font-size:18px;line-height:1;padding:4px;display:flex;align-items:center;justify-content:center;border-radius:4px;transition:color .15s}',
     '#rc-close:hover{color:#fff}',
-
-    /* Messages */
     '#rc-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;scroll-behavior:smooth}',
     '#rc-messages::-webkit-scrollbar{width:4px}',
     '#rc-messages::-webkit-scrollbar-track{background:transparent}',
@@ -83,38 +88,24 @@
     '.rc-msg{max-width:82%;font-size:13px;line-height:1.55;padding:10px 14px;word-break:break-word}',
     '.rc-msg--ai{align-self:flex-start;background:#2A2A2A;color:#fff;border-radius:12px 12px 12px 4px}',
     '.rc-msg--user{align-self:flex-end;background:linear-gradient(135deg,#F26C38,#D72F58);color:#fff;border-radius:12px 12px 4px 12px}',
-
-    /* Typing indicator */
     '#rc-typing{align-self:flex-start;background:#2A2A2A;border-radius:12px 12px 12px 4px;padding:12px 16px;display:none;gap:5px;align-items:center}',
     '#rc-typing.rc-show{display:flex}',
     '.rc-dot{width:6px;height:6px;border-radius:50%;background:#A1A1A1;animation:rc-bounce .9s ease-in-out infinite}',
     '.rc-dot:nth-child(2){animation-delay:.15s}',
     '.rc-dot:nth-child(3){animation-delay:.3s}',
     '@keyframes rc-bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}',
-
-    /* Input row */
     '#rc-input-row{display:flex;align-items:center;gap:8px;padding:12px 14px;border-top:1px solid rgba(255,255,255,.08);flex-shrink:0}',
     '#rc-input{flex:1;background:#2A2A2A;border:none;border-radius:999px;padding:10px 16px;font-size:13px;color:#fff;font-family:inherit;outline:none;caret-color:#F26C38}',
     '#rc-input::placeholder{color:#A1A1A1}',
     '#rc-send{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#F26C38,#D72F58);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:filter .15s,transform .15s}',
     '#rc-send:hover{filter:brightness(1.15);transform:scale(1.05)}',
     '#rc-send:disabled{opacity:.4;cursor:default;transform:none}',
-
-    /* Option pills */
     '.rc-options{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;align-self:flex-start;max-width:92%}',
     '.rc-opt{padding:7px 16px;border-radius:999px;background:#2A2A2A;border:1px solid rgba(255,255,255,.15);color:#fff;cursor:pointer;font-size:12px;font-family:inherit;transition:border-color .15s,color .15s}',
     '.rc-opt:hover{border-color:#F26C38;color:#F26C38}',
-
-    /* Timezone select */
     '.rc-tz-select{width:100%;background:#2A2A2A;border:1px solid rgba(255,255,255,.15);border-radius:8px;color:#fff;font-family:inherit;font-size:13px;padding:9px 12px;outline:none;cursor:pointer;-webkit-appearance:none;appearance:none}',
     '.rc-tz-select:focus{border-color:#F26C38}',
     '.rc-tz-select option{background:#2A2A2A;color:#fff}',
-
-    /* Datetime picker */
-    '.rc-datetime{width:100%;background:#2A2A2A;border:1px solid rgba(255,255,255,.15);border-radius:8px;color:#fff;font-family:inherit;font-size:13px;padding:9px 12px;outline:none;color-scheme:dark}',
-    '.rc-datetime:focus{border-color:#F26C38}',
-
-    /* Mobile */
     '@media(max-width:420px){#rc-panel{width:calc(100vw - 32px);right:-8px}}'
   ].join('');
   document.head.appendChild(style);
@@ -161,7 +152,7 @@
   var sendBtn  = document.getElementById('rc-send');
   var closeBtn = document.getElementById('rc-close');
 
-  /* ── Helpers ── */
+  /* ── Core helpers ── */
   function scrollBottom() { messages.scrollTop = messages.scrollHeight; }
 
   function appendMsg(text, role) {
@@ -170,6 +161,20 @@
     div.textContent = text;
     messages.insertBefore(div, typing);
     scrollBottom();
+  }
+
+  /* typing delay before each of Roc's messages — scales with length, max 1.6s */
+  function speakMsg(text) {
+    return new Promise(function (resolve) {
+      typing.classList.add('rc-show');
+      scrollBottom();
+      var delay = Math.min(400 + text.length * 14, 1600);
+      setTimeout(function () {
+        typing.classList.remove('rc-show');
+        appendMsg(text, 'ai');
+        resolve();
+      }, delay);
+    });
   }
 
   function renderOptions(items, onPick) {
@@ -209,15 +214,16 @@
 
   /* ── Flow ── */
   function startFlow() {
-    appendMsg("👋 Hi! I\u2019m Roc, Raphael\u2019s AI appointment setter \u2014 built with n8n + GHL. No forms, no back-and-forth. Just pick what you need and we\u2019ll handle the rest.", 'ai');
-    showIntentOptions();
+    speakMsg('👋 Hi! I’m Roc, Raphael’s AI appointment setter — built with n8n + GHL. No forms, no back-and-forth. Just pick what you need and we’ll handle the rest.').then(function () {
+      showIntentOptions();
+    });
   }
 
   function showIntentOptions() {
     state.step = 'intent';
     state.intent = ''; state.name = ''; state.email = ''; state.slot = ''; state.timezone = '';
     hideInput();
-    renderOptions(['\uD83D\uDCC5 Book a Call', '\u274C Cancel Appointment', '\uD83D\uDD04 Reschedule'], function (label) {
+    renderOptions(['📅 Book a Call', '❌ Cancel Appointment', '🔄 Reschedule'], function (label) {
       if (label.indexOf('Book') !== -1) {
         state.intent = 'book';
         appendMsg('Book a Call', 'user');
@@ -236,17 +242,19 @@
 
   function askName() {
     state.step = 'name';
-    appendMsg("Great! What\u2019s your full name?", 'ai');
-    showInput("Your full name...");
+    speakMsg('Great! What’s your full name?').then(function () {
+      showInput('Your full name...');
+    });
   }
 
   function askEmail() {
     state.step = 'email';
     var prompt = state.intent === 'book'
-      ? 'Nice to meet you, ' + state.name + '! What\u2019s your email address?'
-      : 'What\u2019s the email address on your appointment?';
-    appendMsg(prompt, 'ai');
-    showInput("your@email.com");
+      ? 'Nice to meet you, ' + state.name + '! What’s your email address?'
+      : 'What’s the email address on your appointment?';
+    speakMsg(prompt).then(function () {
+      showInput('your@email.com');
+    });
   }
 
   function askTimezone() {
@@ -256,146 +264,170 @@
     try { detected = Intl.DateTimeFormat().resolvedOptions().timeZone; } catch (e) {}
     if (!detected) detected = 'Asia/Manila';
     state.timezone = detected;
-    appendMsg("I detected your timezone as " + getTzLabel(detected) + ". Is that correct?", 'ai');
-    renderOptions(['\u2705 Yes, that\u2019s correct', '\uD83C\uDF0D Choose a different timezone'], function (label) {
-      if (label.indexOf('Yes') !== -1) {
-        appendMsg('Yes, that\u2019s correct', 'user');
-        askSlot();
-      } else {
-        appendMsg('Choose a different timezone', 'user');
-        showTimezoneSelect();
-      }
+    speakMsg('I detected your timezone as ' + getTzLabel(detected) + '. Is that correct?').then(function () {
+      renderOptions(['✅ Yes, that’s correct', '🌍 Choose a different timezone'], function (label) {
+        if (label.indexOf('Yes') !== -1) {
+          appendMsg('Yes, that’s correct', 'user');
+          askSlot();
+        } else {
+          appendMsg('Choose a different timezone', 'user');
+          showTimezoneSelect();
+        }
+      });
     });
   }
 
   function showTimezoneSelect() {
     state.step = 'timezone-select';
-    appendMsg("Select your timezone:", 'ai');
+    speakMsg('Select your timezone:').then(function () {
+      var container = document.createElement('div');
+      container.className = 'rc-options';
+      container.style.cssText = 'flex-direction:column;align-items:stretch;width:90%';
 
-    var container = document.createElement('div');
-    container.className = 'rc-options';
-    container.style.cssText = 'flex-direction:column;align-items:stretch;width:90%';
+      var sel = document.createElement('select');
+      sel.className = 'rc-tz-select';
+      TIMEZONES.forEach(function (tz) {
+        var opt = document.createElement('option');
+        opt.value = tz.value;
+        opt.textContent = tz.label;
+        sel.appendChild(opt);
+      });
 
-    var sel = document.createElement('select');
-    sel.className = 'rc-tz-select';
-    TIMEZONES.forEach(function (tz) {
-      var opt = document.createElement('option');
-      opt.value = tz.value;
-      opt.textContent = tz.label;
-      sel.appendChild(opt);
+      var confirmBtn = document.createElement('button');
+      confirmBtn.className = 'rc-opt';
+      confirmBtn.textContent = 'Confirm →';
+      confirmBtn.style.alignSelf = 'flex-start';
+      confirmBtn.addEventListener('click', function () {
+        state.timezone = sel.value;
+        container.remove();
+        appendMsg(getTzLabel(sel.value), 'user');
+        askSlot();
+      });
+
+      container.appendChild(sel);
+      container.appendChild(confirmBtn);
+      messages.insertBefore(container, typing);
+      scrollBottom();
     });
-
-    var confirmBtn = document.createElement('button');
-    confirmBtn.className = 'rc-opt';
-    confirmBtn.textContent = 'Confirm \u2192';
-    confirmBtn.style.alignSelf = 'flex-start';
-
-    confirmBtn.addEventListener('click', function () {
-      state.timezone = sel.value;
-      container.remove();
-      appendMsg(getTzLabel(sel.value), 'user');
-      askSlot();
-    });
-
-    container.appendChild(sel);
-    container.appendChild(confirmBtn);
-    messages.insertBefore(container, typing);
-    scrollBottom();
   }
 
   function askSlot() {
     state.step = 'slot';
     hideInput();
-    appendMsg("Let me pull up available times for you\u2026", 'ai');
-    setWaiting(true);
-
-    fetch(WEBHOOK_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ intent: 'get_slots', sessionId: sessionId, timezone: state.timezone })
-    })
-      .then(function (res) { return res.json(); })
-      .then(function (data) {
-        setWaiting(false);
-        var slots = Array.isArray(data.slots) && data.slots.length ? data.slots : null;
-        if (!slots) { showDatePicker(); return; }
-
-        appendMsg("Here are the next available times:", 'ai');
-
-        var slotMap = {};
-        var labels = slots.slice(0, 5).map(function (iso) {
-          var label = formatSlot(iso, state.timezone);
-          slotMap[label] = iso;
-          return label;
-        });
-        labels.push('\uD83D\uDD50 None of these work');
-
-        renderOptions(labels, function (label) {
-          if (label.indexOf('None') !== -1) {
-            appendMsg('None of these work', 'user');
-            appendMsg("No problem! Pick a date and time that works for you:", 'ai');
-            showDatePicker();
-            return;
-          }
-          state.slot = slotMap[label];
-          appendMsg(label, 'user');
-          confirmAndSubmit();
-        });
+    speakMsg('Let me pull up available times for you…').then(function () {
+      setWaiting(true);
+      fetch(WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ intent: 'get_slots', sessionId: sessionId, timezone: state.timezone })
       })
-      .catch(function () {
-        setWaiting(false);
-        showDatePicker();
-      });
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          setWaiting(false);
+          var slots = Array.isArray(data.slots) && data.slots.length ? data.slots : null;
+          if (!slots) { showDatePicker(); return; }
+
+          var slotMap = {};
+          var labels = slots.slice(0, 5).map(function (iso) {
+            var label = formatSlot(iso, state.timezone);
+            slotMap[label] = iso;
+            return label;
+          });
+          labels.push('🕐 None of these work');
+
+          speakMsg('Here are the next available times:').then(function () {
+            renderOptions(labels, function (label) {
+              if (label.indexOf('None') !== -1) {
+                appendMsg('None of these work', 'user');
+                showDatePicker();
+                return;
+              }
+              state.slot = slotMap[label];
+              appendMsg(label, 'user');
+              confirmAndSubmit();
+            });
+          });
+        })
+        .catch(function () {
+          setWaiting(false);
+          showDatePicker();
+        });
+    });
   }
 
+  /* ── 2-step date picker: day buttons → time buttons ── */
   function showDatePicker() {
-    state.step = 'slot-picker';
-    hideInput();
+    state.step = 'slot-day';
+    speakMsg('No problem! Pick a day that works for you:').then(function () {
+      renderDayPicker();
+    });
+  }
 
+  function renderDayPicker() {
     var container = document.createElement('div');
     container.className = 'rc-options';
-    container.style.cssText = 'flex-direction:column;align-items:flex-start;gap:8px;width:90%';
 
-    var dt = document.createElement('input');
-    dt.type = 'datetime-local';
-    dt.className = 'rc-datetime';
     var now = new Date();
-    now.setHours(now.getHours() + 1, 0, 0, 0);
-    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-    dt.min = now.toISOString().slice(0, 16);
+    for (var i = 1; i <= 7; i++) {
+      var d = new Date(now.getFullYear(), now.getMonth(), now.getDate() + i);
+      (function (day) {
+        var label = day.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+        var btn = document.createElement('button');
+        btn.className = 'rc-opt';
+        btn.textContent = label;
+        btn.addEventListener('click', function () {
+          container.remove();
+          appendMsg(label, 'user');
+          speakMsg('Got it! What time works best?').then(function () {
+            renderTimePicker(day);
+          });
+        });
+        container.appendChild(btn);
+      })(d);
+    }
 
-    var confirmBtn = document.createElement('button');
-    confirmBtn.className = 'rc-opt';
-    confirmBtn.textContent = 'Confirm this time \u2192';
-
-    confirmBtn.addEventListener('click', function () {
-      if (!dt.value) { dt.style.borderColor = '#D72F58'; return; }
-      container.remove();
-      state.slot = dt.value + ':00';
-      var label = formatSlot(new Date(dt.value).toISOString(), state.timezone);
-      appendMsg(label, 'user');
-      confirmAndSubmit();
-    });
-
-    container.appendChild(dt);
-    container.appendChild(confirmBtn);
     messages.insertBefore(container, typing);
     scrollBottom();
-    dt.focus();
+  }
+
+  function renderTimePicker(selectedDay) {
+    state.step = 'slot-time';
+    var container = document.createElement('div');
+    container.className = 'rc-options';
+
+    TIME_SLOTS.forEach(function (t) {
+      var btn = document.createElement('button');
+      btn.className = 'rc-opt';
+      btn.textContent = t.label;
+      btn.addEventListener('click', function () {
+        container.remove();
+        appendMsg(t.label, 'user');
+        state.slot = selectedDay.getFullYear() + '-' +
+          pad(selectedDay.getMonth() + 1) + '-' +
+          pad(selectedDay.getDate()) + 'T' +
+          pad(t.hour) + ':00:00';
+        confirmAndSubmit();
+      });
+      container.appendChild(btn);
+    });
+
+    messages.insertBefore(container, typing);
+    scrollBottom();
   }
 
   function askCancelConfirm() {
     state.step = 'cancel-confirm';
     hideInput();
-    appendMsg("Ready to cancel the appointment linked to " + state.email + "?", 'ai');
-    renderOptions(['\u2714 Yes, cancel it', '\u2190 No, go back'], function (label) {
-      if (label.indexOf('Yes') !== -1) {
-        appendMsg('Yes, cancel it', 'user');
-        confirmAndSubmit();
-      } else {
-        appendMsg('No, go back', 'user');
-        showIntentOptions();
-      }
+    speakMsg('Ready to cancel the appointment linked to ' + state.email + '?').then(function () {
+      renderOptions(['✔ Yes, cancel it', '← No, go back'], function (label) {
+        if (label.indexOf('Yes') !== -1) {
+          appendMsg('Yes, cancel it', 'user');
+          confirmAndSubmit();
+        } else {
+          appendMsg('No, go back', 'user');
+          showIntentOptions();
+        }
+      });
     });
   }
 
@@ -404,12 +436,7 @@
     hideInput();
     setWaiting(true);
 
-    var payload = {
-      sessionId: sessionId,
-      intent: state.intent,
-      email: state.email,
-      timezone: state.timezone
-    };
+    var payload = { sessionId: sessionId, intent: state.intent, email: state.email, timezone: state.timezone };
     if (state.intent === 'book') { payload.name = state.name; payload.slot = state.slot; }
     if (state.intent === 'reschedule') { payload.slot = state.slot; }
 
@@ -421,18 +448,21 @@
       .then(function (res) { return res.json(); })
       .then(function (data) {
         setWaiting(false);
-        appendMsg(data.reply || 'All done! You\u2019ll receive a confirmation shortly.', 'ai');
-        appendMsg("Need anything else?", 'ai');
-        showIntentOptions();
+        speakMsg(data.reply || 'All done! You’ll receive a confirmation shortly.').then(function () {
+          return speakMsg('Need anything else?');
+        }).then(function () {
+          showIntentOptions();
+        });
       })
       .catch(function () {
         setWaiting(false);
-        appendMsg('Something went wrong. Please try again.', 'ai');
-        showIntentOptions();
+        speakMsg('Something went wrong. Please try again.').then(function () {
+          showIntentOptions();
+        });
       });
   }
 
-  /* ── Text input handler ── */
+  /* ── Text input handler (name + email only) ── */
   function handleSubmit() {
     var text = input.value.trim();
     if (!text || state.waiting) return;
@@ -444,7 +474,7 @@
       askEmail();
     } else if (state.step === 'email') {
       if (!text.includes('@')) {
-        appendMsg("That doesn\u2019t look like a valid email. Please try again.", 'ai');
+        appendMsg('That doesn’t look like a valid email. Please try again.', 'ai');
         return;
       }
       state.email = text.toLowerCase();
