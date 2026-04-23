@@ -180,14 +180,14 @@
     }
 
     /* ─── HERO ─── */
+    /* ── HERO: split layout ── */
     .section--hero {
-      padding-top: calc(64px + 60px); /* navbar height + breathing room */
-      padding-bottom: 80px;
+      padding-top: calc(64px + 60px);
+      padding-bottom: 60px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      text-align: center;
-      gap: 28px;
+      gap: 40px;
       position: relative;
       overflow: hidden;
     }
@@ -224,6 +224,35 @@
 
     .section--hero > * { position: relative; z-index: 1; }
 
+    .hero__split {
+      display: flex;
+      align-items: center;
+      gap: 56px;
+      width: 100%;
+    }
+
+    .hero__left {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 20px;
+    }
+
+    .hero__right {
+      width: 300px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      opacity: 0;
+      transform: translateX(24px);
+      animation: fade-right 0.65s 0.55s var(--ease) forwards;
+    }
+
+    @keyframes fade-right { to { opacity: 1; transform: translateX(0); } }
+
     .hero__badge {
       display: inline-flex; align-items: center; gap: 8px;
       padding: 5px 14px;
@@ -246,15 +275,11 @@
       50%      { opacity: .7; box-shadow: 0 0 0 5px rgba(34,197,94,0); }
     }
 
-    /* Full-width typographic headline — no photo column */
-    .hero__headline-block {
-      max-width: 960px;
-      text-align: center;
-    }
+    .hero__headline-block { max-width: 580px; }
 
     .hero__h1 {
       font-family: var(--f-display);
-      font-size: clamp(44px, 7.5vw, 100px);
+      font-size: clamp(38px, 5vw, 72px);
       font-weight: 900;
       line-height: 1.0;
       letter-spacing: -0.03em;
@@ -268,65 +293,172 @@
       padding-bottom: 0.15em;
     }
 
-
     .hero__sub {
-      font-size: clamp(15px,1.6vw,18px);
+      font-size: clamp(14px, 1.4vw, 17px);
       color: var(--t2); line-height: 1.7;
-      max-width: 560px; font-weight: 400;
-      text-align: center;
+      max-width: 480px; font-weight: 400;
     }
 
-    .hero__cta {
-      display: flex; gap: 12px; flex-wrap: wrap;
-      justify-content: center;
+    /* ── Workflow animation ── */
+    .hero__workflow {
+      background: rgba(255,255,255,0.025);
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 14px 16px;
+      width: 100%;
+      max-width: 500px;
     }
 
-    .hero__tools {
-      margin-top: 8px;
-      text-align: center;
+    .wf-header {
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
     }
-    .hero__tools-label {
-      font-size: 0.75rem;
-      letter-spacing: 0.12em;
+
+    .wf-live-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: #22c55e;
+      animation: blink-dot 2s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+
+    .wf-header-badge {
+      font-size: 9px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: #22c55e;
+    }
+
+    .wf-header-name {
+      font-size: 12px; font-weight: 600;
+      color: rgba(255,255,255,0.55);
+      margin-left: auto;
+    }
+
+    .wf-track {
+      display: flex; flex-direction: column;
+      position: relative;
+    }
+
+    .wf-track::before {
+      content: '';
+      position: absolute;
+      left: 15px; top: 20px; bottom: 20px;
+      width: 1px;
+      background: linear-gradient(to bottom, rgba(242,108,56,0.25), rgba(215,47,88,0.25));
+    }
+
+    .wf-step {
+      display: flex; align-items: center; gap: 10px;
+      padding: 5px 0;
+      position: relative;
+    }
+
+    .wf-icon {
+      width: 32px; height: 32px;
+      background: rgba(242,108,56,0.07);
+      border: 1px solid rgba(242,108,56,0.15);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; flex-shrink: 0; z-index: 1;
+      transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .wf-name { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.6); line-height: 1.3; transition: color 0.3s; }
+    .wf-tool { font-size: 10px; color: rgba(255,255,255,0.28); margin-top: 1px; letter-spacing: 0.03em; }
+
+    @keyframes wf-pulse {
+      0%, 12%, 100% { background: rgba(242,108,56,0.07); border-color: rgba(242,108,56,0.15); box-shadow: none; }
+      6%            { background: rgba(242,108,56,0.3);  border-color: #F26C38; box-shadow: 0 0 14px rgba(242,108,56,0.55), 0 0 32px rgba(242,108,56,0.2); }
+    }
+
+    @keyframes wf-text {
+      0%, 12%, 100% { color: rgba(255,255,255,0.6); }
+      6%            { color: #fff; }
+    }
+
+    .wf-step:nth-child(1) .wf-icon { animation: wf-pulse 5s 0.0s ease-in-out infinite; }
+    .wf-step:nth-child(2) .wf-icon { animation: wf-pulse 5s 1.0s ease-in-out infinite; }
+    .wf-step:nth-child(3) .wf-icon { animation: wf-pulse 5s 2.0s ease-in-out infinite; }
+    .wf-step:nth-child(4) .wf-icon { animation: wf-pulse 5s 3.0s ease-in-out infinite; }
+    .wf-step:nth-child(5) .wf-icon { animation: wf-pulse 5s 4.0s ease-in-out infinite; }
+    .wf-step:nth-child(1) .wf-name { animation: wf-text  5s 0.0s ease-in-out infinite; }
+    .wf-step:nth-child(2) .wf-name { animation: wf-text  5s 1.0s ease-in-out infinite; }
+    .wf-step:nth-child(3) .wf-name { animation: wf-text  5s 2.0s ease-in-out infinite; }
+    .wf-step:nth-child(4) .wf-name { animation: wf-text  5s 3.0s ease-in-out infinite; }
+    .wf-step:nth-child(5) .wf-name { animation: wf-text  5s 4.0s ease-in-out infinite; }
+
+    /* ── Hero hub cards (right column) ── */
+    .hero-hub__label {
+      font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.12em;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: 2px;
+    }
+
+    .hero-hub__card {
+      display: flex; align-items: center; gap: 12px;
+      background: rgba(255,255,255,0.025);
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 11px 13px;
+      cursor: pointer; text-align: left; width: 100%;
+      font-family: inherit; color: var(--t1);
+      transition: background 0.15s, border-color 0.15s, transform 0.15s;
+    }
+
+    .hero-hub__card:hover {
+      background: rgba(242,108,56,0.08);
+      border-color: rgba(242,108,56,0.4);
+      transform: translateX(4px);
+    }
+
+    .hero-hub__icon {
+      width: 34px; height: 34px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; flex-shrink: 0;
+    }
+
+    .hero-hub__name { font-size: 13px; font-weight: 600; line-height: 1.2; }
+    .hero-hub__sub  { font-size: 11px; color: var(--t2); margin-top: 2px; }
+
+    .hero-hub__soon {
+      font-size: 9px; font-weight: 700; letter-spacing: 0.05em;
       text-transform: uppercase;
-      color: var(--t2);
-      margin-bottom: 16px;
-      opacity: 0.6;
-    }
-    .hero__tools-logos {
-      display: flex;
-      gap: 32px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-    .hero__tools-logos span {
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: var(--t2);
-      opacity: 0.45;
-      letter-spacing: 0.05em;
-      transition: opacity 0.2s, color 0.2s;
-    }
-    .hero__tools-logos span:hover {
-      opacity: 1;
-      color: var(--t1);
+      background: linear-gradient(135deg, #F26C38, #D72F58);
+      color: #fff; padding: 2px 5px; margin-left: 5px;
+      display: inline-block; line-height: 1.4; vertical-align: middle;
     }
 
+    .hero-hub__ghost {
+      font-size: 11px; color: rgba(255,255,255,0.28);
+      display: flex; align-items: center; justify-content: center; gap: 4px;
+      margin-top: 4px; text-decoration: none;
+      transition: color 0.15s, gap 0.15s;
+    }
+    .hero-hub__ghost:hover { color: rgba(255,255,255,0.6); gap: 8px; }
+
+    /* Scroll indicator */
     .scroll-indicator {
       align-self: center;
       animation: bounce 2s ease-in-out infinite;
     }
-
     @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(8px)} }
 
     /* Hero stagger animations */
-    .hero__badge, .hero__h1, .hero__sub, .hero__cta, .hero__tools { opacity: 0; transform: translateY(24px); }
-    .hero__badge    { animation: fade-up 0.6s 0.1s var(--ease) forwards; }
+    .hero__badge, .hero__h1, .hero__sub, .hero__workflow { opacity: 0; transform: translateY(24px); }
+    .hero__badge    { animation: fade-up 0.6s 0.1s  var(--ease) forwards; }
     .hero__h1       { animation: fade-up 0.6s 0.25s var(--ease) forwards; }
-    .hero__sub      { animation: fade-up 0.6s 0.4s var(--ease) forwards; }
-    .hero__cta      { animation: fade-up 0.6s 0.5s var(--ease) forwards; }
-    .hero__tools    { animation: fade-up 0.6s 0.65s var(--ease) forwards; }
+    .hero__sub      { animation: fade-up 0.6s 0.4s  var(--ease) forwards; }
+    .hero__workflow { animation: fade-up 0.6s 0.5s  var(--ease) forwards; }
     @keyframes fade-up { to { opacity: 1; transform: translateY(0); } }
+
+    /* Responsive */
+    @media (max-width: 860px) {
+      .hero__split { flex-direction: column; gap: 36px; }
+      .hero__left  { align-items: center; text-align: center; }
+      .hero__right { width: 100%; transform: translateX(0);
+                     animation: fade-up 0.65s 0.55s var(--ease) forwards; }
+      .hero__sub, .hero__workflow { max-width: 100%; }
+      .hero-hub__card:hover { transform: none; }
+    }
 
     /* ─── STATUS DOT ─── */
     .status-dot {
@@ -1653,29 +1785,113 @@
   ═══════════════════════════════════ -->
   <section id="hero" class="section section--hero">
 
-    <!-- Status row -->
-    <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:center;">
-      <div class="hero__badge">
-        <span class="hero__dot"></span>
-        AI Automation Specialist &middot; Philippines
+    <div class="hero__split">
+
+      <!-- LEFT: headline + live workflow animation -->
+      <div class="hero__left">
+
+        <div class="hero__badge">
+          <span class="hero__dot"></span>
+          AI Automation Specialist &middot; Philippines
+        </div>
+
+        <div class="hero__headline-block">
+          <h1 class="hero__h1">
+            Less manual work.<br>
+            <span class="hero__grad">More growth.</span>
+          </h1>
+        </div>
+
+        <p class="hero__sub">I build practical AI workflows that save you time and cut manual work — bringing the right tools into your process, no technical background needed.</p>
+
+        <!-- Live workflow: AI Appointment Setter -->
+        <div class="hero__workflow">
+          <div class="wf-header">
+            <span class="wf-live-dot"></span>
+            <span class="wf-header-badge">Live</span>
+            <span class="wf-header-name">AI Appointment Setter</span>
+          </div>
+          <div class="wf-track">
+            <div class="wf-step">
+              <div class="wf-icon">💬</div>
+              <div>
+                <div class="wf-name">Visitor chats on site</div>
+                <div class="wf-tool">Trigger &middot; Chat Widget</div>
+              </div>
+            </div>
+            <div class="wf-step">
+              <div class="wf-icon">🤖</div>
+              <div>
+                <div class="wf-name">Roc AI processes request</div>
+                <div class="wf-tool">Claude AI &middot; n8n</div>
+              </div>
+            </div>
+            <div class="wf-step">
+              <div class="wf-icon">📅</div>
+              <div>
+                <div class="wf-name">Fetches available slots</div>
+                <div class="wf-tool">GHL Calendar &middot; n8n</div>
+              </div>
+            </div>
+            <div class="wf-step">
+              <div class="wf-icon">📋</div>
+              <div>
+                <div class="wf-name">Books appointment in CRM</div>
+                <div class="wf-tool">GoHighLevel</div>
+              </div>
+            </div>
+            <div class="wf-step">
+              <div class="wf-icon">✅</div>
+              <div>
+                <div class="wf-name">Sends confirmation</div>
+                <div class="wf-tool">SMS &middot; Email &middot; GHL</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
+
+      <!-- RIGHT: hub engagement options -->
+      <div class="hero__right">
+        <p class="hero-hub__label">How can I help you?</p>
+
+        <button class="hero-hub__card" data-hub-action="form">
+          <span class="hero-hub__icon" style="background:rgba(96,165,250,0.1)">📝</span>
+          <span>
+            <div class="hero-hub__name">Describe My Problem</div>
+            <div class="hero-hub__sub">Get a free automation audit</div>
+          </span>
+        </button>
+
+        <button class="hero-hub__card" data-hub-action="chat">
+          <span class="hero-hub__icon" style="background:rgba(242,108,56,0.1)">💬</span>
+          <span>
+            <div class="hero-hub__name">Chat with Roc</div>
+            <div class="hero-hub__sub">Questions &amp; appointment booking</div>
+          </span>
+        </button>
+
+        <button class="hero-hub__card" data-hub-action="book">
+          <span class="hero-hub__icon" style="background:rgba(52,211,153,0.1)">📅</span>
+          <span>
+            <div class="hero-hub__name">Book a Discovery Call</div>
+            <div class="hero-hub__sub">Schedule on my calendar</div>
+          </span>
+        </button>
+
+        <button class="hero-hub__card" data-hub-action="voice">
+          <span class="hero-hub__icon" style="background:rgba(167,139,250,0.1)">🎤</span>
+          <span>
+            <div class="hero-hub__name">Voice Receptionist<span class="hero-hub__soon">Soon</span></div>
+            <div class="hero-hub__sub" id="hero-voice-sub">Talk to our AI receptionist</div>
+          </span>
+        </button>
+
+        <a href="#projects" class="hero-hub__ghost">View my projects &rarr;</a>
+      </div>
+
     </div>
-
-    <!-- Full-width headline — no photo column -->
-    <div class="hero__headline-block">
-      <h1 class="hero__h1">
-        Less manual work.<br>
-        <span class="hero__grad">More growth.</span>
-      </h1>
-    </div>
-
-    <p class="hero__sub">I build practical AI workflows that save you time and cut manual work — bringing the right tools into your process, no technical background needed.</p>
-
-    <div class="hero__cta">
-      <a href="#contact" class="btn-primary">Let's Work Together</a>
-      <a href="#projects" class="btn-ghost">View My Projects &rarr;</a>
-    </div>
-
 
     <div class="scroll-indicator" aria-hidden="true">
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -2881,18 +3097,7 @@
     if (processBtn) processBtn.addEventListener('click', function() { resetModal(); openModal('book'); });
     if (closeBtn) closeBtn.addEventListener('click', closeModal);
 
-    // Auto-open with smart persistence (suppresses after 3 dismissals or on submission)
-    setTimeout(function() {
-      var submitted = localStorage.getItem('lf_submitted');
-      var count = parseInt(localStorage.getItem('lf_dismiss_count') || '0', 10);
-      var ts    = parseInt(localStorage.getItem('lf_dismiss_ts')    || '0', 10);
-      if (Date.now() - ts > 7 * 24 * 60 * 60 * 1000) count = 0;
-      if (!submitted && count < 3 && !overlay.classList.contains('is-open')) {
-        resetModal(); openModal('form');
-      }
-    }, 2000);
-
-    // Exit-intent: re-show once per session if not submitted
+    // Exit-intent: show lead form once per session when user moves to leave
     var exitShown = false;
     document.addEventListener('mouseleave', function(e) {
       if (e.clientY < 5 && !exitShown && !localStorage.getItem('lf_submitted') && !overlay.classList.contains('is-open')) {
@@ -3043,6 +3248,29 @@
       });
     });
   })();
+
+  // ── Hero hub card handlers ──
+  document.querySelectorAll('[data-hub-action]').forEach(function(card) {
+    card.addEventListener('click', function() {
+      var action = this.getAttribute('data-hub-action');
+      if (action === 'form') {
+        if (window.rcCloseChat) window.rcCloseChat();
+        if (window.openLeadModal) window.openLeadModal('form');
+      } else if (action === 'book') {
+        if (window.rcCloseChat) window.rcCloseChat();
+        if (window.openLeadModal) window.openLeadModal('book');
+      } else if (action === 'chat') {
+        if (window.rcToggleChat) window.rcToggleChat();
+      } else if (action === 'voice') {
+        var sub = document.getElementById('hero-voice-sub');
+        if (sub && sub.textContent !== '🚀 Coming soon — stay tuned!') {
+          var orig = sub.textContent;
+          sub.textContent = '🚀 Coming soon — stay tuned!';
+          setTimeout(function() { sub.textContent = orig; }, 2500);
+        }
+      }
+    });
+  });
 
 })();
 </script>
