@@ -79,7 +79,7 @@
     '#rc-header-sub{font-size:11px;color:#A1A1A1;margin-top:1px}',
     '#rc-close{background:none;border:none;cursor:pointer;color:rgba(255,255,255,.4);font-size:18px;line-height:1;padding:4px;display:flex;align-items:center;justify-content:center;border-radius:4px;transition:color .15s}',
     '#rc-close:hover{color:#fff}',
-    '#rc-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;scroll-behavior:smooth}',
+    '#rc-messages{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:16px;display:flex;flex-direction:column;gap:10px;scroll-behavior:smooth}',
     '#rc-messages::-webkit-scrollbar{width:4px}',
     '#rc-messages::-webkit-scrollbar-track{background:transparent}',
     '#rc-messages::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:2px}',
@@ -145,7 +145,7 @@
   var closeBtn = document.getElementById('rc-close');
 
   /* ── Core helpers ── */
-  function scrollBottom() { messages.scrollTop = messages.scrollHeight; }
+  function scrollBottom() { requestAnimationFrame(function () { messages.scrollTop = messages.scrollHeight; }); }
 
   function appendMsg(text, role) {
     var div = document.createElement('div');
@@ -183,7 +183,7 @@
       container.appendChild(btn);
     });
     messages.insertBefore(container, typing);
-    scrollBottom();
+    requestAnimationFrame(function () { container.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); });
   }
 
   function showInput(placeholder) {
@@ -299,7 +299,7 @@
       container.appendChild(sel);
       container.appendChild(confirmBtn);
       messages.insertBefore(container, typing);
-      scrollBottom();
+      requestAnimationFrame(function () { container.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); });
     });
   }
 
@@ -379,7 +379,7 @@
     }
 
     messages.insertBefore(container, typing);
-    scrollBottom();
+    requestAnimationFrame(function () { container.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); });
   }
 
   function renderTimePicker(selectedDay) {
@@ -404,7 +404,7 @@
     });
 
     messages.insertBefore(container, typing);
-    scrollBottom();
+    requestAnimationFrame(function () { container.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); });
   }
 
   function askCancelConfirm() {

@@ -180,7 +180,6 @@
     }
 
     /* ─── HERO ─── */
-    /* ── HERO: split layout ── */
     .section--hero {
       padding-top: calc(64px + 60px);
       padding-bottom: 60px;
@@ -224,38 +223,106 @@
 
     .section--hero > * { position: relative; z-index: 1; }
 
-    .hero__split {
-      display: flex;
-      align-items: center;
-      gap: 56px;
+    /* ── Bento grid ── */
+    .bento {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1.3fr;
+      grid-template-rows: auto auto;
+      gap: 12px;
       width: 100%;
     }
 
-    .hero__left {
-      flex: 1;
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 20px;
-    }
+    .bento__cell--headline { grid-column: 1; grid-row: 1; }
+    .bento__cell--chat     { grid-column: 2; grid-row: 1; }
+    .bento__cell--workflow { grid-column: 3; grid-row: 1 / span 2; }
+    .bento__cell--form     { grid-column: 1; grid-row: 2; }
+    .bento__cell--voice    { grid-column: 2; grid-row: 2; }
 
-    .hero__right {
-      width: 300px;
-      flex-shrink: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      padding: 20px;
+    .bento__cell {
       background: rgba(255,255,255,0.025);
-      border: 1px solid rgba(255,255,255,0.1);
-      opacity: 0;
-      transform: translateX(24px);
-      animation: fade-right 0.65s 0.55s var(--ease) forwards;
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 22px 20px;
+      display: flex; flex-direction: column; gap: 12px;
+      position: relative; overflow: hidden;
+      opacity: 0; transform: translateY(20px);
+      animation: fade-up 0.55s var(--ease) forwards;
+    }
+    .bento__cell:nth-child(1) { animation-delay: 0.1s; }
+    .bento__cell:nth-child(2) { animation-delay: 0.2s; }
+    .bento__cell:nth-child(3) { animation-delay: 0.3s; }
+    .bento__cell:nth-child(4) { animation-delay: 0.4s; }
+    .bento__cell:nth-child(5) { animation-delay: 0.5s; }
+
+    .bento__cell--headline {
+      background: transparent;
+      border-color: transparent;
+      gap: 16px;
+      justify-content: center;
     }
 
-    @keyframes fade-right { to { opacity: 1; transform: translateX(0); } }
+    .bento__cell--chat,
+    .bento__cell--form {
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .bento__cell--chat:hover,
+    .bento__cell--form:hover {
+      border-color: rgba(242,108,56,0.5);
+      background: rgba(242,108,56,0.06);
+    }
 
+    .bento__cell--voice {
+      opacity: 0;
+      border-style: dashed;
+      animation: fade-up 0.55s 0.5s var(--ease) forwards;
+      cursor: default;
+    }
+
+    .bento__proj-label {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 9px; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--accent-1);
+    }
+
+    .bento__proj-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: #22c55e;
+      animation: blink-dot 2s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+
+    .bento__icon {
+      font-size: 22px; line-height: 1;
+    }
+
+    .bento__title {
+      font-size: 15px; font-weight: 700; color: var(--t1); line-height: 1.3;
+    }
+
+    .bento__desc {
+      font-size: 12px; color: var(--t2); line-height: 1.6; flex: 1;
+    }
+
+    .bento__cta {
+      margin-top: auto;
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--accent-1);
+      background: none; border: none; font-family: inherit;
+      padding: 0; cursor: pointer;
+      transition: gap 0.15s, color 0.15s;
+    }
+    .bento__cta:hover { gap: 10px; color: #fff; }
+
+    .bento__soon-chip {
+      font-size: 9px; font-weight: 700; letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #F26C38, #D72F58);
+      color: #fff; padding: 2px 6px; margin-left: 6px;
+      display: inline-block; line-height: 1.4; vertical-align: middle;
+    }
+
+    /* ── Shared hero text elements ── */
     .hero__badge {
       display: inline-flex; align-items: center; gap: 8px;
       padding: 5px 14px;
@@ -278,11 +345,9 @@
       50%      { opacity: .7; box-shadow: 0 0 0 5px rgba(34,197,94,0); }
     }
 
-    .hero__headline-block { max-width: 580px; }
-
     .hero__h1 {
       font-family: var(--f-display);
-      font-size: clamp(38px, 5vw, 72px);
+      font-size: clamp(32px, 3.8vw, 60px);
       font-weight: 900;
       line-height: 1.0;
       letter-spacing: -0.03em;
@@ -297,18 +362,14 @@
     }
 
     .hero__sub {
-      font-size: clamp(14px, 1.4vw, 17px);
+      font-size: clamp(13px, 1.2vw, 15px);
       color: var(--t2); line-height: 1.7;
-      max-width: 480px; font-weight: 400;
+      font-weight: 400;
     }
 
     /* ── Workflow animation ── */
     .hero__workflow {
-      background: rgba(255,255,255,0.025);
-      border: 1px solid rgba(255,255,255,0.08);
-      padding: 14px 16px;
-      width: 100%;
-      max-width: 500px;
+      width: 100%; height: 100%;
     }
 
     .wf-header {
@@ -389,56 +450,6 @@
     .wf-step:nth-child(4) .wf-name { animation: wf-text  5s 3.0s ease-in-out infinite; }
     .wf-step:nth-child(5) .wf-name { animation: wf-text  5s 4.0s ease-in-out infinite; }
 
-    /* ── Hero hub cards (right column) ── */
-    .hero-hub__label {
-      font-size: 10px; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.12em;
-      color: rgba(255,255,255,0.3);
-      margin-bottom: 2px;
-    }
-
-    .hero-hub__card {
-      display: flex; align-items: center; gap: 12px;
-      background: rgba(255,255,255,0.025);
-      border: 1px solid rgba(255,255,255,0.08);
-      padding: 11px 13px;
-      cursor: pointer; text-align: left; width: 100%;
-      font-family: inherit; color: var(--t1);
-      transition: background 0.15s, border-color 0.15s, transform 0.15s;
-    }
-
-    .hero-hub__card:hover {
-      background: rgba(242,108,56,0.1);
-      border-color: rgba(242,108,56,0.55);
-      border-left-width: 3px;
-      transform: translateX(4px);
-    }
-
-    .hero-hub__icon {
-      width: 34px; height: 34px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 16px; flex-shrink: 0;
-    }
-
-    .hero-hub__name { font-size: 13px; font-weight: 600; line-height: 1.2; }
-    .hero-hub__sub  { font-size: 11px; color: var(--t2); margin-top: 2px; }
-
-    .hero-hub__soon {
-      font-size: 9px; font-weight: 700; letter-spacing: 0.05em;
-      text-transform: uppercase;
-      background: linear-gradient(135deg, #F26C38, #D72F58);
-      color: #fff; padding: 2px 5px; margin-left: 5px;
-      display: inline-block; line-height: 1.4; vertical-align: middle;
-    }
-
-    .hero-hub__ghost {
-      font-size: 11px; color: rgba(255,255,255,0.28);
-      display: flex; align-items: center; justify-content: center; gap: 4px;
-      margin-top: 4px; text-decoration: none;
-      transition: color 0.15s, gap 0.15s;
-    }
-    .hero-hub__ghost:hover { color: rgba(255,255,255,0.6); gap: 8px; }
-
     /* Scroll indicator */
     .scroll-indicator {
       align-self: center;
@@ -446,22 +457,27 @@
     }
     @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(8px)} }
 
-    /* Hero stagger animations */
-    .hero__badge, .hero__h1, .hero__sub, .hero__workflow { opacity: 0; transform: translateY(24px); }
-    .hero__badge    { animation: fade-up 0.6s 0.1s  var(--ease) forwards; }
-    .hero__h1       { animation: fade-up 0.6s 0.25s var(--ease) forwards; }
-    .hero__sub      { animation: fade-up 0.6s 0.4s  var(--ease) forwards; }
-    .hero__workflow { animation: fade-up 0.6s 0.5s  var(--ease) forwards; }
     @keyframes fade-up { to { opacity: 1; transform: translateY(0); } }
 
     /* Responsive */
     @media (max-width: 860px) {
-      .hero__split { flex-direction: column; gap: 36px; }
-      .hero__left  { align-items: center; text-align: center; }
-      .hero__right { width: 100%; transform: translateX(0);
-                     animation: fade-up 0.65s 0.55s var(--ease) forwards; }
-      .hero__sub, .hero__workflow { max-width: 100%; }
-      .hero-hub__card:hover { transform: none; }
+      .bento {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto;
+      }
+      .bento__cell--headline { grid-column: 1 / -1; grid-row: auto; }
+      .bento__cell--workflow { grid-column: 1 / -1; grid-row: auto; }
+      .bento__cell--chat     { grid-column: 1; grid-row: auto; }
+      .bento__cell--form     { grid-column: 2; grid-row: auto; }
+      .bento__cell--voice    { grid-column: 1 / -1; grid-row: auto; }
+    }
+    @media (max-width: 540px) {
+      .bento { grid-template-columns: 1fr; }
+      .bento__cell--headline,
+      .bento__cell--chat,
+      .bento__cell--form,
+      .bento__cell--workflow,
+      .bento__cell--voice { grid-column: 1; grid-row: auto; }
     }
 
     /* ─── LIVE AUTOMATIONS ─── */
@@ -1879,26 +1895,35 @@
   ═══════════════════════════════════ -->
   <section id="hero" class="section section--hero">
 
-    <div class="hero__split">
+    <div class="bento">
 
-      <!-- LEFT: headline + live workflow animation -->
-      <div class="hero__left">
-
+      <!-- HEADLINE tile -->
+      <div class="bento__cell bento__cell--headline">
         <div class="hero__badge">
           <span class="hero__dot"></span>
-          AI Automation Specialist &middot; Philippines
+          AI Automation Specialist
         </div>
+        <h1 class="hero__h1">
+          Less manual work.<br>
+          <span class="hero__grad">More growth.</span>
+        </h1>
+        <p class="hero__sub">I build practical AI workflows that save you time — bringing the right tools into your process, no technical background needed.</p>
+      </div>
 
-        <div class="hero__headline-block">
-          <h1 class="hero__h1">
-            Less manual work.<br>
-            <span class="hero__grad">More growth.</span>
-          </h1>
+      <!-- CHAT WITH ROC tile -->
+      <div class="bento__cell bento__cell--chat" role="button" tabindex="0" onclick="if(window.rcToggleChat)window.rcToggleChat()" onkeydown="if(event.key==='Enter'&&window.rcToggleChat)window.rcToggleChat()">
+        <div class="bento__proj-label">
+          <span class="bento__proj-dot"></span>
+          Live Project
         </div>
+        <div class="bento__icon">💬</div>
+        <div class="bento__title">Chat with Roc</div>
+        <p class="bento__desc">My AI appointment bot — books, reschedules, and cancels. Powered by n8n + GoHighLevel.</p>
+        <button class="bento__cta" onclick="event.stopPropagation();if(window.rcToggleChat)window.rcToggleChat()">Try it live &rarr;</button>
+      </div>
 
-        <p class="hero__sub">I build practical AI workflows that save you time and cut manual work — bringing the right tools into your process, no technical background needed.</p>
-
-        <!-- Live workflow: AI Appointment Setter -->
+      <!-- WORKFLOW ANIMATION tile -->
+      <div class="bento__cell bento__cell--workflow">
         <div class="hero__workflow">
           <div class="wf-header">
             <span class="wf-live-dot"></span>
@@ -1943,46 +1968,28 @@
             </div>
           </div>
         </div>
-
       </div>
 
-      <!-- RIGHT: hub engagement options -->
-      <div class="hero__right">
-        <p class="hero-hub__label">How can I help you?</p>
+      <!-- LEAD FORM tile -->
+      <div class="bento__cell bento__cell--form" role="button" tabindex="0" onclick="if(window.openLeadModal)window.openLeadModal('form')" onkeydown="if(event.key==='Enter'&&window.openLeadModal)window.openLeadModal('form')">
+        <div class="bento__proj-label">
+          <span class="bento__proj-dot"></span>
+          Live Project
+        </div>
+        <div class="bento__icon">📝</div>
+        <div class="bento__title">Describe My Problem</div>
+        <p class="bento__desc">Submit your workflow challenge. Goes straight into my n8n lead nurture pipeline.</p>
+        <button class="bento__cta" onclick="event.stopPropagation();if(window.openLeadModal)window.openLeadModal('form')">Open form &rarr;</button>
+      </div>
 
-        <button class="hero-hub__card" data-hub-action="form">
-          <span class="hero-hub__icon" style="background:rgba(96,165,250,0.1)">📝</span>
-          <span>
-            <div class="hero-hub__name">Describe My Problem</div>
-            <div class="hero-hub__sub">Tell me what's slowing you down</div>
-          </span>
-        </button>
-
-        <button class="hero-hub__card" data-hub-action="chat">
-          <span class="hero-hub__icon" style="background:rgba(242,108,56,0.1)">💬</span>
-          <span>
-            <div class="hero-hub__name">Chat with Roc</div>
-            <div class="hero-hub__sub">Book, reschedule or cancel appointments</div>
-          </span>
-        </button>
-
-        <button class="hero-hub__card" data-hub-action="book">
-          <span class="hero-hub__icon" style="background:rgba(52,211,153,0.1)">📅</span>
-          <span>
-            <div class="hero-hub__name">Book a Discovery Call</div>
-            <div class="hero-hub__sub">Schedule on my calendar</div>
-          </span>
-        </button>
-
-        <button class="hero-hub__card" data-hub-action="voice">
-          <span class="hero-hub__icon" style="background:rgba(167,139,250,0.1)">🎤</span>
-          <span>
-            <div class="hero-hub__name">Voice Receptionist<span class="hero-hub__soon">Soon</span></div>
-            <div class="hero-hub__sub" id="hero-voice-sub">Talk to Roc AI booking receptionist</div>
-          </span>
-        </button>
-
-        <a href="#projects" class="hero-hub__ghost">View my projects &rarr;</a>
+      <!-- VOICE RECEPTIONIST tile -->
+      <div class="bento__cell bento__cell--voice">
+        <div class="bento__proj-label" style="color:rgba(167,139,250,0.7)">
+          Next project
+        </div>
+        <div class="bento__icon">🎤</div>
+        <div class="bento__title">Voice Receptionist<span class="bento__soon-chip">Soon</span></div>
+        <p class="bento__desc">Talk to Roc — voice-powered booking and inquiry handling.</p>
       </div>
 
     </div>
@@ -3561,28 +3568,6 @@
     });
   })();
 
-  // ── Hero hub card handlers ──
-  document.querySelectorAll('[data-hub-action]').forEach(function(card) {
-    card.addEventListener('click', function() {
-      var action = this.getAttribute('data-hub-action');
-      if (action === 'form') {
-        if (window.rcCloseChat) window.rcCloseChat();
-        if (window.openLeadModal) window.openLeadModal('form');
-      } else if (action === 'book') {
-        if (window.rcCloseChat) window.rcCloseChat();
-        if (window.openLeadModal) window.openLeadModal('book');
-      } else if (action === 'chat') {
-        if (window.rcToggleChat) window.rcToggleChat();
-      } else if (action === 'voice') {
-        var sub = document.getElementById('hero-voice-sub');
-        if (sub && sub.textContent !== '🚀 Coming soon — stay tuned!') {
-          var orig = sub.textContent;
-          sub.textContent = '🚀 Coming soon — stay tuned!';
-          setTimeout(function() { sub.textContent = orig; }, 2500);
-        }
-      }
-    });
-  });
 
 })();
 </script>
