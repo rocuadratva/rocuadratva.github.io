@@ -69,9 +69,7 @@
   var style = document.createElement('style');
   style.textContent = [
     '#rc-chat-widget{position:fixed;bottom:24px;right:24px;z-index:99999;font-family:"Inter",system-ui,sans-serif}',
-    '#rc-bubble{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#F26C38,#D72F58);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 0 10px rgba(242,108,56,.45),0 0 28px rgba(242,108,56,.18);animation:rc-pulse 2.5s ease-in-out infinite;transition:transform .2s,filter .2s}',
-    '#rc-bubble:hover{transform:translateY(-2px);filter:brightness(1.1);animation-play-state:paused}',
-    '@keyframes rc-pulse{0%,100%{box-shadow:0 0 10px rgba(242,108,56,.45),0 0 28px rgba(242,108,56,.18)}50%{box-shadow:0 0 22px rgba(242,108,56,.75),0 0 55px rgba(215,47,88,.35)}}',
+    /* bubble styles removed — hub-widget.js owns the FAB */
     '#rc-panel{position:absolute;bottom:68px;right:0;width:360px;height:520px;background:#1E1E1E;border:1px solid rgba(255,255,255,.15);border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.6),0 0 40px rgba(242,108,56,.08);display:flex;flex-direction:column;overflow:hidden;opacity:0;pointer-events:none;transform:translateY(12px) scale(.97);transition:opacity .25s,transform .25s}',
     '#rc-panel.rc-open{opacity:1;pointer-events:all;transform:translateY(0) scale(1)}',
     '#rc-header{display:flex;align-items:center;gap:10px;padding:14px 16px;background:#252525;border-bottom:1px solid rgba(255,255,255,.08);flex-shrink:0}',
@@ -114,11 +112,6 @@
   var wrap = document.createElement('div');
   wrap.id = 'rc-chat-widget';
   wrap.innerHTML = [
-    '<button id="rc-bubble" aria-label="Chat with Roc">',
-      '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">',
-        '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
-      '</svg>',
-    '</button>',
     '<div id="rc-panel" role="dialog" aria-label="Roc AI Chat" aria-hidden="true">',
       '<div id="rc-header">',
         '<div id="rc-avatar">R</div>',
@@ -143,7 +136,6 @@
   ].join('');
   document.body.appendChild(wrap);
 
-  var bubble   = document.getElementById('rc-bubble');
   var panel    = document.getElementById('rc-panel');
   var messages = document.getElementById('rc-messages');
   var typing   = document.getElementById('rc-typing');
@@ -503,7 +495,9 @@
     }
   }
 
-  bubble.addEventListener('click', togglePanel);
   closeBtn.addEventListener('click', togglePanel);
+
+  window.rcToggleChat = togglePanel;
+  window.rcCloseChat  = function () { if (state.open) togglePanel(); };
 
 })();

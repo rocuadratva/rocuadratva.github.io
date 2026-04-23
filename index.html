@@ -2841,7 +2841,14 @@
       overlay.classList.remove('is-open');
       overlay.setAttribute('aria-hidden', 'true');
       document.body.style.overflow = '';
+      if (!localStorage.getItem('lf_submitted')) {
+        var c = parseInt(localStorage.getItem('lf_dismiss_count') || '0', 10);
+        localStorage.setItem('lf_dismiss_count', String(c + 1));
+        localStorage.setItem('lf_dismiss_ts', String(Date.now()));
+      }
     }
+
+    window.openLeadModal = function (tab) { resetModal(); openModal(tab || 'form'); };
 
     function resetModal() {
       form.reset();
@@ -2874,12 +2881,25 @@
     if (processBtn) processBtn.addEventListener('click', function() { resetModal(); openModal('book'); });
     if (closeBtn) closeBtn.addEventListener('click', closeModal);
 
-    // Auto-open on every page load (2s delay)
+    // Auto-open with smart persistence (suppresses after 3 dismissals or on submission)
     setTimeout(function() {
-      if (!overlay.classList.contains('is-open')) {
+      var submitted = localStorage.getItem('lf_submitted');
+      var count = parseInt(localStorage.getItem('lf_dismiss_count') || '0', 10);
+      var ts    = parseInt(localStorage.getItem('lf_dismiss_ts')    || '0', 10);
+      if (Date.now() - ts > 7 * 24 * 60 * 60 * 1000) count = 0;
+      if (!submitted && count < 3 && !overlay.classList.contains('is-open')) {
         resetModal(); openModal('form');
       }
     }, 2000);
+
+    // Exit-intent: re-show once per session if not submitted
+    var exitShown = false;
+    document.addEventListener('mouseleave', function(e) {
+      if (e.clientY < 5 && !exitShown && !localStorage.getItem('lf_submitted') && !overlay.classList.contains('is-open')) {
+        exitShown = true;
+        resetModal(); openModal('form');
+      }
+    });
 
     overlay.addEventListener('click', function(e) {
       if (e.target === overlay) closeModal();
@@ -2996,6 +3016,7 @@
         { field: 'budget',         value: budgetEl ? budgetEl.value : '' },
         { field: 'current_tools',  value: toolsEl ? toolsEl.value.trim() : '' },
         { field: 'description',    value: descriptionEl.value.trim() },
+        { field: 'source',          value: 'Lead Form' },
         { field: 'source_platform', value: 'roctechva.cloud' },
         { field: 'submission_date', value: new Date().toISOString() }
       ];
@@ -3008,6 +3029,7 @@
       })
       .then(function() {
         /* no-cors returns opaque response — assume success if no network error */
+        localStorage.setItem('lf_submitted', '1');
         form.style.display    = 'none';
         success.style.display = 'flex';
       })
@@ -3027,6 +3049,9 @@
 
 <!-- ─── AI CHAT WIDGET ─── -->
 <script src="chat-widget.js"></script>
+
+<!-- ─── ENGAGEMENT HUB ─── -->
+<script src="hub-widget.js"></script>
 
 </body>
 </html>
