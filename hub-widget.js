@@ -38,7 +38,7 @@
         '<span class="hub-opt-icon" style="background:rgba(167,139,250,.14)">🎤</span>',
         '<span class="hub-opt-text">',
           '<span class="hub-opt-label">Voice Receptionist<span class="hub-soon">Soon</span></span>',
-          '<span class="hub-opt-sub" id="hub-voice-sub">Talk to our AI receptionist</span>',
+          '<span class="hub-opt-sub" id="hub-voice-sub">Talk to Roc AI booking receptionist</span>',
         '</span>',
       '</button>',
 
@@ -46,7 +46,7 @@
         '<span class="hub-opt-icon" style="background:rgba(242,108,56,.14)">💬</span>',
         '<span class="hub-opt-text">',
           '<span class="hub-opt-label">Chat with Roc</span>',
-          '<span class="hub-opt-sub">Questions &amp; appointment booking</span>',
+          '<span class="hub-opt-sub">Book, reschedule or cancel appointments</span>',
         '</span>',
       '</button>',
 
@@ -62,7 +62,7 @@
         '<span class="hub-opt-icon" style="background:rgba(96,165,250,.14)">📝</span>',
         '<span class="hub-opt-text">',
           '<span class="hub-opt-label">Describe My Problem</span>',
-          '<span class="hub-opt-sub">Get a free automation audit</span>',
+          '<span class="hub-opt-sub">Tell me what\'s slowing you down</span>',
         '</span>',
       '</button>',
 

@@ -246,6 +246,9 @@
       display: flex;
       flex-direction: column;
       gap: 10px;
+      padding: 20px;
+      background: rgba(255,255,255,0.025);
+      border: 1px solid rgba(255,255,255,0.1);
       opacity: 0;
       transform: translateX(24px);
       animation: fade-right 0.65s 0.55s var(--ease) forwards;
@@ -405,8 +408,9 @@
     }
 
     .hero-hub__card:hover {
-      background: rgba(242,108,56,0.08);
-      border-color: rgba(242,108,56,0.4);
+      background: rgba(242,108,56,0.1);
+      border-color: rgba(242,108,56,0.55);
+      border-left-width: 3px;
       transform: translateX(4px);
     }
 
@@ -458,6 +462,96 @@
                      animation: fade-up 0.65s 0.55s var(--ease) forwards; }
       .hero__sub, .hero__workflow { max-width: 100%; }
       .hero-hub__card:hover { transform: none; }
+    }
+
+    /* ─── LIVE AUTOMATIONS ─── */
+    .automations-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .automation-card {
+      background: rgba(255,255,255,0.025);
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      transition: border-color 0.2s;
+    }
+
+    .automation-card:hover { border-color: rgba(242,108,56,0.3); }
+
+    .automation-card .wf-header { margin-bottom: 14px; }
+
+    .automation-card__footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .automation-card__tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .automation-card__link {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent-1);
+      text-decoration: none;
+      letter-spacing: 0.03em;
+      transition: gap 0.15s, opacity 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .automation-card__link:hover { opacity: 0.8; gap: 7px; }
+
+    /* Stagger card pulse offsets so all 4 don't glow in sync */
+    .automation-card:nth-child(2) .wf-step:nth-child(1) .wf-icon { animation-delay: 0.5s; }
+    .automation-card:nth-child(2) .wf-step:nth-child(2) .wf-icon { animation-delay: 1.5s; }
+    .automation-card:nth-child(2) .wf-step:nth-child(3) .wf-icon { animation-delay: 2.5s; }
+    .automation-card:nth-child(2) .wf-step:nth-child(4) .wf-icon { animation-delay: 3.5s; }
+    .automation-card:nth-child(2) .wf-step:nth-child(5) .wf-icon { animation-delay: 4.5s; }
+    .automation-card:nth-child(2) .wf-step:nth-child(1) .wf-name { animation-delay: 0.5s; }
+    .automation-card:nth-child(2) .wf-step:nth-child(2) .wf-name { animation-delay: 1.5s; }
+    .automation-card:nth-child(2) .wf-step:nth-child(3) .wf-name { animation-delay: 2.5s; }
+    .automation-card:nth-child(2) .wf-step:nth-child(4) .wf-name { animation-delay: 3.5s; }
+    .automation-card:nth-child(2) .wf-step:nth-child(5) .wf-name { animation-delay: 4.5s; }
+
+    .automation-card:nth-child(3) .wf-step:nth-child(1) .wf-icon { animation-delay: 1.0s; }
+    .automation-card:nth-child(3) .wf-step:nth-child(2) .wf-icon { animation-delay: 2.0s; }
+    .automation-card:nth-child(3) .wf-step:nth-child(3) .wf-icon { animation-delay: 3.0s; }
+    .automation-card:nth-child(3) .wf-step:nth-child(4) .wf-icon { animation-delay: 4.0s; }
+    .automation-card:nth-child(3) .wf-step:nth-child(5) .wf-icon { animation-delay: 0.0s; }
+    .automation-card:nth-child(3) .wf-step:nth-child(1) .wf-name { animation-delay: 1.0s; }
+    .automation-card:nth-child(3) .wf-step:nth-child(2) .wf-name { animation-delay: 2.0s; }
+    .automation-card:nth-child(3) .wf-step:nth-child(3) .wf-name { animation-delay: 3.0s; }
+    .automation-card:nth-child(3) .wf-step:nth-child(4) .wf-name { animation-delay: 4.0s; }
+    .automation-card:nth-child(3) .wf-step:nth-child(5) .wf-name { animation-delay: 0.0s; }
+
+    .automation-card:nth-child(4) .wf-step:nth-child(1) .wf-icon { animation-delay: 1.5s; }
+    .automation-card:nth-child(4) .wf-step:nth-child(2) .wf-icon { animation-delay: 2.5s; }
+    .automation-card:nth-child(4) .wf-step:nth-child(3) .wf-icon { animation-delay: 3.5s; }
+    .automation-card:nth-child(4) .wf-step:nth-child(4) .wf-icon { animation-delay: 4.5s; }
+    .automation-card:nth-child(4) .wf-step:nth-child(5) .wf-icon { animation-delay: 0.5s; }
+    .automation-card:nth-child(4) .wf-step:nth-child(1) .wf-name { animation-delay: 1.5s; }
+    .automation-card:nth-child(4) .wf-step:nth-child(2) .wf-name { animation-delay: 2.5s; }
+    .automation-card:nth-child(4) .wf-step:nth-child(3) .wf-name { animation-delay: 3.5s; }
+    .automation-card:nth-child(4) .wf-step:nth-child(4) .wf-name { animation-delay: 4.5s; }
+    .automation-card:nth-child(4) .wf-step:nth-child(5) .wf-name { animation-delay: 0.5s; }
+
+    @media (max-width: 768px) {
+      .automations-grid { grid-template-columns: 1fr; }
     }
 
     /* ─── STATUS DOT ─── */
@@ -1860,7 +1954,7 @@
           <span class="hero-hub__icon" style="background:rgba(96,165,250,0.1)">📝</span>
           <span>
             <div class="hero-hub__name">Describe My Problem</div>
-            <div class="hero-hub__sub">Get a free automation audit</div>
+            <div class="hero-hub__sub">Tell me what's slowing you down</div>
           </span>
         </button>
 
@@ -1868,7 +1962,7 @@
           <span class="hero-hub__icon" style="background:rgba(242,108,56,0.1)">💬</span>
           <span>
             <div class="hero-hub__name">Chat with Roc</div>
-            <div class="hero-hub__sub">Questions &amp; appointment booking</div>
+            <div class="hero-hub__sub">Book, reschedule or cancel appointments</div>
           </span>
         </button>
 
@@ -1884,7 +1978,7 @@
           <span class="hero-hub__icon" style="background:rgba(167,139,250,0.1)">🎤</span>
           <span>
             <div class="hero-hub__name">Voice Receptionist<span class="hero-hub__soon">Soon</span></div>
-            <div class="hero-hub__sub" id="hero-voice-sub">Talk to our AI receptionist</div>
+            <div class="hero-hub__sub" id="hero-voice-sub">Talk to Roc AI booking receptionist</div>
           </span>
         </button>
 
@@ -2015,6 +2109,231 @@
       </div>
     </div>
   </div>
+
+  <!-- ═══════════════════════════════════
+       LIVE AUTOMATIONS
+  ═══════════════════════════════════ -->
+  <section id="automations" class="section">
+    <div class="section__inner">
+
+      <div class="section__header">
+        <div class="section__kicker">See It Running</div>
+        <h2 class="section__h2">Live <span>Automations</span></h2>
+      </div>
+
+      <div class="automations-grid">
+
+        <!-- Card 1: Facebook AI Agent -->
+        <div class="automation-card reveal">
+          <div class="wf-header">
+            <span class="wf-live-dot"></span>
+            <span class="wf-header-badge">Live</span>
+            <span class="wf-header-name">Facebook AI Agent</span>
+          </div>
+          <div class="wf-track">
+            <div class="wf-step">
+              <div class="wf-icon">📥</div>
+              <div>
+                <div class="wf-name">Comment or message received</div>
+                <div class="wf-tool">Trigger &middot; Facebook Page</div>
+              </div>
+            </div>
+            <div class="wf-step">
+              <div class="wf-icon">🤖</div>
+              <div>
+                <div class="wf-name">AI reads &amp; understands context</div>
+                <div class="wf-tool">Claude AI &middot; n8n</div>
+              </div>
+            </div>
+            <div class="wf-step">
+              <div class="wf-icon">✍️</div>
+              <div>
+                <div class="wf-name">Generates on-brand reply</div>
+                <div class="wf-tool">n8n AI Node</div>
+              </div>
+            </div>
+            <div class="wf-step">
+              <div class="wf-icon">📤</div>
+              <div>
+                <div class="wf-name">Posts response automatically</div>
+                <div class="wf-tool">Facebook API &middot; n8n</div>
+              </div>
+            </div>
+            <div class="wf-step">
+              <div class="wf-icon">📊</div>
+              <div>
+                <div class="wf-name">Logs interaction for review</div>
+                <div class="wf-tool">Google Sheets &middot; n8n</div>
+              </div>
+            </div>
+          </div>
+          <div class="automation-card__footer">
+            <div class="automation-card__tags">
+              <span class="tag">n8n</span><span class="tag">AI Agent</span><span class="tag">Facebook</span>
+            </div>
+            <a href="#projects" class="automation-card__link">View project &rarr;</a>
+          </div>
+        </div>
+
+        <!-- Card 2: HR Onboarding -->
+        <div class="automation-card reveal">
+          <div class="wf-header">
+            <span class="wf-live-dot"></span>
+            <span class="wf-header-badge">Live</span>
+            <span class="wf-header-name">HR Onboarding Workflow</span>
+          </div>
+          <div class="wf-track">
+            <div class="wf-step">
+              <div class="wf-icon">📋</div>
+              <div>
+                <div class="wf-name">New hire form submitted</div>
+                <div class="wf-tool">Trigger &middot; Google Forms</div>
+              </div>
+            </div>
+            <div class="wf-step">
+              <div class="wf-icon">⚡</div>
+              <div>
+                <div class="wf-name">Zapier workflow triggers</div>
+                <div class="wf-tool">Zapier</div>
+              </div>
+            </div>
+            <div class="wf-step">
+              <div class="wf-icon">🔑</div>
+              <div>
+                <div class="wf-name">Accounts created &amp; access granted</div>
+                <div class="wf-tool">GSuite &middot; Slack</div>
+              </div>
+            </div>
+            <div class="wf-step">
+              <div class="wf-icon">✅</div>
+              <div>
+                <div class="wf-name">Onboarding tasks assigned</div>
+                <div class="wf-tool">Asana &middot; Zapier</div>
+              </div>
+            </div>
+            <div class="wf-step">
+              <div class="wf-icon">📧</div>
+              <div>
+                <div class="wf-name">Welcome email sent automatically</div>
+                <div class="wf-tool">Gmail &middot; Zapier</div>
+              </div>
+            </div>
+          </div>
+          <div class="automation-card__footer">
+            <div class="automation-card__tags">
+              <span class="tag">Zapier</span><span class="tag">HR</span><span class="tag">Onboarding</span>
+            </div>
+            <a href="#projects" class="automation-card__link">View project &rarr;</a>
+          </div>
+        </div>
+
+        <!-- Card 3: Lead Enrichment -->
+        <div class="automation-card reveal">
+          <div class="wf-header">
+            <span class="wf-live-dot"></span>
+            <span class="wf-header-badge">Live</span>
+            <span class="wf-header-name">Automated Lead Enrichment</span>
+          </div>
+          <div class="wf-track">
+            <div class="wf-step">
+              <div class="wf-icon">🙋</div>
+              <div>
+                <div class="wf-name">New lead captured</div>
+                <div class="wf-tool">Trigger &middot; CRM / Landing Page</div>
+              </div>
+            </div>
+            <div class="wf-step">
+              <div class="wf-icon">⚡</div>
+              <div>
+                <div class="wf-name">Zapier detects new entry</div>
+                <div class="wf-tool">Zapier</div>
+              </div>
+            </div>
+            <div class="wf-step">
+              <div class="wf-icon">🔍</div>
+              <div>
+                <div class="wf-name">Lead data enriched</div>
+                <div class="wf-tool">Clearbit &middot; Hunter.io</div>
+              </div>
+            </div>
+            <div class="wf-step">
+              <div class="wf-icon">📋</div>
+              <div>
+                <div class="wf-name">CRM record updated</div>
+                <div class="wf-tool">HubSpot &middot; Pipedrive</div>
+              </div>
+            </div>
+            <div class="wf-step">
+              <div class="wf-icon">🔔</div>
+              <div>
+                <div class="wf-name">Sales team notified</div>
+                <div class="wf-tool">Slack &middot; Email &middot; Zapier</div>
+              </div>
+            </div>
+          </div>
+          <div class="automation-card__footer">
+            <div class="automation-card__tags">
+              <span class="tag">Zapier</span><span class="tag">CRM</span><span class="tag">Leads</span>
+            </div>
+            <a href="#projects" class="automation-card__link">View project &rarr;</a>
+          </div>
+        </div>
+
+        <!-- Card 4: AI Content Generator -->
+        <div class="automation-card reveal">
+          <div class="wf-header">
+            <span class="wf-live-dot"></span>
+            <span class="wf-header-badge">Live</span>
+            <span class="wf-header-name">AI Content Generator</span>
+          </div>
+          <div class="wf-track">
+            <div class="wf-step">
+              <div class="wf-icon">⏰</div>
+              <div>
+                <div class="wf-name">Scheduled trigger fires</div>
+                <div class="wf-tool">Trigger &middot; n8n Cron</div>
+              </div>
+            </div>
+            <div class="wf-step">
+              <div class="wf-icon">🤖</div>
+              <div>
+                <div class="wf-name">AI writes structured content</div>
+                <div class="wf-tool">Claude AI &middot; n8n</div>
+              </div>
+            </div>
+            <div class="wf-step">
+              <div class="wf-icon">🎨</div>
+              <div>
+                <div class="wf-name">Formats for each platform</div>
+                <div class="wf-tool">n8n Transform Node</div>
+              </div>
+            </div>
+            <div class="wf-step">
+              <div class="wf-icon">👀</div>
+              <div>
+                <div class="wf-name">Added to review queue</div>
+                <div class="wf-tool">Notion &middot; Airtable</div>
+              </div>
+            </div>
+            <div class="wf-step">
+              <div class="wf-icon">🚀</div>
+              <div>
+                <div class="wf-name">Published on approval</div>
+                <div class="wf-tool">Social API &middot; n8n</div>
+              </div>
+            </div>
+          </div>
+          <div class="automation-card__footer">
+            <div class="automation-card__tags">
+              <span class="tag">n8n</span><span class="tag">AI</span><span class="tag">Content</span>
+            </div>
+            <a href="#projects" class="automation-card__link">View project &rarr;</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
 
   <!-- ═══════════════════════════════════
        ABOUT ME
@@ -3097,14 +3416,7 @@
     if (processBtn) processBtn.addEventListener('click', function() { resetModal(); openModal('book'); });
     if (closeBtn) closeBtn.addEventListener('click', closeModal);
 
-    // Exit-intent: show lead form once per session when user moves to leave
-    var exitShown = false;
-    document.addEventListener('mouseleave', function(e) {
-      if (e.clientY < 5 && !exitShown && !localStorage.getItem('lf_submitted') && !overlay.classList.contains('is-open')) {
-        exitShown = true;
-        resetModal(); openModal('form');
-      }
-    });
+    // Lead form opens only via explicit hub card click — no auto-triggers
 
     overlay.addEventListener('click', function(e) {
       if (e.target === overlay) closeModal();
