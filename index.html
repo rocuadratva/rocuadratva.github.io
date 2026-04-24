@@ -181,12 +181,12 @@
 
     /* ─── HERO ─── */
     .section--hero {
-      padding-top: calc(64px + 60px);
-      padding-bottom: 60px;
+      padding-top: calc(64px + 28px);
+      padding-bottom: 24px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 40px;
+      gap: 20px;
       position: relative;
       overflow: hidden;
     }
@@ -245,16 +245,29 @@
       transition: color 0.2s; white-space: nowrap; flex-shrink: 0;
     }
     .lp-tab.lp-tab--active { color: var(--t1); }
+    .lp-tab--soon { opacity: 0.55; cursor: default; }
+    .lp-tab--soon:hover { color: rgba(255,255,255,0.38); }
+    .lp-soon-chip {
+      display: inline-block; font-size: 8px; font-weight: 700; letter-spacing: .06em;
+      text-transform: uppercase; vertical-align: middle; margin-left: 6px;
+      background: linear-gradient(135deg,#a78bfa,#7c3aed); color:#fff;
+      padding: 1px 5px; border-radius: 3px; line-height: 1.5;
+    }
+    .lp-info__cta--soon {
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+      color: var(--t2); cursor: default;
+    }
+    .lp-info__cta--soon:hover { filter: none; transform: none; }
     .lp-tab-ink {
       position: absolute; bottom: 0; height: 2px;
       background: linear-gradient(90deg, #F26C38, #D72F58);
       transition: left 0.28s var(--ease), width 0.28s var(--ease);
       pointer-events: none;
     }
-    .lp-content { display: grid; grid-template-columns: 1fr 1.1fr; min-height: 340px; }
+    .lp-content { display: grid; grid-template-columns: 1fr 1.1fr; min-height: 290px; }
     .lp-flow {
       border-right: 1px solid rgba(255,255,255,0.06);
-      padding: 32px 36px; display: flex; align-items: center;
+      padding: 24px 28px; display: flex; align-items: center;
       transition: opacity 0.18s;
     }
     .lp-flow.is-fading, .lp-info.is-fading { opacity: 0; }
@@ -302,8 +315,8 @@
     }
 
     .lp-info {
-      padding: 36px 40px; display: flex; flex-direction: column;
-      justify-content: center; gap: 16px; transition: opacity 0.18s;
+      padding: 28px 36px; display: flex; flex-direction: column;
+      justify-content: center; gap: 12px; transition: opacity 0.18s;
     }
     .lp-info__tags { display: flex; gap: 6px; flex-wrap: wrap; }
     .lp-info__title {
@@ -349,7 +362,7 @@
 
     .hero__h1 {
       font-family: var(--f-display);
-      font-size: clamp(32px, 3.8vw, 60px);
+      font-size: clamp(28px, 3.2vw, 52px);
       font-weight: 900;
       line-height: 1.0;
       letter-spacing: -0.03em;
@@ -1805,10 +1818,10 @@
         <span class="hero__dot"></span>
         This site runs on live automations
       </div>
-      <h1 class="hero__h1" style="margin-top:14px">
+      <h1 class="hero__h1" style="margin-top:10px">
         This portfolio runs<br><span class="hero__grad">on what I build.</span>
       </h1>
-      <p class="hero__sub" style="margin-top:12px;max-width:520px">The chat bot, the lead form, the email reply — each one is a real n8n workflow running in production. Click any tab to see inside.</p>
+      <p class="hero__sub" style="margin-top:8px;max-width:520px">The chat bot, the lead form, the email reply — each one is a real n8n workflow running in production. Click any tab to see inside.</p>
     </div>
 
     <div class="lp-tabcard">
@@ -1816,6 +1829,7 @@
         <button class="lp-tab lp-tab--active" role="tab" aria-selected="true"  data-lp="0">AI Chat Booking</button>
         <button class="lp-tab"                role="tab" aria-selected="false" data-lp="1">Lead Nurture</button>
         <button class="lp-tab"                role="tab" aria-selected="false" data-lp="2">Gmail Reply Trigger</button>
+        <button class="lp-tab lp-tab--soon"   role="tab" aria-selected="false" data-lp="3">Voice Receptionist<span class="lp-soon-chip">Soon</span></button>
         <div class="lp-tab-ink" id="lp-ink"></div>
       </div>
       <div class="lp-content">
@@ -3506,16 +3520,31 @@
     },
     {
       name: 'Gmail Reply Trigger',
-      tags: ['n8n', 'Gmail', 'Automation'],
-      desc: 'Detects incoming emails and fires automated replies instantly — no manual review, no delays, no missed messages.',
+      tags: ['n8n', 'Gmail', 'Sheets'],
+      desc: 'When a nurtured lead replies to an email, n8n detects the reply and updates their status in Google Sheets — stopping the nurture sequence immediately.',
       cta: 'View workflow',
       action: function () { if (window.lbShowSrc) window.lbShowSrc('images/n8n web-gmail-reply-trigger.png', 'Gmail Reply Trigger'); },
       steps: [
-        { icon: '📩', label: 'Email received',         tool: 'Gmail Trigger · n8n' },
-        { icon: '🔍', label: 'Content analyzed',       tool: 'n8n Filter Node' },
-        { icon: '🤖', label: 'Reply generated',        tool: 'AI · n8n' },
-        { icon: '📤', label: 'Auto-reply sent',        tool: 'Gmail · n8n' },
-        { icon: '📋', label: 'Interaction logged',     tool: 'Google Sheets' }
+        { icon: '📩', label: 'Lead replies to email',     tool: 'Gmail Trigger · n8n' },
+        { icon: '🔍', label: 'Reply detected & parsed',   tool: 'n8n Filter Node' },
+        { icon: '✅', label: 'Lead status identified',    tool: 'n8n Logic' },
+        { icon: '📊', label: 'Google Sheets updated',     tool: 'Sheets · n8n' },
+        { icon: '🛑', label: 'Nurture sequence halted',   tool: 'n8n Workflow' }
+      ]
+    },
+    {
+      name: 'AI Voice Receptionist',
+      tags: ['n8n', 'AI Voice', 'GHL'],
+      desc: 'Answers calls 24/7 and handles bookings by voice. Talk directly to Roc AI — no forms, no chat, just speak.',
+      cta: 'Coming soon',
+      soon: true,
+      action: function () {},
+      steps: [
+        { icon: '📞', label: 'Incoming call received',      tool: 'Phone · AI Voice' },
+        { icon: '🎙️', label: 'Voice intent detected',      tool: 'Voice AI · n8n' },
+        { icon: '📅', label: 'Slots fetched in real-time', tool: 'GHL Calendar' },
+        { icon: '📋', label: 'Appointment booked',          tool: 'GoHighLevel' },
+        { icon: '✅', label: 'Caller confirmed via SMS',    tool: 'Twilio · GHL' }
       ]
     }
   ];
@@ -3526,21 +3555,24 @@
   var inkEl   = document.getElementById('lp-ink');
   var tabEls  = document.querySelectorAll('[data-lp]');
 
-  function renderFlow(steps) {
+  function renderFlow(steps, soon) {
     var track = document.createElement('div');
     track.className = 'lp-flow-track';
+    if (soon) track.style.opacity = '0.45';
     steps.forEach(function (s, i) {
       var step = document.createElement('div');
       step.className = 'lp-flow-step';
       var node = document.createElement('div');
       node.className = 'lp-node';
       node.textContent = s.icon;
-      node.style.animationDelay = (i * 1.0) + 's';
+      if (!soon) node.style.animationDelay = (i * 1.0) + 's';
+      else node.style.animation = 'none';
       var text = document.createElement('div');
       var name = document.createElement('div');
       name.className = 'lp-step-name';
       name.textContent = s.label;
-      name.style.animationDelay = (i * 1.0) + 's';
+      if (!soon) name.style.animationDelay = (i * 1.0) + 's';
+      else name.style.animation = 'none';
       var tool = document.createElement('div');
       tool.className = 'lp-step-tool';
       tool.textContent = s.tool;
@@ -3556,14 +3588,14 @@
 
   function renderInfo(p, idx) {
     var tagsHTML = p.tags.map(function (t) { return '<span class="tag">' + t + '</span>'; }).join('');
+    var ctaClass = 'lp-info__cta' + (p.soon ? ' lp-info__cta--soon' : '');
+    var ctaIcon  = p.soon ? '' : '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="margin-left:2px"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
     infoEl.innerHTML =
       '<div class="lp-info__tags">' + tagsHTML + '</div>' +
       '<div class="lp-info__title">' + p.name + '</div>' +
       '<p class="lp-info__desc">' + p.desc + '</p>' +
-      '<button class="lp-info__cta" id="lp-cta">' + p.cta +
-        '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="margin-left:2px"><path d="M5 12h14M12 5l7 7-7 7"/></svg>' +
-      '</button>';
-    document.getElementById('lp-cta').addEventListener('click', PROJECTS[idx].action);
+      '<button class="' + ctaClass + '" id="lp-cta">' + p.cta + ctaIcon + '</button>';
+    if (!p.soon) document.getElementById('lp-cta').addEventListener('click', PROJECTS[idx].action);
   }
 
   function moveInk(tabEl) {
@@ -3573,6 +3605,11 @@
   }
 
   function activate(idx) {
+    var p = PROJECTS[idx];
+    if (!p) return;
+    if (p.soon && idx !== activeIdx) {
+      /* still switch to it so user can preview the coming-soon state */
+    }
     if (idx === activeIdx && flowEl.children.length > 0) return;
     activeIdx = idx;
 
@@ -3580,14 +3617,15 @@
     infoEl.classList.add('is-fading');
 
     setTimeout(function () {
-      renderFlow(PROJECTS[idx].steps);
-      renderInfo(PROJECTS[idx], idx);
+      renderFlow(p.steps, p.soon);
+      renderInfo(p, idx);
       flowEl.classList.remove('is-fading');
       infoEl.classList.remove('is-fading');
     }, 180);
 
     tabEls.forEach(function (t, i) {
-      t.classList.toggle('lp-tab--active', i === idx);
+      var isSoonTab = PROJECTS[i] && PROJECTS[i].soon;
+      t.classList.toggle('lp-tab--active', i === idx && !isSoonTab);
       t.setAttribute('aria-selected', i === idx ? 'true' : 'false');
     });
     moveInk(tabEls[idx]);
@@ -3598,7 +3636,7 @@
   });
 
   /* Initial render */
-  renderFlow(PROJECTS[0].steps);
+  renderFlow(PROJECTS[0].steps, false);
   renderInfo(PROJECTS[0], 0);
   requestAnimationFrame(function () { moveInk(tabEls[0]); });
 })();

@@ -43,7 +43,7 @@
       '</button>',
 
       '<button class="hub-opt" data-action="chat" role="menuitem">',
-        '<span class="hub-opt-icon" style="background:rgba(242,108,56,.14)">💬</span>',
+        '<span class="hub-opt-icon" style="background:rgba(255,255,255,.08)">💬</span>',
         '<span class="hub-opt-text">',
           '<span class="hub-opt-label">Chat with Roc</span>',
           '<span class="hub-opt-sub">Book, reschedule or cancel appointments</span>',
