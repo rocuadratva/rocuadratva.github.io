@@ -4,9 +4,9 @@
   /* ── CSS ── */
   var style = document.createElement('style');
   style.textContent = [
-    '#rc-hub{position:fixed;bottom:24px;right:24px;z-index:100001;font-family:"Inter",system-ui,sans-serif;display:flex;flex-direction:column;align-items:flex-end;gap:10px}',
+    '#rc-hub{position:fixed;bottom:24px;right:24px;z-index:100001;font-family:"Inter",system-ui,sans-serif;display:flex;flex-direction:column;align-items:flex-end;gap:10px;pointer-events:none}',
 
-    '#rc-hub-fab{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#F26C38,#D72F58);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 0 10px rgba(242,108,56,.45),0 0 28px rgba(242,108,56,.18);animation:hub-pulse 2.5s ease-in-out infinite;transition:transform .2s,filter .2s;flex-shrink:0;touch-action:manipulation}',
+    '#rc-hub-fab{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#F26C38,#D72F58);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 0 10px rgba(242,108,56,.45),0 0 28px rgba(242,108,56,.18);animation:hub-pulse 2.5s ease-in-out infinite;transition:transform .2s,filter .2s;flex-shrink:0;touch-action:manipulation;pointer-events:auto}',
     '#rc-hub-fab:hover{transform:translateY(-2px);filter:brightness(1.1);animation-play-state:paused}',
     '@keyframes hub-pulse{0%,100%{box-shadow:0 0 10px rgba(242,108,56,.45),0 0 28px rgba(242,108,56,.18)}50%{box-shadow:0 0 22px rgba(242,108,56,.75),0 0 55px rgba(215,47,88,.35)}}',
 
@@ -22,7 +22,7 @@
 
     '.hub-soon{font-size:9px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;background:linear-gradient(135deg,#F26C38,#D72F58);color:#fff;border-radius:4px;padding:2px 5px;margin-left:6px;vertical-align:middle;display:inline-block;line-height:1.4}',
 
-    '#rc-hub-backdrop{position:fixed;inset:0;z-index:100000;background:transparent}',
+    '#rc-hub-backdrop{position:fixed;inset:0;z-index:99998;background:transparent}',
 
     '@media(max-width:420px){.hub-opt{padding:9px 12px 9px 10px}.hub-opt-icon{width:30px;height:30px;font-size:15px}}'
   ].join('');
@@ -87,6 +87,8 @@
   var isOpen     = false;
   var backdrop   = null;
 
+  function onBackdropClick() { closeMenu(); }
+
   function openMenu() {
     isOpen = true;
     menu.classList.add('hub-open');
@@ -96,7 +98,7 @@
     fab.style.animation = 'none';
     backdrop = document.createElement('div');
     backdrop.id = 'rc-hub-backdrop';
-    backdrop.addEventListener('click', closeMenu);
+    backdrop.addEventListener('click', onBackdropClick);
     document.body.insertBefore(backdrop, hub);
   }
 
@@ -107,7 +109,11 @@
     iconClosed.style.display = 'block';
     iconOpen.style.display   = 'none';
     fab.style.animation = '';
-    if (backdrop) { backdrop.remove(); backdrop = null; }
+    if (backdrop) {
+      backdrop.removeEventListener('click', onBackdropClick);
+      backdrop.remove();
+      backdrop = null;
+    }
   }
 
   fab.addEventListener('click', function (e) {

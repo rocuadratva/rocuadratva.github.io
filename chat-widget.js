@@ -145,7 +145,7 @@
   var closeBtn = document.getElementById('rc-close');
 
   /* ── Core helpers ── */
-  function scrollBottom() { requestAnimationFrame(function () { messages.scrollTop = messages.scrollHeight; }); }
+  function scrollBottom() { requestAnimationFrame(function () { requestAnimationFrame(function () { messages.scrollTop = messages.scrollHeight; }); }); }
 
   function appendMsg(text, role) {
     var div = document.createElement('div');
@@ -491,7 +491,10 @@
     if (state.open && messages.querySelectorAll('.rc-msg').length === 0) {
       startFlow();
     } else if (state.open) {
+      scrollBottom();
       input.focus();
+    } else {
+      state.step = 'intent';
     }
   }
 
