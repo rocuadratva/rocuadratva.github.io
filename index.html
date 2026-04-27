@@ -591,9 +591,14 @@
       background: rgba(255,255,255,0.025);
       border: 1px solid rgba(255,255,255,0.08);
       border-radius: 10px;
-      overflow: hidden;
     }
-    .lp-tabs-bar .lp-tabs { border-bottom: none; }
+    .lp-tabs-bar .lp-tabs {
+      border-bottom: none;
+      border-radius: 10px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .lp-tabs-bar .lp-tabs::-webkit-scrollbar { display: none; }
 
     @media (max-width: 900px) {
       .hero__row { flex-direction: column; gap: 32px; }
