@@ -264,40 +264,6 @@
       transition: left 0.28s var(--ease), width 0.28s var(--ease);
       pointer-events: none;
     }
-    .lp-content { display: grid; grid-template-columns: 1fr 1.1fr; min-height: 290px; }
-    .lp-flow {
-      border-right: 1px solid rgba(255,255,255,0.06);
-      padding: 24px 28px; display: flex; align-items: center;
-      transition: opacity 0.18s;
-    }
-    .lp-flow.is-fading, .lp-info.is-fading { opacity: 0; }
-    .lp-flow-track { display: flex; flex-direction: column; position: relative; width: 100%; }
-    .lp-flow-track::before {
-      content: ''; position: absolute;
-      left: 15px; top: 28px; bottom: 28px; width: 1px;
-      background: linear-gradient(to bottom, rgba(242,108,56,0.2), rgba(215,47,88,0.15));
-    }
-    .lp-flow-step { display: flex; align-items: center; gap: 12px; padding: 6px 0; position: relative; }
-    .lp-node {
-      width: 32px; height: 32px; flex-shrink: 0; z-index: 1;
-      background: rgba(242,108,56,0.07); border: 1px solid rgba(242,108,56,0.15);
-      border-radius: 7px; display: flex; align-items: center; justify-content: center;
-      font-size: 13px; animation: lp-node-pulse 5s ease-in-out infinite;
-    }
-    .lp-step-name {
-      font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.55);
-      line-height: 1.3; animation: lp-node-text 5s ease-in-out infinite;
-    }
-    .lp-step-tool { font-size: 10px; color: rgba(255,255,255,0.25); margin-top: 2px; }
-    @keyframes lp-node-pulse {
-      0%,14%,100% { background:rgba(242,108,56,0.07);border-color:rgba(242,108,56,0.15);box-shadow:none; }
-      7%           { background:rgba(242,108,56,0.28);border-color:#F26C38;box-shadow:0 0 14px rgba(242,108,56,0.5),0 0 28px rgba(242,108,56,0.2); }
-    }
-    @keyframes lp-node-text {
-      0%,14%,100% { color:rgba(255,255,255,0.55); }
-      7%           { color:#fff; }
-    }
-
     .badge-live {
       position: absolute; top: 10px; left: 10px;
       display: flex; align-items: center; gap: 5px;
@@ -314,28 +280,36 @@
       flex-shrink: 0;
     }
 
-    .lp-info {
-      padding: 28px 36px; display: flex; flex-direction: column;
-      justify-content: center; gap: 12px; transition: opacity 0.18s;
+    /* ── Orbit info panel ── */
+    .orbit-info-panel {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-top: none;
+      border-radius: 0 0 10px 10px;
+      padding: 14px 18px 16px;
+      min-height: 94px;
+      transition: opacity 0.18s;
     }
-    .lp-info__tags { display: flex; gap: 6px; flex-wrap: wrap; }
-    .lp-info__title {
+    .orbit-info-panel.is-fading { opacity: 0; }
+    .orbit-info__title {
       font-family: var(--f-display);
-      font-size: clamp(18px,2.2vw,26px); font-weight: 800;
-      line-height: 1.15; letter-spacing: -0.02em;
+      font-size: 14px; font-weight: 800;
+      line-height: 1.2; letter-spacing: -0.01em;
+      margin-bottom: 5px;
     }
-    .lp-info__desc { font-size: 13px; color: var(--t2); line-height: 1.75; max-width: 380px; }
-    .lp-info__cta {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 11px 22px;
-      background: linear-gradient(135deg, #F26C38, #D72F58);
-      color: #fff; font-size: 12px; font-weight: 700;
-      letter-spacing: 0.06em; text-transform: uppercase;
-      border: none; border-radius: 6px; cursor: pointer; font-family: inherit;
-      width: fit-content; margin-top: 4px;
-      transition: filter 0.15s, transform 0.15s;
+    .orbit-info__desc { font-size: 12px; color: var(--t2); line-height: 1.7; }
+    .orbit-info__cta {
+      display: inline-flex; align-items: center; gap: 6px;
+      margin-top: 10px;
+      font-size: 10px; font-weight: 700; letter-spacing: 0.07em;
+      text-transform: uppercase; color: var(--accent-1);
+      background: none; border: none; padding: 0;
+      cursor: pointer; font-family: inherit;
+      transition: gap 0.15s;
     }
-    .lp-info__cta:hover { filter: brightness(1.1); transform: translateY(-1px); }
+    .orbit-info__cta:hover { gap: 10px; }
+    .orbit-info__cta--soon { opacity: 0.5; cursor: default; }
+    .orbit-info__cta--soon:hover { gap: 6px; }
 
     /* ── Shared hero text elements ── */
     .hero__badge {
@@ -419,7 +393,7 @@
       justify-content: center;
     }
 
-    /* ─── LAPTOP DEVICE ─── */
+    /* ─── ORBITAL AI HUB ─── */
     .hero__laptop-wrap {
       width: 100%;
       max-width: 490px;
@@ -429,178 +403,171 @@
       transform: translateY(18px);
       animation: fade-up 0.6s 0.28s var(--ease) forwards;
     }
-    .wf-graph {
+
+    .orbit-hub-wrap {
+      position: relative;
+      width: 100%;
+      height: 280px;
+    }
+
+    .orbit-hub {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    /* SVG ring outlines */
+    .orbit-rings-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      overflow: visible;
+    }
+    .orbit-ring-line {
+      fill: none;
+      stroke-dasharray: 3 9;
+      stroke-linecap: round;
+    }
+    .orbit-ring-line--inner { stroke: rgba(242,108,56,0.24); stroke-width: 1; }
+    .orbit-ring-line--outer { stroke: rgba(242,108,56,0.14); stroke-width: 1; }
+
+    /* Central sphere */
+    .orbit-sphere {
+      position: absolute;
+      left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      width: 74px; height: 74px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 36% 30%, rgba(255,220,200,0.24) 0%, transparent 44%),
+        radial-gradient(circle at 65% 70%, rgba(215,47,88,0.4) 0%, transparent 50%),
+        radial-gradient(circle, rgba(242,108,56,0.95) 0%, rgba(196,50,80,0.9) 45%, rgba(110,20,45,0.95) 100%);
+      box-shadow:
+        0 0 0 1.5px rgba(242,108,56,0.45),
+        0 0 32px rgba(242,108,56,0.62),
+        0 0 72px rgba(242,108,56,0.34),
+        0 0 130px rgba(215,47,88,0.18),
+        inset 0 1px 0 rgba(255,255,255,0.28);
+      z-index: 10;
+      animation: sphere-pulse 4s ease-in-out infinite;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0;
-      padding: 12px 20px;
-      background: rgba(255,255,255,0.03);
-      border: 1.5px solid rgba(255,255,255,0.10);
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      border-radius: 12px 12px 0 0;
     }
-    .wf-node {
+    .orbit-sphere::before,
+    .orbit-sphere::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(242,108,56,0.38);
+      animation: sphere-ring 3.6s ease-out infinite;
+      pointer-events: none;
+    }
+    .orbit-sphere::before { inset: -14px; }
+    .orbit-sphere::after  { inset: -30px; border-color: rgba(242,108,56,0.18); animation-delay: 1.3s; }
+    @keyframes sphere-ring {
+      0%   { opacity: 0.9; transform: scale(0.8); }
+      100% { opacity: 0;   transform: scale(1.55); }
+    }
+    @keyframes sphere-pulse {
+      0%,100% {
+        box-shadow:
+          0 0 0 1.5px rgba(242,108,56,0.45),
+          0 0 32px rgba(242,108,56,0.62),
+          0 0 72px rgba(242,108,56,0.34),
+          0 0 130px rgba(215,47,88,0.18),
+          inset 0 1px 0 rgba(255,255,255,0.28);
+      }
+      50% {
+        box-shadow:
+          0 0 0 1.5px rgba(242,108,56,0.62),
+          0 0 48px rgba(242,108,56,0.78),
+          0 0 95px rgba(242,108,56,0.46),
+          0 0 160px rgba(215,47,88,0.26),
+          inset 0 1px 0 rgba(255,255,255,0.28);
+      }
+    }
+    .orbit-sphere__shimmer {
+      position: absolute;
+      inset: 0; border-radius: 50%;
+      background: conic-gradient(
+        from 0deg,
+        transparent 0%,
+        rgba(255,255,255,0.15) 12%,
+        transparent 26%,
+        rgba(255,255,255,0.07) 42%,
+        transparent 58%
+      );
+      animation: sphere-shimmer 7s linear infinite;
+    }
+    @keyframes sphere-shimmer { to { transform: rotate(360deg); } }
+    .orbit-sphere__label {
+      position: relative; z-index: 1;
+      font-family: var(--f-display);
+      font-size: 16px; font-weight: 900;
+      color: #fff; letter-spacing: 0.08em;
+      text-shadow: 0 0 14px rgba(255,255,255,0.65);
+    }
+
+    /* Tool nodes */
+    .orbit-node {
+      position: absolute;
+      left: 0; top: 0;
+      width: 40px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 3px;
-      padding: 7px 14px;
-      border-radius: 8px;
-      border: 1px solid;
-      font-size: 9px;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      animation: wf-node-pulse 3s ease-in-out infinite;
+      gap: 4px;
+      transition: opacity 0.5s ease, filter 0.5s ease;
+      pointer-events: none;
     }
-    .wf-icon { font-size: 16px; line-height: 1; }
-    .wf-node--trigger { background: rgba(242,108,56,0.12); border-color: rgba(242,108,56,0.40); color: #f26c38; animation-delay: 0s; }
-    .wf-node--ai      { background: rgba(99,102,241,0.12); border-color: rgba(99,102,241,0.40); color: #818cf8; animation-delay: 0.6s; }
-    .wf-node--action  { background: rgba(34,197,94,0.12);  border-color: rgba(34,197,94,0.40);  color: #22c55e; animation-delay: 1.2s; }
-    @keyframes wf-node-pulse {
-      0%,100% { transform: translateY(0); }
-      50%      { transform: translateY(-2px); filter: brightness(1.12); }
+    .orbit-node__disc {
+      width: 40px; height: 40px;
+      background: rgba(10,11,24,0.9);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.5s, box-shadow 0.5s;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.55);
     }
-    .wf-connector { display: flex; align-items: center; flex-shrink: 0; }
-    .wf-connector svg { display: block; overflow: visible; }
-    /* ─── 3D LAPTOP ─── */
-    .laptop-scene {
-      perspective: 1100px;
-      perspective-origin: 50% 28%;
-      width: 100%;
+    .orbit-node__disc img { width: 18px; height: 18px; object-fit: contain; opacity: 0.7; transition: opacity 0.5s; }
+    .orbit-icon { font-size: 17px; line-height: 1; opacity: 0.7; transition: opacity 0.5s; }
+    .orbit-node__name {
+      font-size: 8px; font-weight: 700; letter-spacing: 0.07em;
+      text-transform: uppercase; color: rgba(255,255,255,0.3);
+      white-space: nowrap; transition: color 0.5s;
     }
-    .laptop-3d {
-      position: relative;
-      animation: laptop-float 6s ease-in-out infinite;
-      transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    .orbit-node.is-active .orbit-node__disc {
+      border-color: rgba(242,108,56,0.62);
+      box-shadow: 0 0 0 1px rgba(242,108,56,0.22), 0 0 20px rgba(242,108,56,0.48), 0 4px 14px rgba(0,0,0,0.55);
     }
-    .laptop-3d:hover {
-      animation-play-state: paused;
-      transform: rotateX(3deg) rotateY(-4deg) translateY(-6px) !important;
-    }
-    @keyframes laptop-float {
-      0%,100% { transform: rotateX(7deg) rotateY(-9deg) translateY(0px); }
-      50%      { transform: rotateX(7deg) rotateY(-9deg) translateY(-8px); }
-    }
+    .orbit-node.is-active .orbit-node__disc img,
+    .orbit-node.is-active .orbit-icon { opacity: 1; }
+    .orbit-node.is-active .orbit-node__name { color: rgba(242,108,56,0.88); }
+    .orbit-node.is-dim { opacity: 0.35; }
 
-    /* Lid */
-    .laptop-lid {
-      background: linear-gradient(155deg, #2a2e4c 0%, #1e2040 35%, #262944 65%, #1c1e38 100%);
-      border: 1.5px solid rgba(120,130,190,0.28);
-      border-bottom: 2px solid rgba(55,60,100,0.7);
-      border-radius: 14px 14px 3px 3px;
-      padding: 12px 10px 8px;
-      position: relative;
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.11),
-        inset -1px 0 0 rgba(0,0,0,0.28),
-        inset 1px 0 0 rgba(255,255,255,0.05),
-        0 0 60px rgba(242,108,56,0.13),
-        0 30px 80px rgba(0,0,0,0.65),
-        -5px 8px 0 rgba(0,0,0,0.22);
-      animation: laptop-glow 5s ease-in-out 1s infinite;
-    }
-    @keyframes laptop-glow {
-      0%,100% { box-shadow: inset 0 1px 0 rgba(255,255,255,0.11), inset -1px 0 0 rgba(0,0,0,0.28), inset 1px 0 0 rgba(255,255,255,0.05), 0 0 40px rgba(242,108,56,0.10), 0 30px 80px rgba(0,0,0,0.65), -5px 8px 0 rgba(0,0,0,0.22); }
-      50%      { box-shadow: inset 0 1px 0 rgba(255,255,255,0.11), inset -1px 0 0 rgba(0,0,0,0.28), inset 1px 0 0 rgba(255,255,255,0.05), 0 0 70px rgba(242,108,56,0.24), 0 30px 80px rgba(0,0,0,0.65), -5px 8px 0 rgba(0,0,0,0.22); }
-    }
-    .laptop-notch { display: flex; justify-content: center; margin-bottom: 6px; }
-    .laptop-camera {
-      width: 5px; height: 5px;
-      background: rgba(40,45,70,0.95);
-      border-radius: 50%;
-      border: 1px solid rgba(255,255,255,0.07);
-      box-shadow: inset 0 0 2px rgba(100,180,255,0.18);
-    }
-    .laptop-bezel {
-      background: #090915;
-      border-radius: 5px;
-      overflow: hidden;
-      border: 1px solid rgba(255,255,255,0.03);
-      box-shadow: inset 0 0 28px rgba(0,0,0,0.7), 0 0 18px rgba(242,108,56,0.07);
-    }
-    .laptop-bezel .lp-content { min-height: 245px; }
-
-    /* Hinge */
-    .laptop-hinge {
-      height: 5px;
-      background: linear-gradient(to bottom, #12132a, #0c0d1c);
-      border-left: 1.5px solid rgba(110,120,180,0.22);
-      border-right: 1.5px solid rgba(110,120,180,0.22);
-      position: relative;
-    }
-    .laptop-hinge::after {
-      content: '';
-      position: absolute;
-      top: 1px; left: 12%; right: 12%;
-      height: 2px;
-      background: linear-gradient(to right, transparent, rgba(242,108,56,0.22), rgba(215,47,88,0.16), transparent);
-      border-radius: 2px;
-    }
-
-    /* Keyboard base */
-    .laptop-body {
-      background: linear-gradient(175deg, #21243e 0%, #1a1d33 50%, #181b2e 100%);
-      border: 1.5px solid rgba(95,105,160,0.22);
-      border-top: 1px solid rgba(80,90,140,0.14);
-      border-radius: 0 0 10px 10px;
-      padding: 10px 16px 14px;
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.04),
-        0 14px 40px rgba(0,0,0,0.7),
-        0 5px 0 rgba(0,0,0,0.55),
-        -4px 5px 0 rgba(0,0,0,0.28);
-    }
-    .laptop-keyboard { display: flex; flex-direction: column; gap: 2.5px; margin-bottom: 8px; }
-    .kbd-row { display: flex; gap: 2px; }
-    .k {
-      flex: 1;
-      height: 8px;
-      max-width: 27px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.04) 100%);
-      border-radius: 2px;
-      border-bottom: 1.5px solid rgba(0,0,0,0.55);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.09), 0 1px 0 rgba(255,255,255,0.03);
-    }
-    .k--fn      { max-width: 18px; height: 5.5px; }
-    .k--esc     { max-width: 24px; }
-    .k--del     { flex: 1.4; max-width: 36px; }
-    .k--backspace { flex: 1.8; max-width: 46px; }
-    .k--tab     { flex: 1.6; max-width: 42px; }
-    .k--caps    { flex: 1.8; max-width: 46px; }
-    .k--enter   { flex: 1.7; max-width: 44px; }
-    .k--enter2  { flex: 2.3; max-width: 60px; }
-    .k--shift   { flex: 2.1; max-width: 54px; }
-    .k--shift-r { flex: 2.7; max-width: 70px; }
-    .k--mod     { flex: 1.1; max-width: 30px; }
-    .k--space   { flex: 4.5; max-width: 145px; }
-    .k--arr     { flex: 0.8; max-width: 20px; height: 4px; margin-top: 2px; }
-    .laptop-trackpad {
-      width: 36%;
-      height: 20px;
-      background: linear-gradient(135deg, rgba(255,255,255,0.046), rgba(255,255,255,0.018));
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 5px;
-      margin: 0 auto;
-    }
-
-    /* Tabs bar below laptop */
-    .lp-tabs-bar {
+    /* Tabs bar below hub */
+    .orbit-tabs-bar {
       margin-top: 14px;
       background: rgba(255,255,255,0.025);
       border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 10px;
-    }
-    .lp-tabs-bar .lp-tabs {
       border-bottom: none;
-      border-radius: 10px;
+      border-radius: 10px 10px 0 0;
+    }
+    .orbit-tabs-bar .lp-tabs {
+      border-bottom: none;
+      border-radius: 10px 10px 0 0;
       overflow-x: auto;
       scrollbar-width: none;
     }
-    .lp-tabs-bar .lp-tabs::-webkit-scrollbar { display: none; }
-    .lp-tabs-bar .lp-tab { padding: 10px 14px; font-size: 11px; }
-    .lp-tabs-bar .lp-soon-chip { display: none; }
+    .orbit-tabs-bar .lp-tabs::-webkit-scrollbar { display: none; }
+    .orbit-tabs-bar .lp-tab { padding: 10px 14px; font-size: 11px; }
+    .orbit-tabs-bar .lp-soon-chip { display: none; }
 
     @media (max-width: 900px) {
       .hero__row { flex-direction: column; gap: 32px; }
@@ -611,12 +578,8 @@
       .hero__cta { justify-content: center; }
       .hero__right { width: 100%; max-width: 480px; }
     }
-
     @media (max-width: 700px) {
-      .lp-content { grid-template-columns: 1fr; }
-      .lp-flow { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); padding: 24px 20px; }
-      .lp-info { padding: 24px 20px; }
-      .lp-tabs { overflow-x: auto; }
+      .orbit-hub-wrap { height: 220px; }
     }
 
     /* ─── LIVE AUTOMATIONS ─── */
@@ -2053,84 +2016,78 @@
         </div>
       </div>
 
-      <!-- RIGHT COLUMN: device visual -->
+      <!-- RIGHT COLUMN: orbital AI hub -->
       <div class="hero__right">
         <div class="hero__laptop-wrap">
 
-          <!-- 3D Laptop -->
-          <div class="laptop-scene">
-            <div class="laptop-3d">
+          <!-- Orbital Hub Visual -->
+          <div class="orbit-hub-wrap">
+            <div class="orbit-hub" id="orbit-hub">
 
-              <!-- Screen lid -->
-              <div class="laptop-lid">
-                <div class="laptop-notch"><div class="laptop-camera"></div></div>
-                <div class="laptop-bezel">
-                  <div class="lp-content">
-                    <div class="lp-flow" id="lp-flow" aria-live="polite"></div>
-                    <div class="lp-info" id="lp-info"></div>
-                  </div>
-                </div>
+              <!-- Dashed ring outlines -->
+              <svg class="orbit-rings-svg" viewBox="-245 -140 490 280" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
+                <ellipse cx="0" cy="0" rx="138" ry="43" class="orbit-ring-line orbit-ring-line--inner"/>
+                <ellipse cx="0" cy="0" rx="178" ry="56" class="orbit-ring-line orbit-ring-line--outer"/>
+              </svg>
+
+              <!-- Central glowing sphere -->
+              <div class="orbit-sphere">
+                <div class="orbit-sphere__shimmer"></div>
+                <span class="orbit-sphere__label">AI</span>
               </div>
 
-              <!-- Hinge -->
-              <div class="laptop-hinge"></div>
-
-              <!-- Keyboard base -->
-              <div class="laptop-body">
-                <div class="laptop-keyboard">
-                  <div class="kbd-row kbd-row--fn">
-                    <span class="k k--esc"></span>
-                    <span class="k k--fn"></span><span class="k k--fn"></span><span class="k k--fn"></span><span class="k k--fn"></span>
-                    <span class="k k--fn"></span><span class="k k--fn"></span><span class="k k--fn"></span><span class="k k--fn"></span>
-                    <span class="k k--fn"></span><span class="k k--fn"></span><span class="k k--fn"></span><span class="k k--fn"></span>
-                    <span class="k k--del"></span>
-                  </div>
-                  <div class="kbd-row">
-                    <span class="k"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="k"></span>
-                    <span class="k"></span><span class="k"></span><span class="k"></span><span class="k"></span><span class="k"></span>
-                    <span class="k"></span><span class="k"></span><span class="k"></span><span class="k k--backspace"></span>
-                  </div>
-                  <div class="kbd-row">
-                    <span class="k k--tab"></span>
-                    <span class="k"></span><span class="k"></span><span class="k"></span><span class="k"></span>
-                    <span class="k"></span><span class="k"></span><span class="k"></span><span class="k"></span>
-                    <span class="k"></span><span class="k"></span><span class="k"></span><span class="k k--enter"></span>
-                  </div>
-                  <div class="kbd-row">
-                    <span class="k k--caps"></span>
-                    <span class="k"></span><span class="k"></span><span class="k"></span><span class="k"></span>
-                    <span class="k"></span><span class="k"></span><span class="k"></span><span class="k"></span>
-                    <span class="k"></span><span class="k"></span><span class="k k--enter2"></span>
-                  </div>
-                  <div class="kbd-row">
-                    <span class="k k--shift"></span>
-                    <span class="k"></span><span class="k"></span><span class="k"></span><span class="k"></span>
-                    <span class="k"></span><span class="k"></span><span class="k"></span>
-                    <span class="k k--shift-r"></span>
-                  </div>
-                  <div class="kbd-row kbd-row--bottom">
-                    <span class="k k--mod"></span><span class="k k--mod"></span><span class="k k--mod"></span>
-                    <span class="k k--space"></span>
-                    <span class="k k--mod"></span><span class="k k--mod"></span>
-                    <span class="k k--arr"></span><span class="k k--arr"></span><span class="k k--arr"></span>
-                  </div>
+              <!-- Tool nodes — JS positions + animates these -->
+              <div class="orbit-node" id="onode-0" data-tool="n8n">
+                <div class="orbit-node__disc">
+                  <img src="https://cdn.simpleicons.org/n8n/ffffff" alt="n8n" loading="lazy">
                 </div>
-                <div class="laptop-trackpad"></div>
+                <span class="orbit-node__name">n8n</span>
+              </div>
+              <div class="orbit-node" id="onode-1" data-tool="ghl">
+                <div class="orbit-node__disc">
+                  <span class="orbit-icon">⚡</span>
+                </div>
+                <span class="orbit-node__name">GHL</span>
+              </div>
+              <div class="orbit-node" id="onode-2" data-tool="openai">
+                <div class="orbit-node__disc">
+                  <img src="https://cdn.simpleicons.org/openai/ffffff" alt="OpenAI" loading="lazy">
+                </div>
+                <span class="orbit-node__name">OpenAI</span>
+              </div>
+              <div class="orbit-node" id="onode-3" data-tool="gmail">
+                <div class="orbit-node__disc">
+                  <img src="https://cdn.simpleicons.org/gmail/ea4335" alt="Gmail" loading="lazy">
+                </div>
+                <span class="orbit-node__name">Gmail</span>
+              </div>
+              <div class="orbit-node" id="onode-4" data-tool="make">
+                <div class="orbit-node__disc">
+                  <img src="https://cdn.simpleicons.org/make/ffffff" alt="Make" loading="lazy">
+                </div>
+                <span class="orbit-node__name">Make</span>
+              </div>
+              <div class="orbit-node" id="onode-5" data-tool="twilio">
+                <div class="orbit-node__disc">
+                  <img src="https://cdn.simpleicons.org/twilio/ffffff" alt="Twilio" loading="lazy">
+                </div>
+                <span class="orbit-node__name">Twilio</span>
               </div>
 
             </div>
           </div>
 
-          <!-- Tabs below the laptop -->
-          <div class="lp-tabs-bar">
+          <!-- Tabs + info below hub -->
+          <div class="orbit-tabs-bar">
             <div class="lp-tabs" role="tablist">
-              <button class="lp-tab lp-tab--active" role="tab" aria-selected="true"  data-lp="0">AI Chat Booking</button>
-              <button class="lp-tab"                role="tab" aria-selected="false" data-lp="1">Lead Nurture</button>
-              <button class="lp-tab"                role="tab" aria-selected="false" data-lp="2">Gmail Reply Trigger</button>
-              <button class="lp-tab lp-tab--soon"   role="tab" aria-selected="false" data-lp="3">Voice Receptionist<span class="lp-soon-chip">Soon</span></button>
-              <div class="lp-tab-ink" id="lp-ink"></div>
+              <button class="lp-tab lp-tab--active" role="tab" aria-selected="true"  data-ob="0">AI Chat Booking</button>
+              <button class="lp-tab"                role="tab" aria-selected="false" data-ob="1">Lead Nurture</button>
+              <button class="lp-tab"                role="tab" aria-selected="false" data-ob="2">Gmail Reply Trigger</button>
+              <button class="lp-tab lp-tab--soon"   role="tab" aria-selected="false" data-ob="3">Voice Receptionist<span class="lp-soon-chip">Soon</span></button>
+              <div class="lp-tab-ink" id="ob-ink"></div>
             </div>
           </div>
+          <div class="orbit-info-panel" id="orbit-info"></div>
 
         </div>
       </div>
@@ -3785,146 +3742,151 @@
 })();
 </script>
 
-<!-- ─── HERO TAB SWITCHER ─── -->
+<!-- ─── ORBITAL HUB CONTROLLER ─── -->
 <script>
 (function () {
-  var PROJECTS = [
+  var SCENARIOS = [
     {
       name: 'AI Chat Booking Assistant',
-      tags: ['n8n', 'Claude AI', 'GHL'],
       desc: 'Books, reschedules, and cancels appointments with zero back-and-forth. Runs on live n8n + GoHighLevel infrastructure 24/7.',
       cta: 'Try it live',
+      soon: false,
       action: function () { if (window.rcToggleChat) window.rcToggleChat(); },
-      steps: [
-        { icon: '💬', label: 'Visitor sends message',  tool: 'Chat Widget' },
-        { icon: '🤖', label: 'AI reads intent',        tool: 'Claude AI · n8n' },
-        { icon: '📅', label: 'Fetches open slots',     tool: 'GHL Calendar' },
-        { icon: '📋', label: 'Books in CRM',           tool: 'GoHighLevel' },
-        { icon: '✅', label: 'Sends confirmation',     tool: 'SMS · Email' }
-      ]
+      tools: ['n8n', 'ghl', 'openai']
     },
     {
       name: 'Portfolio Lead Nurture',
-      tags: ['n8n', 'CRM', 'Automation'],
       desc: 'Every form submission on this site feeds a live n8n pipeline. No lead goes cold — follow-up fires automatically.',
       cta: 'Submit your problem',
+      soon: false,
       action: function () { if (window.openLeadModal) window.openLeadModal('form'); },
-      steps: [
-        { icon: '📝', label: 'Form submitted',         tool: 'Portfolio Site' },
-        { icon: '⚡', label: 'n8n workflow triggers',  tool: 'n8n Webhook' },
-        { icon: '📧', label: 'Email sequence starts',  tool: 'n8n · SMTP' },
-        { icon: '🏷️', label: 'Lead tagged in CRM',    tool: 'GoHighLevel' },
-        { icon: '🔔', label: 'Follow-up scheduled',    tool: 'n8n Cron' }
-      ]
+      tools: ['n8n', 'ghl', 'gmail']
     },
     {
       name: 'Gmail Reply Trigger',
-      tags: ['n8n', 'Gmail', 'Sheets'],
-      desc: 'When a nurtured lead replies to an email, n8n detects the reply and updates their status in Google Sheets — stopping the nurture sequence immediately.',
+      desc: 'When a nurtured lead replies to an email, n8n detects the reply and stops the nurture sequence immediately.',
       cta: 'View workflow',
+      soon: false,
       action: function () { if (window.lbShowSrc) window.lbShowSrc('images/n8n web-gmail-reply-trigger.png', 'Gmail Reply Trigger'); },
-      steps: [
-        { icon: '📩', label: 'Lead replies to email',     tool: 'Gmail Trigger · n8n' },
-        { icon: '🔍', label: 'Reply detected & parsed',   tool: 'n8n Filter Node' },
-        { icon: '✅', label: 'Lead status identified',    tool: 'n8n Logic' },
-        { icon: '📊', label: 'Google Sheets updated',     tool: 'Sheets · n8n' },
-        { icon: '🛑', label: 'Nurture sequence halted',   tool: 'n8n Workflow' }
-      ]
+      tools: ['n8n', 'gmail']
     },
     {
       name: 'AI Voice Receptionist',
-      tags: ['n8n', 'AI Voice', 'GHL'],
-      desc: 'Answers calls 24/7 and handles bookings by voice. Talk directly to Roc AI — no forms, no chat, just speak.',
+      desc: 'Answers calls 24/7 and handles bookings by voice. No forms, no chat — just speak.',
       cta: 'Coming soon',
       soon: true,
       action: function () {},
-      steps: [
-        { icon: '📞', label: 'Incoming call received',      tool: 'Phone · AI Voice' },
-        { icon: '🎙️', label: 'Voice intent detected',      tool: 'Voice AI · n8n' },
-        { icon: '📅', label: 'Slots fetched in real-time', tool: 'GHL Calendar' },
-        { icon: '📋', label: 'Appointment booked',          tool: 'GoHighLevel' },
-        { icon: '✅', label: 'Caller confirmed via SMS',    tool: 'Twilio · GHL' }
-      ]
+      tools: ['n8n', 'ghl', 'twilio']
     }
   ];
 
-  var activeIdx = 0;
-  var flowEl  = document.getElementById('lp-flow');
-  var infoEl  = document.getElementById('lp-info');
-  var inkEl   = document.getElementById('lp-ink');
-  var tabEls  = document.querySelectorAll('[data-lp]');
+  /* 6 tools: 3 on inner ring (0°/120°/240°), 3 on outer ring (60°/180°/300°) */
+  var NODES = [
+    { id: 'onode-0', key: 'n8n',    inner: true,  phase: 0   },
+    { id: 'onode-1', key: 'ghl',    inner: false, phase: 60  },
+    { id: 'onode-2', key: 'openai', inner: true,  phase: 120 },
+    { id: 'onode-3', key: 'gmail',  inner: false, phase: 180 },
+    { id: 'onode-4', key: 'make',   inner: true,  phase: 240 },
+    { id: 'onode-5', key: 'twilio', inner: false, phase: 300 }
+  ];
 
-  function renderFlow(steps, soon) {
-    var track = document.createElement('div');
-    track.className = 'lp-flow-track';
-    if (soon) track.style.opacity = '0.45';
-    steps.forEach(function (s, i) {
-      var step = document.createElement('div');
-      step.className = 'lp-flow-step';
-      var node = document.createElement('div');
-      node.className = 'lp-node';
-      node.textContent = s.icon;
-      if (!soon) node.style.animationDelay = (i * 1.0) + 's';
-      else node.style.animation = 'none';
-      var text = document.createElement('div');
-      var name = document.createElement('div');
-      name.className = 'lp-step-name';
-      name.textContent = s.label;
-      if (!soon) name.style.animationDelay = (i * 1.0) + 's';
-      else name.style.animation = 'none';
-      var tool = document.createElement('div');
-      tool.className = 'lp-step-tool';
-      tool.textContent = s.tool;
-      text.appendChild(name);
-      text.appendChild(tool);
-      step.appendChild(node);
-      step.appendChild(text);
-      track.appendChild(step);
+  var INNER_SPEED = 360 / 20000; /* deg/ms — full orbit in 20s */
+  var OUTER_SPEED = 360 / 30000; /* deg/ms — full orbit in 30s */
+
+  var hubEl = document.getElementById('orbit-hub');
+  if (!hubEl) return;
+
+  var state = NODES.map(function (n) {
+    return { cfg: n, el: document.getElementById(n.id), angle: n.phase };
+  });
+
+  var cx = 0, cy = 0, irx = 0, iry = 0, orx = 0, ory = 0;
+
+  function measure() {
+    var r = hubEl.getBoundingClientRect();
+    cx  = r.width  / 2;
+    cy  = r.height / 2;
+    /* ring radii as fractions of hub dimensions */
+    irx = r.width  * 0.282;
+    iry = r.height * 0.154;
+    orx = r.width  * 0.363;
+    ory = r.height * 0.200;
+  }
+  measure();
+  window.addEventListener('resize', measure);
+
+  var paused = false;
+  hubEl.addEventListener('mouseenter', function () { paused = true; });
+  hubEl.addEventListener('mouseleave', function () { paused = false; });
+
+  var lastTs = null;
+  function tick(ts) {
+    if (!lastTs) lastTs = ts;
+    var dt = Math.min(ts - lastTs, 80);
+    lastTs = ts;
+
+    state.forEach(function (s) {
+      if (!paused) {
+        var spd = s.cfg.inner ? INNER_SPEED : OUTER_SPEED;
+        s.angle = (s.angle + spd * dt) % 360;
+      }
+      var rad   = s.angle * Math.PI / 180;
+      var rx    = s.cfg.inner ? irx : orx;
+      var ry    = s.cfg.inner ? iry : ory;
+      var x     = cx + rx * Math.cos(rad) - 20;
+      var y     = cy + ry * Math.sin(rad) - 20;
+      var depth = (Math.sin(rad) + 1) / 2; /* 0 = back, 1 = front */
+      var scale = 0.70 + depth * 0.35;
+      s.el.style.transform = 'translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px) scale(' + scale.toFixed(3) + ')';
+      s.el.style.zIndex    = depth > 0.5 ? '12' : '5';
     });
-    flowEl.innerHTML = '';
-    flowEl.appendChild(track);
+    requestAnimationFrame(tick);
   }
+  requestAnimationFrame(tick);
 
-  function renderInfo(p, idx) {
-    var tagsHTML = p.tags.map(function (t) { return '<span class="tag">' + t + '</span>'; }).join('');
-    var ctaClass = 'lp-info__cta' + (p.soon ? ' lp-info__cta--soon' : '');
-    var ctaIcon  = p.soon ? '' : '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="margin-left:2px"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+  /* ── Tab / scenario logic ── */
+  var infoEl    = document.getElementById('orbit-info');
+  var inkEl     = document.getElementById('ob-ink');
+  var tabEls    = document.querySelectorAll('[data-ob]');
+  var activeIdx = 0;
+
+  function renderInfo(idx) {
+    var s = SCENARIOS[idx];
+    var ctaClass = 'orbit-info__cta' + (s.soon ? ' orbit-info__cta--soon' : '');
+    var arrow = s.soon ? '' : '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left:2px" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
     infoEl.innerHTML =
-      '<div class="lp-info__tags">' + tagsHTML + '</div>' +
-      '<div class="lp-info__title">' + p.name + '</div>' +
-      '<p class="lp-info__desc">' + p.desc + '</p>' +
-      '<button class="' + ctaClass + '" id="lp-cta">' + p.cta + ctaIcon + '</button>';
-    if (!p.soon) document.getElementById('lp-cta').addEventListener('click', PROJECTS[idx].action);
+      '<div class="orbit-info__title">' + s.name + '</div>' +
+      '<p class="orbit-info__desc">' + s.desc + '</p>' +
+      '<button class="' + ctaClass + '" id="ob-cta">' + s.cta + arrow + '</button>';
+    if (!s.soon) document.getElementById('ob-cta').addEventListener('click', s.action);
   }
 
-  function moveInk(tabEl) {
-    if (!inkEl || !tabEl) return;
-    inkEl.style.left  = tabEl.offsetLeft + 'px';
-    inkEl.style.width = tabEl.offsetWidth + 'px';
+  function setTools(keys) {
+    state.forEach(function (s) {
+      var on = keys.indexOf(s.cfg.key) !== -1;
+      s.el.classList.toggle('is-active', on);
+      s.el.classList.toggle('is-dim',    !on);
+    });
+  }
+
+  function moveInk(el) {
+    if (!inkEl || !el) return;
+    inkEl.style.left  = el.offsetLeft + 'px';
+    inkEl.style.width = el.offsetWidth + 'px';
   }
 
   function activate(idx) {
-    var p = PROJECTS[idx];
-    if (!p) return;
-    if (p.soon && idx !== activeIdx) {
-      /* still switch to it so user can preview the coming-soon state */
-    }
-    if (idx === activeIdx && flowEl.children.length > 0) return;
+    if (idx === activeIdx && infoEl.innerHTML) return;
     activeIdx = idx;
-
-    flowEl.classList.add('is-fading');
+    var s = SCENARIOS[idx];
     infoEl.classList.add('is-fading');
-
     setTimeout(function () {
-      renderFlow(p.steps, p.soon);
-      renderInfo(p, idx);
-      flowEl.classList.remove('is-fading');
+      renderInfo(idx);
+      setTools(s.tools);
       infoEl.classList.remove('is-fading');
     }, 180);
-
     tabEls.forEach(function (t, i) {
-      var isSoonTab = PROJECTS[i] && PROJECTS[i].soon;
-      t.classList.toggle('lp-tab--active', i === idx && !isSoonTab);
+      t.classList.toggle('lp-tab--active', i === idx && !SCENARIOS[i].soon);
       t.setAttribute('aria-selected', i === idx ? 'true' : 'false');
     });
     moveInk(tabEls[idx]);
@@ -3935,8 +3897,8 @@
   });
 
   /* Initial render */
-  renderFlow(PROJECTS[0].steps, false);
-  renderInfo(PROJECTS[0], 0);
+  renderInfo(0);
+  setTools(SCENARIOS[0].tools);
   requestAnimationFrame(function () { moveInk(tabEls[0]); });
 })();
 </script>
