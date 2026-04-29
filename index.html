@@ -2030,8 +2030,26 @@
               <!-- Central glowing sphere -->
               <div class="orbit-sphere">
                 <div class="orbit-sphere__shimmer"></div>
-                <svg class="orbit-sphere__bolt" width="32" height="40" viewBox="0 0 28 36" fill="none" aria-hidden="true">
-                  <path d="M16 2L3 21L13 21L8 34L25 14L15 14Z" fill="white" opacity="0.95"/>
+                <svg class="orbit-sphere__bolt" width="38" height="36" viewBox="0 0 44 42" fill="none" aria-hidden="true">
+                  <!-- Left hemisphere -->
+                  <path d="M22 5C19 5 14 6 11 10C8 14 8 18 10 21C8 22 7 25 8 28C9 31 12 34 17 35L22 35"
+                    stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.95"/>
+                  <!-- Right hemisphere -->
+                  <path d="M22 5C25 5 30 6 33 10C36 14 36 18 34 21C36 22 37 25 36 28C35 31 32 34 27 35L22 35"
+                    stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.95"/>
+                  <!-- Brain folds -->
+                  <path d="M14 16Q16 13 19 15" stroke="white" stroke-width="1.2" stroke-linecap="round" opacity="0.55"/>
+                  <path d="M30 16Q28 13 25 15" stroke="white" stroke-width="1.2" stroke-linecap="round" opacity="0.55"/>
+                  <path d="M12 26Q14 23 17 25" stroke="white" stroke-width="1.2" stroke-linecap="round" opacity="0.55"/>
+                  <path d="M32 26Q30 23 27 25" stroke="white" stroke-width="1.2" stroke-linecap="round" opacity="0.55"/>
+                  <!-- Neural nodes -->
+                  <circle cx="15" cy="21" r="2" fill="white" opacity="0.9"/>
+                  <circle cx="29" cy="21" r="2" fill="white" opacity="0.9"/>
+                  <circle cx="22" cy="29" r="2.5" fill="white"/>
+                  <!-- Neural connections -->
+                  <line x1="15" y1="21" x2="22" y2="29" stroke="white" stroke-width="1" opacity="0.4"/>
+                  <line x1="29" y1="21" x2="22" y2="29" stroke="white" stroke-width="1" opacity="0.4"/>
+                  <line x1="15" y1="21" x2="29" y2="21" stroke="white" stroke-width="1" opacity="0.3"/>
                 </svg>
               </div>
 
