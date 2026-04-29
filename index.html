@@ -181,12 +181,12 @@
 
     /* ─── HERO ─── */
     .section--hero {
-      padding-top: calc(64px + 28px);
-      padding-bottom: 24px;
+      padding-top: calc(64px + 40px);
+      padding-bottom: 48px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 20px;
+      gap: 28px;
       position: relative;
       overflow: hidden;
     }
@@ -369,9 +369,9 @@
     .hero__row {
       display: flex;
       align-items: center;
-      gap: 52px;
+      gap: 56px;
       width: 100%;
-      max-width: 1100px;
+      max-width: 1280px;
       position: relative;
       z-index: 1;
     }
@@ -380,14 +380,14 @@
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      gap: 20px;
+      gap: 24px;
     }
     .hero__left .hero__badge { opacity: 0; transform: translateY(18px); animation: fade-up 0.55s 0.10s var(--ease) forwards; align-self: flex-start; }
-    .hero__left .hero__h1    { opacity: 0; transform: translateY(18px); animation: fade-up 0.55s 0.22s var(--ease) forwards; font-size: clamp(30px,3.8vw,54px); text-align: left; }
-    .hero__left .hero__sub   { opacity: 0; transform: translateY(18px); animation: fade-up 0.55s 0.34s var(--ease) forwards; text-align: left; max-width: 460px; }
-    .hero__cta { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; opacity: 0; transform: translateY(18px); animation: fade-up 0.55s 0.46s var(--ease) forwards; }
+    .hero__left .hero__h1    { opacity: 0; transform: translateY(18px); animation: fade-up 0.55s 0.22s var(--ease) forwards; font-size: clamp(32px,4.2vw,60px); text-align: left; }
+    .hero__left .hero__sub   { opacity: 0; transform: translateY(18px); animation: fade-up 0.55s 0.34s var(--ease) forwards; text-align: left; max-width: 480px; font-size: clamp(14px,1.3vw,16px); }
+    .hero__cta { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; opacity: 0; transform: translateY(18px); animation: fade-up 0.55s 0.46s var(--ease) forwards; }
     .hero__right {
-      flex: 1.05;
+      flex: 1.4;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -396,7 +396,7 @@
     /* ─── ORBITAL AI HUB ─── */
     .hero__laptop-wrap {
       width: 100%;
-      max-width: 540px;
+      max-width: 720px;
       display: flex;
       flex-direction: column;
       opacity: 0;
@@ -1361,6 +1361,127 @@
       font-size: 13px; color: var(--t2); line-height: 1.65; margin-bottom: 20px; font-weight: 400;
     }
 
+    /* ─── LIVE HUB SHOWCASE ─── */
+    .live-hub {
+      background: linear-gradient(135deg, rgba(242,108,56,0.06) 0%, rgba(34,197,94,0.04) 100%);
+      border: 1px solid rgba(242,108,56,0.22);
+      border-radius: 16px;
+      padding: 28px 28px 24px;
+      margin-bottom: 36px;
+    }
+    .live-hub__top {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .live-hub__pulse {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(34,197,94,0.12);
+      border: 1px solid rgba(34,197,94,0.3);
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #22c55e;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+    .live-hub__pulse-dot {
+      width: 6px; height: 6px;
+      background: #22c55e;
+      border-radius: 50%;
+      animation: blink-dot 1.4s ease-in-out infinite;
+    }
+    .live-hub__headline {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--t2);
+      letter-spacing: 0.01em;
+    }
+    .live-hub__tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .live-hub__tab {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      color: var(--t2);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 7px 14px;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+      font-family: var(--f-body);
+      letter-spacing: 0.02em;
+    }
+    .live-hub__tab:hover {
+      border-color: rgba(242,108,56,0.4);
+      color: var(--t1);
+    }
+    .live-hub__tab.is-active {
+      border-color: #F26C38;
+      color: #F26C38;
+      background: rgba(242,108,56,0.08);
+    }
+    .live-hub__panels { position: relative; }
+    .live-hub__panel {
+      display: none;
+    }
+    .live-hub__panel.is-active {
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+    .live-hub__panel-left { flex: 1; min-width: 220px; }
+    .live-hub__panel-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(34,197,94,0.08);
+      border: 1px solid rgba(34,197,94,0.2);
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #22c55e;
+      flex-shrink: 0;
+      align-self: flex-start;
+    }
+    .live-hub__panel-right-dot {
+      width: 6px; height: 6px;
+      background: #22c55e;
+      border-radius: 50%;
+      animation: blink-dot 1.4s ease-in-out infinite;
+    }
+    .live-hub__panel-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--t1);
+      margin-bottom: 6px;
+      font-family: var(--f-display);
+    }
+    .live-hub__panel-desc {
+      font-size: 13px;
+      color: var(--t2);
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+    .live-hub__panel-tools { display: flex; gap: 6px; flex-wrap: wrap; }
+    @media (max-width: 600px) {
+      .live-hub { padding: 20px 16px; }
+      .live-hub__tabs { gap: 6px; }
+      .live-hub__tab { font-size: 11px; padding: 6px 10px; }
+    }
+
     /* ─── UPWORK PROFILE CARD ─── */
     .upwork-card {
       display: flex;
@@ -2028,32 +2149,96 @@
     @keyframes spin { to { transform: rotate(360deg); } }
 
     /* ─── 3-PANEL SHOWCASE ─── */
-    .sim-showcase { width: 100%; max-width: 540px; }
-    .sim-panels { display: flex; align-items: stretch; width: 100%; }
+    .sim-showcase { width: 100%; max-width: 720px; }
+    .sim-panels { display: flex; align-items: stretch; width: 100%; gap: 0; }
     .sim-panel {
       flex: 1; min-width: 0;
-      background: rgba(16,16,24,0.78);
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 14px;
-      padding: 16px 10px 12px;
-      display: flex; flex-direction: column; align-items: center; gap: 10px;
-      transition: border-color 0.4s, box-shadow 0.4s, opacity 0.4s;
+      background: rgba(16,16,24,0.82);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 28px 20px 22px;
+      display: flex; flex-direction: column; align-items: center; gap: 16px;
+      transition: border-color 0.4s, box-shadow 0.4s, opacity 0.4s, transform 0.4s;
       opacity: 0.28;
+      transform: scale(0.96);
+      position: relative;
+      overflow: hidden;
     }
     .sim-panel.is-active {
-      border-color: rgba(242,108,56,0.65);
-      box-shadow: 0 0 28px rgba(242,108,56,0.13), inset 0 0 16px rgba(242,108,56,0.04);
+      border-color: rgba(242,108,56,0.7);
+      box-shadow: 0 0 40px rgba(242,108,56,0.22), 0 10px 30px rgba(0,0,0,0.5), inset 0 0 20px rgba(242,108,56,0.06);
       opacity: 1;
+      transform: scale(1.05);
     }
+    /* Option 3: Progress bar */
+    .sim-panel::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      height: 2.5px; width: 0%;
+      background: linear-gradient(90deg, #F26C38, #D72F58);
+      border-radius: 0 0 14px 14px;
+    }
+    .sim-panel.is-active::after {
+      animation: panel-progress var(--phase-dur, 3s) linear forwards;
+    }
+    @keyframes panel-progress { from { width: 0%; } to { width: 100%; } }
     .sim-connector {
       display: flex; align-items: center; justify-content: center;
       padding: 0 5px; flex-shrink: 0;
-      color: rgba(255,255,255,0.14);
-      transition: color 0.4s;
+      color: rgba(255,255,255,0.18);
+      transition: color 0.3s;
     }
-    .sim-connector.is-active { color: rgba(242,108,56,0.78); }
+    .sim-connector.is-active { color: rgba(242,108,56,0.85); }
+    .sim-connector.is-active .conn-line {
+      animation: line-draw 0.5s ease-out forwards;
+    }
+    .sim-connector.is-active .conn-head {
+      animation: head-appear 0.15s 0.45s ease-out forwards;
+    }
+    @keyframes line-draw {
+      from { stroke-dashoffset: 28; }
+      to   { stroke-dashoffset: 0;  }
+    }
+    @keyframes head-appear {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    /* Narrative CTA strip */
+    .sim-cta {
+      display: flex; align-items: center; justify-content: center;
+      gap: 10px; flex-wrap: wrap;
+      margin-top: 18px;
+    }
+    .sim-cta__text {
+      font-size: 12px; color: rgba(255,255,255,0.55);
+      font-family: var(--f-body); letter-spacing: 0.02em;
+    }
+    .sim-cta__btn {
+      display: inline-flex; align-items: center;
+      font-size: 12.5px; font-weight: 700;
+      color: #fff;
+      background: #F26C38;
+      border: none;
+      border-radius: 20px; padding: 7px 18px;
+      text-decoration: none; letter-spacing: 0.02em;
+      transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+      box-shadow: 0 2px 12px rgba(242,108,56,0.35);
+    }
+    .sim-cta__btn:hover {
+      background: #e05a28;
+      box-shadow: 0 4px 20px rgba(242,108,56,0.55);
+      transform: translateY(-1px);
+    }
+    .sim-cta.is-visible .sim-cta__btn {
+      animation: cta-pulse 2s ease-in-out infinite;
+    }
+    @keyframes cta-pulse {
+      0%, 100% { box-shadow: 0 2px 12px rgba(242,108,56,0.35); }
+      50%       { box-shadow: 0 2px 12px rgba(242,108,56,0.35), 0 0 0 8px rgba(242,108,56,0.18); }
+    }
     .sim-panel__visual {
-      width: 100%; min-height: 106px;
+      width: 100%; min-height: 180px;
       display: flex; align-items: center; justify-content: center;
     }
     /* Mini terminal */
@@ -2061,80 +2246,98 @@
       width: 100%;
       background: rgba(6,9,18,0.97);
       border: 1px solid rgba(242,108,56,0.28);
-      border-radius: 6px;
+      border-radius: 8px;
       font-family: 'Courier New', monospace;
-      font-size: 9px; overflow: hidden;
+      font-size: 10px; overflow: hidden;
     }
     .sim-mini-bar {
       display: flex; gap: 4px; align-items: center;
       padding: 4px 7px;
       border-bottom: 1px solid rgba(242,108,56,0.12);
     }
-    .sim-mini-lines { padding: 6px 7px; min-height: 62px; line-height: 1.75; color: #909090; }
+    .sim-mini-lines { padding: 10px 11px; min-height: 100px; line-height: 1.9; color: #909090; }
     /* Mini orbital */
-    .sim-mini-orbit { position: relative; width: 106px; height: 106px; }
+    .sim-mini-orbit { position: relative; width: 160px; height: 160px; }
     .sim-mini-orbit::before {
       content: '';
       position: absolute; left: 50%; top: 50%;
-      width: 90px; height: 90px; margin: -45px;
+      width: 136px; height: 136px; margin: -68px;
       border-radius: 50%;
-      border: 1px dashed rgba(242,108,56,0.28);
+      border: 1px dashed rgba(242,108,56,0.32);
       pointer-events: none;
     }
     .sim-mini-proc {
       position: absolute; left: 50%; top: 50%;
       transform: translate(-50%, -50%);
-      width: 36px; height: 36px;
+      width: 54px; height: 54px;
       background: rgba(8,12,28,0.95);
-      border: 1.5px solid #F26C38; border-radius: 6px;
+      border: 1.5px solid #F26C38; border-radius: 9px;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       color: #4FC3F7;
-      font-family: 'Courier New', monospace; font-size: 6.5px; font-weight: 700; letter-spacing: 1px;
-      gap: 2px; z-index: 2;
+      font-family: 'Courier New', monospace; font-size: 8.5px; font-weight: 700; letter-spacing: 1px;
+      gap: 3px; z-index: 2;
     }
-    .sim-mini-proc__cursor { width: 14px; height: 1.5px; background: #4FC3F7; animation: chip-cursor 1s step-end infinite; }
+    .sim-mini-proc__cursor { width: 18px; height: 1.5px; background: #4FC3F7; animation: chip-cursor 1s step-end infinite; }
     .sim-mini-node {
       position: absolute; left: 50%; top: 50%;
-      width: 24px; height: 24px;
-      margin-left: -12px; margin-top: -12px;
-      transform-origin: 12px 12px;
+      width: 28px; height: 28px;
+      margin-left: -14px; margin-top: -14px;
+      transform-origin: 14px 14px;
     }
     .sim-mini-node img {
-      width: 20px; height: 20px; object-fit: contain;
+      width: 24px; height: 24px; object-fit: contain;
       background: rgba(10,11,24,0.92);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 5px; padding: 2px; display: block;
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 6px; padding: 3px; display: block;
     }
     .sim-mini-node--n8n    { animation: mini-spin 8s linear infinite 0s;  }
     .sim-mini-node--make   { animation: mini-spin 8s linear infinite -2s; }
     .sim-mini-node--zapier { animation: mini-spin 8s linear infinite -4s; }
     .sim-mini-node--openai { animation: mini-spin 8s linear infinite -6s; }
     @keyframes mini-spin {
-      from { transform: rotate(0deg)   translateX(45px) rotate(0deg);   }
-      to   { transform: rotate(360deg) translateX(45px) rotate(-360deg); }
+      from { transform: rotate(0deg)   translateX(68px) rotate(0deg);   }
+      to   { transform: rotate(360deg) translateX(68px) rotate(-360deg); }
+    }
+    /* Option 4: Burst on Panel 2 activation */
+    .sim-mini-proc.is-bursting {
+      animation: proc-burst 0.65s ease-out forwards;
+    }
+    @keyframes proc-burst {
+      0%   { box-shadow: 0 0 0 0 rgba(242,108,56,0);  border-color: #F26C38; }
+      35%  { box-shadow: 0 0 0 10px rgba(242,108,56,0.35), 0 0 24px rgba(242,108,56,0.6); border-color: #ffaa70; }
+      100% { box-shadow: 0 0 0 0 rgba(242,108,56,0);  border-color: #F26C38; }
+    }
+    .sim-mini-orbit.is-bursting::after {
+      animation: orbit-burst 0.65s ease-out forwards;
+    }
+    @keyframes orbit-burst {
+      0%   { border-color: rgba(242,108,56,0.28); transform: translate(-50%,-50%) scale(1); }
+      40%  { border-color: rgba(242,108,56,0.7);  transform: translate(-50%,-50%) scale(1.12); }
+      100% { border-color: rgba(242,108,56,0.28); transform: translate(-50%,-50%) scale(1); }
     }
     /* Run visual */
-    .sim-run-visual { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .sim-run-visual { display: flex; flex-direction: column; align-items: center; gap: 8px; }
     .sim-run-dot {
-      width: 10px; height: 10px; background: #22c55e; border-radius: 50%;
+      width: 12px; height: 12px; background: #22c55e; border-radius: 50%;
       animation: blink-dot 1.5s ease-in-out infinite;
-      box-shadow: 0 0 10px rgba(34,197,94,0.55);
+      box-shadow: 0 0 14px rgba(34,197,94,0.65);
     }
-    .sim-run-badge { font-size: 9px; font-weight: 700; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 0.1em; }
-    .sim-run-time  { font-size: 30px; font-weight: 900; color: #22c55e; letter-spacing: -0.03em; line-height: 1; }
+    .sim-run-badge { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.12em; }
+    .sim-run-time  { font-size: 58px; font-weight: 900; color: #22c55e; letter-spacing: -0.03em; line-height: 1; }
     /* Panel footer */
     .sim-panel__footer {
-      display: flex; flex-direction: column; align-items: center; gap: 2px;
-      text-align: center; padding-top: 6px;
-      border-top: 1px solid rgba(255,255,255,0.05); width: 100%;
+      display: flex; flex-direction: column; align-items: center; gap: 5px;
+      text-align: center; padding-top: 12px;
+      border-top: 1px solid rgba(255,255,255,0.07); width: 100%;
     }
-    .sim-panel__step  { font-size: 9px; font-weight: 700; color: rgba(242,108,56,0.55); letter-spacing: 0.12em; font-family: 'Courier New', monospace; }
-    .sim-panel__label { font-size: 12px; font-weight: 800; color: rgba(255,255,255,0.88); letter-spacing: 0.02em; }
-    .sim-panel__desc  { font-size: 9.5px; color: rgba(255,255,255,0.3); line-height: 1.4; }
-    @media (max-width: 540px) {
+    .sim-panel__step  { font-size: 11px; font-weight: 700; color: rgba(242,108,56,0.65); letter-spacing: 0.14em; font-family: 'Courier New', monospace; }
+    .sim-panel__label { font-size: 16px; font-weight: 900; color: rgba(255,255,255,0.92); letter-spacing: 0.01em; }
+    .sim-panel__desc  { font-size: 12px; color: rgba(255,255,255,0.4); line-height: 1.45; }
+    @media (max-width: 600px) {
       .sim-connector svg { width: 14px; height: 14px; }
-      .sim-panel { padding: 12px 7px 10px; border-radius: 10px; }
-      .sim-mini-orbit { width: 90px; height: 90px; }
+      .sim-panel { padding: 16px 10px 14px; border-radius: 14px; }
+      .sim-mini-orbit { width: 108px; height: 108px; }
+      .sim-run-time { font-size: 36px; }
     }
   </style>
 </head>
@@ -2217,8 +2420,13 @@
 
               <!-- Connector 1 -->
               <div class="sim-connector" id="sim-c1">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                  <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <svg class="conn-line-svg" width="28" height="4" viewBox="0 0 28 4">
+                  <line class="conn-line" x1="0" y1="2" x2="28" y2="2"
+                        stroke="currentColor" stroke-width="1.5"
+                        stroke-dasharray="28" stroke-dashoffset="28"
+                        stroke-linecap="round"/>
+                  <polygon class="conn-head" points="23,0 28,2 23,4"
+                           fill="currentColor" opacity="0"/>
                 </svg>
               </div>
 
@@ -2253,8 +2461,13 @@
 
               <!-- Connector 2 -->
               <div class="sim-connector" id="sim-c2">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                  <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <svg class="conn-line-svg" width="28" height="4" viewBox="0 0 28 4">
+                  <line class="conn-line" x1="0" y1="2" x2="28" y2="2"
+                        stroke="currentColor" stroke-width="1.5"
+                        stroke-dasharray="28" stroke-dashoffset="28"
+                        stroke-linecap="round"/>
+                  <polygon class="conn-head" points="23,0 28,2 23,4"
+                           fill="currentColor" opacity="0"/>
                 </svg>
               </div>
 
@@ -2274,6 +2487,12 @@
                 </div>
               </div>
 
+            </div>
+
+            <!-- Narrative CTA — appears when Panel 3 activates -->
+            <div class="sim-cta" id="sim-cta">
+              <span class="sim-cta__text">Ready to automate your business?</span>
+              <a href="#contact" class="sim-cta__btn">Let&rsquo;s Automate It &rarr;</a>
             </div>
           </div>
 
@@ -2697,6 +2916,73 @@
       <div class="section__header">
         <div class="section__kicker">My Work</div>
         <h2 class="section__h2">Automation <span>Projects</span></h2>
+      </div>
+
+      <!-- LIVE AUTOMATION HUB -->
+      <div class="live-hub reveal" id="live-hub">
+        <div class="live-hub__top">
+          <div class="live-hub__pulse">
+            <span class="live-hub__pulse-dot"></span>
+            Live
+          </div>
+          <span class="live-hub__headline">4 automations running right now — not demos</span>
+        </div>
+        <div class="live-hub__tabs" role="tablist">
+          <button class="live-hub__tab is-active" data-htab="0" role="tab">AI Chat Booking</button>
+          <button class="live-hub__tab" data-htab="1" role="tab">Lead Nurture</button>
+          <button class="live-hub__tab" data-htab="2" role="tab">Gmail Trigger</button>
+          <button class="live-hub__tab" data-htab="3" role="tab">Voice Receptionist</button>
+        </div>
+        <div class="live-hub__panels">
+          <div class="live-hub__panel is-active" data-hpanel="0">
+            <div class="live-hub__panel-left">
+              <div class="live-hub__panel-title">AI Chat Booking Assistant</div>
+              <p class="live-hub__panel-desc">Handles appointment bookings 24/7 via AI — books, reschedules, and confirms automatically. Every lead gets a response, nothing falls through.</p>
+              <div class="live-hub__panel-tools">
+                <span class="tag">n8n</span><span class="tag">Claude AI</span><span class="tag">GHL</span>
+              </div>
+            </div>
+            <div class="live-hub__panel-right">
+              <span class="live-hub__panel-right-dot"></span>Running
+            </div>
+          </div>
+          <div class="live-hub__panel" data-hpanel="1">
+            <div class="live-hub__panel-left">
+              <div class="live-hub__panel-title">Portfolio Lead Nurture</div>
+              <p class="live-hub__panel-desc">Every contact form submission on this site triggers an automated nurture sequence. Leads are captured, tagged, and followed up — zero manual effort.</p>
+              <div class="live-hub__panel-tools">
+                <span class="tag">n8n</span><span class="tag">CRM</span><span class="tag">Automation</span>
+              </div>
+            </div>
+            <div class="live-hub__panel-right">
+              <span class="live-hub__panel-right-dot"></span>Running
+            </div>
+          </div>
+          <div class="live-hub__panel" data-hpanel="2">
+            <div class="live-hub__panel-left">
+              <div class="live-hub__panel-title">Gmail Reply Trigger</div>
+              <p class="live-hub__panel-desc">Monitors incoming emails and fires automated replies the moment a message arrives. No manual review, no delays — just instant, consistent responses.</p>
+              <div class="live-hub__panel-tools">
+                <span class="tag">n8n</span><span class="tag">Gmail</span><span class="tag">Automation</span>
+              </div>
+            </div>
+            <div class="live-hub__panel-right">
+              <span class="live-hub__panel-right-dot"></span>Running
+            </div>
+          </div>
+          <div class="live-hub__panel" data-hpanel="3">
+            <div class="live-hub__panel-left">
+              <div class="live-hub__panel-title">AI Voice Receptionist</div>
+              <p class="live-hub__panel-desc">An AI-powered voice agent that handles inbound calls, answers FAQs, and routes callers — available 24/7 without a human receptionist on the line.</p>
+              <div class="live-hub__panel-tools">
+                <span class="tag">Vapi</span><span class="tag">OpenAI</span><span class="tag">n8n</span>
+              </div>
+            </div>
+            <div class="live-hub__panel-right">
+              <span class="live-hub__panel-right-dot"></span>Running
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="filter-tabs" role="group" aria-label="Filter projects by tool">
@@ -3963,15 +4249,35 @@
 
   var phaseTimer = null;
   var lineTimer  = null;
+  var p2proc  = document.querySelector('#sim-p2 .sim-mini-proc');
+  var p2orbit = document.querySelector('#sim-p2 .sim-mini-orbit');
+  var simCta  = document.getElementById('sim-cta');
 
   function clear() {
     clearTimeout(phaseTimer);
     clearTimeout(lineTimer);
   }
 
-  function setActive(idx) {
-    panels.forEach(function (p, i) { p.classList.toggle('is-active', i === idx); });
-    conns.forEach(function  (c, i) { c.classList.toggle('is-active', i < idx);  });
+  function setActive(idx, dur) {
+    panels.forEach(function (p, i) {
+      var active = i === idx;
+      if (active) { p.style.setProperty('--phase-dur', (dur || 3) + 's'); }
+      p.classList.toggle('is-active', active);
+    });
+    conns.forEach(function (c, i) { c.classList.toggle('is-active', i < idx); });
+  }
+
+  function burst() {
+    if (!p2proc || !p2orbit) return;
+    p2proc.classList.remove('is-bursting');
+    p2orbit.classList.remove('is-bursting');
+    void p2proc.offsetWidth;
+    p2proc.classList.add('is-bursting');
+    p2orbit.classList.add('is-bursting');
+    setTimeout(function () {
+      p2proc.classList.remove('is-bursting');
+      p2orbit.classList.remove('is-bursting');
+    }, 800);
   }
 
   function typeLines(el, lines, cb) {
@@ -3990,7 +4296,8 @@
 
   function phase1() {
     clear();
-    setActive(0);
+    if (simCta) simCta.classList.remove('is-visible');
+    setActive(0, 2.54);
     if (miniLinesEl) {
       typeLines(miniLinesEl, LINES, function () {
         phaseTimer = setTimeout(phase2, 700);
@@ -4002,19 +4309,38 @@
 
   function phase2() {
     clear();
-    setActive(1);
+    setActive(1, 3);
+    burst();
     phaseTimer = setTimeout(phase3, 3000);
   }
 
   function phase3() {
     clear();
-    setActive(2);
+    setActive(2, 3.4);
+    if (simCta) simCta.classList.add('is-visible');
     phaseTimer = setTimeout(function () {
       phaseTimer = setTimeout(phase1, 400);
     }, 3000);
   }
 
   setTimeout(phase1, 800);
+})();
+</script>
+
+<!-- ─── LIVE HUB TABS ─── -->
+<script>
+(function () {
+  var hub = document.getElementById('live-hub');
+  if (!hub) return;
+  var tabs   = hub.querySelectorAll('.live-hub__tab');
+  var panels = hub.querySelectorAll('.live-hub__panel');
+  tabs.forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      var idx = parseInt(tab.getAttribute('data-htab'), 10);
+      tabs.forEach(function (t) { t.classList.toggle('is-active', t === tab); });
+      panels.forEach(function (p, i) { p.classList.toggle('is-active', i === idx); });
+    });
+  });
 })();
 </script>
 
