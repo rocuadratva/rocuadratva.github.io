@@ -2240,6 +2240,27 @@
       border-radius: 8px;
       font-family: 'Courier New', monospace;
       font-size: 10px; overflow: hidden;
+      position: relative;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    /* CRT scan line sweeping down the terminal */
+    .sim-mini-terminal::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 35%;
+      background: linear-gradient(180deg, transparent 0%, rgba(79,195,247,0.05) 50%, transparent 100%);
+      animation: terminal-scan 3.2s linear infinite;
+      pointer-events: none;
+      z-index: 1;
+    }
+    @keyframes terminal-scan {
+      from { transform: translateY(-100%); }
+      to   { transform: translateY(350%); }
+    }
+    #sim-p1:hover .sim-mini-terminal {
+      border-color: rgba(242,108,56,0.65);
+      box-shadow: 0 0 12px rgba(242,108,56,0.2), inset 0 0 8px rgba(242,108,56,0.04);
     }
     .sim-mini-bar {
       display: flex; gap: 4px; align-items: center;
@@ -2316,14 +2337,38 @@
     #sim-p2 .sim-mini-node:hover img     { transform: scale(1.25); box-shadow: 0 0 14px rgba(242,108,56,0.8); }
     /* Run visual */
     .sim-run-visual { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    /* Dot wrapper holds the green dot + expanding pulse rings */
+    .sim-dot-wrap { position: relative; width: 12px; height: 12px; }
     .sim-run-dot {
       width: 12px; height: 12px; background: #00e676; border-radius: 50%;
       animation: blink-dot 1.5s ease-in-out infinite;
       box-shadow: 0 0 10px rgba(0,230,118,0.9), 0 0 24px rgba(0,230,118,0.45);
+      position: relative; z-index: 1;
+    }
+    .sim-pulse-ring {
+      position: absolute;
+      inset: 0; border-radius: 50%;
+      border: 1.5px solid rgba(0,230,118,0.7);
+      opacity: 0; pointer-events: none;
+    }
+    #sim-p3.is-active .sim-pulse-ring:nth-child(2) { animation: pulse-ring 2s ease-out infinite 0s;    }
+    #sim-p3.is-active .sim-pulse-ring:nth-child(3) { animation: pulse-ring 2s ease-out infinite 0.65s; }
+    #sim-p3.is-active .sim-pulse-ring:nth-child(4) { animation: pulse-ring 2s ease-out infinite 1.3s;  }
+    #sim-p3:hover    .sim-pulse-ring:nth-child(2)  { animation: pulse-ring 2s ease-out infinite 0s;    }
+    #sim-p3:hover    .sim-pulse-ring:nth-child(3)  { animation: pulse-ring 2s ease-out infinite 0.65s; }
+    #sim-p3:hover    .sim-pulse-ring:nth-child(4)  { animation: pulse-ring 2s ease-out infinite 1.3s;  }
+    @keyframes pulse-ring {
+      0%   { transform: scale(0.8); opacity: 0.75; }
+      100% { transform: scale(4.5); opacity: 0; }
     }
     .sim-run-badge { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.12em; }
     .sim-run-time  { font-size: 58px; font-weight: 700; font-family: 'Space Grotesk', sans-serif; color: #00e676; letter-spacing: -0.02em; line-height: 1; }
     .sim-run-slash { color: rgba(255,255,255,0.25); font-weight: 300; }
+    .sim-task-count {
+      font-size: 9.5px; font-family: 'Courier New', monospace;
+      color: rgba(0,230,118,0.55); letter-spacing: 0.08em;
+      margin-top: 2px;
+    }
     /* Panel footer */
     .sim-panel__footer {
       display: flex; flex-direction: column; align-items: center; gap: 5px;
@@ -2490,9 +2535,15 @@
               <div class="sim-panel" id="sim-p3">
                 <div class="sim-panel__visual">
                   <div class="sim-run-visual">
-                    <div class="sim-run-dot"></div>
+                    <div class="sim-dot-wrap">
+                      <div class="sim-run-dot"></div>
+                      <div class="sim-pulse-ring"></div>
+                      <div class="sim-pulse-ring"></div>
+                      <div class="sim-pulse-ring"></div>
+                    </div>
                     <div class="sim-run-badge">AI Powered</div>
                     <div class="sim-run-time">24<span class="sim-run-slash">/</span>7</div>
+                    <div class="sim-task-count"><span id="sim-task-num">0</span> tasks automated</div>
                   </div>
                 </div>
                 <div class="sim-panel__footer">
@@ -4405,6 +4456,31 @@
       gsap.delayedCall(delay, fire);
     });
   });
+})();
+
+// Panel 3: task counter counts up each time the panel becomes active
+(function initTaskCounter() {
+  if (typeof gsap === 'undefined') return;
+  var p3      = document.getElementById('sim-p3');
+  var taskEl  = document.getElementById('sim-task-num');
+  if (!p3 || !taskEl) return;
+
+  var obj = { val: 0 };
+  var tween = null;
+
+  new MutationObserver(function() {
+    if (p3.classList.contains('is-active')) {
+      obj.val = 0;
+      taskEl.textContent = '0';
+      if (tween) tween.kill();
+      tween = gsap.to(obj, {
+        val: 1247, duration: 2, ease: 'power2.out',
+        onUpdate: function() {
+          taskEl.textContent = Math.round(obj.val).toLocaleString();
+        }
+      });
+    }
+  }).observe(p3, { attributes: true, attributeFilter: ['class'] });
 })();
 </script>
 
