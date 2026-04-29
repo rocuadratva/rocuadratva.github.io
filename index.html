@@ -2206,34 +2206,6 @@
       from { opacity: 0; }
       to   { opacity: 1; }
     }
-    /* Narrative CTA strip */
-    .sim-cta {
-      display: flex; align-items: center; justify-content: center;
-      margin-top: 18px;
-    }
-    .sim-cta__arrow-link {
-      display: flex; flex-direction: column; align-items: center; gap: 6px;
-      text-decoration: none;
-      color: rgba(255,255,255,0.45);
-      transition: color 0.2s;
-    }
-    .sim-cta__arrow-link:hover { color: #F26C38; }
-    .sim-cta__arrow-label {
-      font-size: 11px; font-weight: 600;
-      letter-spacing: 0.1em; text-transform: uppercase;
-      font-family: var(--f-body);
-    }
-    .sim-cta__arrow-icon {
-      animation: arrow-bounce 1.6s ease-in-out infinite;
-    }
-    .sim-cta.is-visible .sim-cta__arrow-link { color: rgba(242,108,56,0.85); }
-    .sim-cta.is-visible .sim-cta__arrow-icon {
-      filter: drop-shadow(0 0 6px rgba(242,108,56,0.6));
-    }
-    @keyframes arrow-bounce {
-      0%, 100% { transform: translateY(0);   }
-      50%       { transform: translateY(5px); }
-    }
     .sim-panel__visual {
       width: 100%; min-height: 180px;
       display: flex; align-items: center; justify-content: center;
@@ -2480,23 +2452,12 @@
                 <div class="sim-panel__footer">
                   <div class="sim-panel__step">03</div>
                   <div class="sim-panel__label">Automated</div>
-                  <p class="sim-panel__desc">Your business runs itself</p>
+                  <p class="sim-panel__desc">Automated workflow</p>
                 </div>
               </div>
 
             </div>
 
-            <!-- Narrative CTA — points to live automations -->
-            <div class="sim-cta" id="sim-cta">
-              <a href="#live-hub" class="sim-cta__arrow-link">
-                <span class="sim-cta__arrow-label">See live automations</span>
-                <svg class="sim-cta__arrow-icon" width="18" height="18" viewBox="0 0 24 24"
-                     fill="none" stroke="currentColor" stroke-width="2.5"
-                     stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 5v14M5 13l7 7 7-7"/>
-                </svg>
-              </a>
-            </div>
           </div>
 
           <!-- Hidden stubs so old JS refs don't throw -->
@@ -4258,7 +4219,6 @@
   var lineTimer  = null;
   var p2proc  = document.querySelector('#sim-p2 .sim-mini-proc');
   var p2orbit = document.querySelector('#sim-p2 .sim-mini-orbit');
-  var simCta  = document.getElementById('sim-cta');
 
   function clear() {
     clearTimeout(phaseTimer);
@@ -4303,7 +4263,6 @@
 
   function phase1() {
     clear();
-    if (simCta) simCta.classList.remove('is-visible');
     setActive(0, 2.54);
     if (miniLinesEl) {
       typeLines(miniLinesEl, LINES, function () {
@@ -4324,7 +4283,6 @@
   function phase3() {
     clear();
     setActive(2, 3.4);
-    if (simCta) simCta.classList.add('is-visible');
     phaseTimer = setTimeout(function () {
       phaseTimer = setTimeout(phase1, 400);
     }, 3000);
