@@ -2172,6 +2172,28 @@
       opacity: 1;
       transform: scale(1.05);
     }
+    /* Ambient glow drift */
+    .sim-panel::before {
+      content: '';
+      position: absolute;
+      width: 140%; height: 140%;
+      top: -20%; left: -20%;
+      background: radial-gradient(ellipse at 50% 50%, rgba(242,108,56,0.07) 0%, transparent 60%);
+      animation: panel-glow-drift 6s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+    .sim-panel.is-active::before {
+      background: radial-gradient(ellipse at 50% 50%, rgba(242,108,56,0.18) 0%, transparent 60%);
+      animation: panel-glow-drift-active 4s ease-in-out infinite alternate;
+    }
+    @keyframes panel-glow-drift {
+      from { transform: translate(-12%, -12%); opacity: 0.5; }
+      to   { transform: translate(12%, 12%);   opacity: 1;   }
+    }
+    @keyframes panel-glow-drift-active {
+      from { transform: translate(-10%, -10%); opacity: 0.75; }
+      to   { transform: translate(10%, 10%);   opacity: 1;    }
+    }
     /* Option 3: Progress bar */
     .sim-panel::after {
       content: '';
@@ -2287,12 +2309,12 @@
     /* Run visual */
     .sim-run-visual { display: flex; flex-direction: column; align-items: center; gap: 8px; }
     .sim-run-dot {
-      width: 12px; height: 12px; background: #22c55e; border-radius: 50%;
+      width: 12px; height: 12px; background: #00e676; border-radius: 50%;
       animation: blink-dot 1.5s ease-in-out infinite;
-      box-shadow: 0 0 14px rgba(34,197,94,0.65);
+      box-shadow: 0 0 10px rgba(0,230,118,0.9), 0 0 24px rgba(0,230,118,0.45);
     }
     .sim-run-badge { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.12em; }
-    .sim-run-time  { font-size: 58px; font-weight: 900; color: #22c55e; letter-spacing: -0.03em; line-height: 1; }
+    .sim-run-time  { font-size: 58px; font-weight: 900; color: #00e676; letter-spacing: -0.03em; line-height: 1; text-shadow: 0 0 20px rgba(0,230,118,0.7), 0 0 40px rgba(0,230,118,0.3); }
     /* Panel footer */
     .sim-panel__footer {
       display: flex; flex-direction: column; align-items: center; gap: 5px;
