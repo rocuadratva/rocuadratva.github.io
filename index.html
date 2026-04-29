@@ -2364,11 +2364,21 @@
     .sim-run-badge { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.12em; }
     .sim-run-time  { font-size: 58px; font-weight: 700; font-family: 'Space Grotesk', sans-serif; color: #00e676; letter-spacing: -0.02em; line-height: 1; }
     .sim-run-slash { color: rgba(255,255,255,0.25); font-weight: 300; }
-    .sim-task-count {
-      font-size: 9.5px; font-family: 'Courier New', monospace;
-      color: rgba(0,230,118,0.55); letter-spacing: 0.08em;
-      margin-top: 2px;
+    /* Scrolling event log on Panel 3 */
+    .sim-event-log {
+      width: 100%; max-width: 164px;
+      min-height: 50px; overflow: hidden;
+      display: flex; flex-direction: column; gap: 3px;
+      margin-top: 4px;
     }
+    .sim-event-line {
+      display: flex; align-items: center; gap: 4px;
+      font-family: 'Courier New', monospace; font-size: 9px;
+      white-space: nowrap; overflow: hidden;
+    }
+    .sim-event-check { color: #00e676; flex-shrink: 0; }
+    .sim-event-text  { color: rgba(255,255,255,0.48); }
+    .sim-event-dest  { color: rgba(79,195,247,0.65); flex-shrink: 0; }
     /* Panel footer */
     .sim-panel__footer {
       display: flex; flex-direction: column; align-items: center; gap: 5px;
@@ -2543,7 +2553,7 @@
                     </div>
                     <div class="sim-run-badge">AI Powered</div>
                     <div class="sim-run-time">24<span class="sim-run-slash">/</span>7</div>
-                    <div class="sim-task-count"><span id="sim-task-num">0</span> tasks automated</div>
+                    <div class="sim-event-log" id="sim-event-log"></div>
                   </div>
                 </div>
                 <div class="sim-panel__footer">
@@ -4458,29 +4468,88 @@
   });
 })();
 
-// Panel 3: task counter counts up each time the panel becomes active
-(function initTaskCounter() {
+// Panel 3: scrolling event log — new automation event appears every second
+(function initEventLog() {
   if (typeof gsap === 'undefined') return;
-  var p3      = document.getElementById('sim-p3');
-  var taskEl  = document.getElementById('sim-task-num');
-  if (!p3 || !taskEl) return;
+  var p3  = document.getElementById('sim-p3');
+  var log = document.getElementById('sim-event-log');
+  if (!p3 || !log) return;
 
-  var obj = { val: 0 };
-  var tween = null;
+  var EVENTS = [
+    ['Lead captured',        '→ Notion'       ],
+    ['Follow-up email sent', '→ client@co.com'],
+    ['Slack notified',       '→ #new-clients' ],
+    ['Invoice drafted',      '→ PDF export'   ],
+    ['CRM updated',          '→ HubSpot'      ],
+    ['Task scheduled',       '→ Monday.com'   ],
+    ['Report generated',     '→ Google Drive' ],
+    ['Webhook triggered',    '→ n8n workflow' ],
+  ];
 
-  new MutationObserver(function() {
-    if (p3.classList.contains('is-active')) {
-      obj.val = 0;
-      taskEl.textContent = '0';
-      if (tween) tween.kill();
-      tween = gsap.to(obj, {
-        val: 1247, duration: 2, ease: 'power2.out',
-        onUpdate: function() {
-          taskEl.textContent = Math.round(obj.val).toLocaleString();
-        }
+  var MAX   = 3;      // max lines visible at once
+  var STEP  = 950;    // ms between events
+  var idx   = 0;
+  var timer = null;
+
+  function addEvent() {
+    var ev   = EVENTS[idx % EVENTS.length];
+    idx++;
+    var line = document.createElement('div');
+    line.className = 'sim-event-line';
+    line.innerHTML =
+      '<span class="sim-event-check">✓</span>' +
+      '<span class="sim-event-text">' + ev[0] + '&nbsp;</span>' +
+      '<span class="sim-event-dest">' + ev[1] + '</span>';
+
+    gsap.set(line, { opacity: 0, y: 10 });
+    log.appendChild(line);
+    gsap.to(line, { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out' });
+
+    var lines = log.querySelectorAll('.sim-event-line');
+    if (lines.length > MAX) {
+      var old = lines[0];
+      gsap.to(old, { opacity: 0, y: -10, duration: 0.25, ease: 'power2.in',
+        onComplete: function() { if (old.parentNode) old.parentNode.removeChild(old); }
       });
     }
+  }
+
+  function start() {
+    idx = 0;
+    while (log.firstChild) log.removeChild(log.firstChild);
+    addEvent();
+    timer = setInterval(addEvent, STEP);
+  }
+
+  function stop() {
+    if (timer) { clearInterval(timer); timer = null; }
+  }
+
+  new MutationObserver(function() {
+    p3.classList.contains('is-active') ? start() : stop();
   }).observe(p3, { attributes: true, attributeFilter: ['class'] });
+})();
+
+// Hero right column: subtle mouse parallax
+(function initHeroParallax() {
+  if (typeof gsap === 'undefined') return;
+  if (window.innerWidth < 768) return;
+  var hero  = document.getElementById('hero');
+  var right = document.querySelector('.hero__right');
+  if (!hero || !right) return;
+
+  var MAX_X = 12, MAX_Y = 7;
+
+  hero.addEventListener('mousemove', function(e) {
+    var r  = hero.getBoundingClientRect();
+    var dx = (e.clientX - (r.left + r.width  / 2)) / (r.width  / 2);
+    var dy = (e.clientY - (r.top  + r.height / 2)) / (r.height / 2);
+    gsap.to(right, { x: dx * MAX_X, y: dy * MAX_Y, duration: 0.9, ease: 'power2.out' });
+  });
+
+  hero.addEventListener('mouseleave', function() {
+    gsap.to(right, { x: 0, y: 0, duration: 1.1, ease: 'power2.out' });
+  });
 })();
 </script>
 
