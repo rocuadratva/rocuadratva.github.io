@@ -2280,6 +2280,7 @@
       background: rgba(10,11,24,0.92);
       border: 1px solid rgba(255,255,255,0.14);
       border-radius: 6px; padding: 3px; display: block;
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.3s;
     }
     .sim-mini-node--n8n    { animation: mini-spin 8s linear infinite 0s;  }
     .sim-mini-node--make   { animation: mini-spin 8s linear infinite -2s; }
@@ -2306,6 +2307,13 @@
       40%  { border-color: rgba(242,108,56,0.7);  transform: translate(-50%,-50%) scale(1.12); }
       100% { border-color: rgba(242,108,56,0.28); transform: translate(-50%,-50%) scale(1); }
     }
+    /* Particle streams */
+    .sim-particles { position: absolute; inset: 0; pointer-events: none; z-index: 3; }
+    .sim-particle  { position: absolute; width: 3px; height: 3px; border-radius: 50%; opacity: 0; }
+    /* Hover enhancements */
+    #sim-p2:hover .sim-mini-orbit::before { border-color: rgba(242,108,56,0.65); transition: border-color 0.3s; }
+    #sim-p2:hover .sim-mini-node img     { border-color: rgba(242,108,56,0.55); box-shadow: 0 0 8px rgba(242,108,56,0.35); }
+    #sim-p2 .sim-mini-node:hover img     { transform: scale(1.25); box-shadow: 0 0 14px rgba(242,108,56,0.8); }
     /* Run visual */
     .sim-run-visual { display: flex; flex-direction: column; align-items: center; gap: 8px; }
     .sim-run-dot {
@@ -2441,6 +2449,21 @@
                     </div>
                     <div class="sim-mini-node sim-mini-node--openai">
                       <img src="https://cdn.simpleicons.org/openai/ffffff" alt="OpenAI" loading="lazy">
+                    </div>
+                    <!-- Particle stream dots: 3 per node × 4 nodes -->
+                    <div class="sim-particles">
+                      <div class="sim-particle" data-src="n8n"></div>
+                      <div class="sim-particle" data-src="n8n"></div>
+                      <div class="sim-particle" data-src="n8n"></div>
+                      <div class="sim-particle" data-src="make"></div>
+                      <div class="sim-particle" data-src="make"></div>
+                      <div class="sim-particle" data-src="make"></div>
+                      <div class="sim-particle" data-src="zapier"></div>
+                      <div class="sim-particle" data-src="zapier"></div>
+                      <div class="sim-particle" data-src="zapier"></div>
+                      <div class="sim-particle" data-src="openai"></div>
+                      <div class="sim-particle" data-src="openai"></div>
+                      <div class="sim-particle" data-src="openai"></div>
                     </div>
                   </div>
                 </div>
@@ -4327,6 +4350,59 @@
       var idx = parseInt(tab.getAttribute('data-htab'), 10);
       tabs.forEach(function (t) { t.classList.toggle('is-active', t === tab); });
       panels.forEach(function (p, i) { p.classList.toggle('is-active', i === idx); });
+    });
+  });
+})();
+</script>
+
+<!-- ─── GSAP (particle streams on AI SYS panel) ─── -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+(function initAISYSParticles() {
+  if (typeof gsap === 'undefined') return;
+  var orbit = document.querySelector('#sim-p2 .sim-mini-orbit');
+  if (!orbit) return;
+  var proc = document.querySelector('#sim-p2 .sim-mini-proc');
+
+  // Orbit container 160×160, center at (80,80), orbit radius 68px.
+  // Each node gets a fixed source zone at the ring edge.
+  var NODES = [
+    { src: 'n8n',    x: 78.5,  y: 10.5,  color: '#F26C38' },
+    { src: 'make',   x: 10.5,  y: 78.5,  color: '#a855f7' },
+    { src: 'zapier', x: 78.5,  y: 146.5, color: '#ff6b35' },
+    { src: 'openai', x: 146.5, y: 78.5,  color: '#4FC3F7' }
+  ];
+
+  var TRAVEL = 0.85;   // seconds to reach center
+  var CYCLE  = 1.6;    // full cycle: travel + pause at source
+  var PER    = 3;      // particles per node
+  var CX = 78.5, CY = 78.5;
+
+  NODES.forEach(function(node, ni) {
+    var particles = orbit.querySelectorAll('.sim-particle[data-src="' + node.src + '"]');
+    // Offset each node group so all 4 nodes fire at different times
+    var nodeOffset = (CYCLE / NODES.length) * ni;
+
+    particles.forEach(function(p, i) {
+      gsap.set(p, { left: node.x, top: node.y, opacity: 0,
+                    backgroundColor: node.color,
+                    boxShadow: '0 0 4px ' + node.color });
+
+      var delay = nodeOffset + (CYCLE / PER) * i;
+
+      function fire() {
+        gsap.timeline({ onComplete: fire })
+          .set(p, { left: node.x, top: node.y, opacity: 0 })
+          .to(p, { opacity: 1, duration: 0.12, ease: 'none' })
+          .to(p, { left: CX, top: CY, duration: TRAVEL, ease: 'power2.in' }, '<')
+          .to(p, { opacity: 0, duration: 0.14, ease: 'none' }, '-=0.18')
+          .call(function() {
+            if (proc) gsap.to(proc, { scale: 1.07, duration: 0.07, yoyo: true, repeat: 1, ease: 'power2.out', overwrite: 'auto' });
+          })
+          .to(p, { duration: CYCLE - TRAVEL - 0.12 });
+      }
+
+      gsap.delayedCall(delay, fire);
     });
   });
 })();
