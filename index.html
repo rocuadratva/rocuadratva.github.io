@@ -396,7 +396,7 @@
     /* ─── ORBITAL AI HUB ─── */
     .hero__laptop-wrap {
       width: 100%;
-      max-width: 490px;
+      max-width: 540px;
       display: flex;
       flex-direction: column;
       opacity: 0;
@@ -407,7 +407,7 @@
     .orbit-hub-wrap {
       position: relative;
       width: 100%;
-      height: 280px;
+      height: 400px;
     }
 
     .orbit-hub {
@@ -438,7 +438,7 @@
       position: absolute;
       left: 50%; top: 50%;
       transform: translate(-50%, -50%);
-      width: 74px; height: 74px;
+      width: 108px; height: 108px;
       border-radius: 50%;
       background:
         radial-gradient(circle at 36% 30%, rgba(255,220,200,0.24) 0%, transparent 44%),
@@ -446,9 +446,9 @@
         radial-gradient(circle, rgba(242,108,56,0.95) 0%, rgba(196,50,80,0.9) 45%, rgba(110,20,45,0.95) 100%);
       box-shadow:
         0 0 0 1.5px rgba(242,108,56,0.45),
-        0 0 32px rgba(242,108,56,0.62),
-        0 0 72px rgba(242,108,56,0.34),
-        0 0 130px rgba(215,47,88,0.18),
+        0 0 40px rgba(242,108,56,0.62),
+        0 0 90px rgba(242,108,56,0.34),
+        0 0 160px rgba(215,47,88,0.18),
         inset 0 1px 0 rgba(255,255,255,0.28);
       z-index: 10;
       animation: sphere-pulse 4s ease-in-out infinite;
@@ -465,8 +465,8 @@
       animation: sphere-ring 3.6s ease-out infinite;
       pointer-events: none;
     }
-    .orbit-sphere::before { inset: -14px; }
-    .orbit-sphere::after  { inset: -30px; border-color: rgba(242,108,56,0.18); animation-delay: 1.3s; }
+    .orbit-sphere::before { inset: -18px; }
+    .orbit-sphere::after  { inset: -38px; border-color: rgba(242,108,56,0.18); animation-delay: 1.3s; }
     @keyframes sphere-ring {
       0%   { opacity: 0.9; transform: scale(0.8); }
       100% { opacity: 0;   transform: scale(1.55); }
@@ -503,12 +503,9 @@
       animation: sphere-shimmer 7s linear infinite;
     }
     @keyframes sphere-shimmer { to { transform: rotate(360deg); } }
-    .orbit-sphere__label {
+    .orbit-sphere__bolt {
       position: relative; z-index: 1;
-      font-family: var(--f-display);
-      font-size: 16px; font-weight: 900;
-      color: #fff; letter-spacing: 0.08em;
-      text-shadow: 0 0 14px rgba(255,255,255,0.65);
+      filter: drop-shadow(0 0 10px rgba(255,255,255,0.7)) drop-shadow(0 0 20px rgba(255,220,180,0.5));
     }
 
     /* Tool nodes */
@@ -576,10 +573,10 @@
       .hero__left .hero__sub { text-align: center !important; max-width: 100% !important; }
       .hero__left .hero__badge { align-self: center !important; }
       .hero__cta { justify-content: center; }
-      .hero__right { width: 100%; max-width: 480px; }
+      .hero__right { width: 100%; max-width: 540px; }
     }
     @media (max-width: 700px) {
-      .orbit-hub-wrap { height: 220px; }
+      .orbit-hub-wrap { height: 280px; }
     }
 
     /* ─── LIVE AUTOMATIONS ─── */
@@ -2025,35 +2022,38 @@
             <div class="orbit-hub" id="orbit-hub">
 
               <!-- Dashed ring outlines -->
-              <svg class="orbit-rings-svg" viewBox="-245 -140 490 280" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
-                <ellipse cx="0" cy="0" rx="138" ry="43" class="orbit-ring-line orbit-ring-line--inner"/>
-                <ellipse cx="0" cy="0" rx="178" ry="56" class="orbit-ring-line orbit-ring-line--outer"/>
+              <svg class="orbit-rings-svg" viewBox="-270 -200 540 400" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
+                <ellipse cx="0" cy="0" rx="200" ry="76" class="orbit-ring-line orbit-ring-line--inner"/>
+                <ellipse cx="0" cy="0" rx="240" ry="94" class="orbit-ring-line orbit-ring-line--outer"/>
               </svg>
 
               <!-- Central glowing sphere -->
               <div class="orbit-sphere">
                 <div class="orbit-sphere__shimmer"></div>
-                <span class="orbit-sphere__label">AI</span>
+                <svg class="orbit-sphere__bolt" width="32" height="40" viewBox="0 0 28 36" fill="none" aria-hidden="true">
+                  <path d="M16 2L3 21L13 21L8 34L25 14L15 14Z" fill="white" opacity="0.95"/>
+                </svg>
               </div>
 
-              <!-- Tool nodes — JS positions + animates these -->
+              <!-- Tool nodes — inner ring: n8n, Make, Zapier, GHL (4 main platforms) -->
+              <!-- outer ring: OpenAI, Gmail, Twilio, Slack (integrations) -->
               <div class="orbit-node" id="onode-0" data-tool="n8n">
                 <div class="orbit-node__disc">
                   <img src="https://cdn.simpleicons.org/n8n/ffffff" alt="n8n" loading="lazy">
                 </div>
                 <span class="orbit-node__name">n8n</span>
               </div>
-              <div class="orbit-node" id="onode-1" data-tool="ghl">
-                <div class="orbit-node__disc">
-                  <span class="orbit-icon">⚡</span>
-                </div>
-                <span class="orbit-node__name">GHL</span>
-              </div>
-              <div class="orbit-node" id="onode-2" data-tool="openai">
+              <div class="orbit-node" id="onode-1" data-tool="openai">
                 <div class="orbit-node__disc">
                   <img src="https://cdn.simpleicons.org/openai/ffffff" alt="OpenAI" loading="lazy">
                 </div>
                 <span class="orbit-node__name">OpenAI</span>
+              </div>
+              <div class="orbit-node" id="onode-2" data-tool="make">
+                <div class="orbit-node__disc">
+                  <img src="https://cdn.simpleicons.org/make/ffffff" alt="Make" loading="lazy">
+                </div>
+                <span class="orbit-node__name">Make</span>
               </div>
               <div class="orbit-node" id="onode-3" data-tool="gmail">
                 <div class="orbit-node__disc">
@@ -2061,17 +2061,29 @@
                 </div>
                 <span class="orbit-node__name">Gmail</span>
               </div>
-              <div class="orbit-node" id="onode-4" data-tool="make">
+              <div class="orbit-node" id="onode-4" data-tool="zapier">
                 <div class="orbit-node__disc">
-                  <img src="https://cdn.simpleicons.org/make/ffffff" alt="Make" loading="lazy">
+                  <img src="https://cdn.simpleicons.org/zapier/ffffff" alt="Zapier" loading="lazy">
                 </div>
-                <span class="orbit-node__name">Make</span>
+                <span class="orbit-node__name">Zapier</span>
               </div>
               <div class="orbit-node" id="onode-5" data-tool="twilio">
                 <div class="orbit-node__disc">
                   <img src="https://cdn.simpleicons.org/twilio/ffffff" alt="Twilio" loading="lazy">
                 </div>
                 <span class="orbit-node__name">Twilio</span>
+              </div>
+              <div class="orbit-node" id="onode-6" data-tool="ghl">
+                <div class="orbit-node__disc">
+                  <span class="orbit-icon">⚡</span>
+                </div>
+                <span class="orbit-node__name">GHL</span>
+              </div>
+              <div class="orbit-node" id="onode-7" data-tool="slack">
+                <div class="orbit-node__disc">
+                  <img src="https://cdn.simpleicons.org/slack/ffffff" alt="Slack" loading="lazy">
+                </div>
+                <span class="orbit-node__name">Slack</span>
               </div>
 
             </div>
@@ -3780,18 +3792,20 @@
     }
   ];
 
-  /* 6 tools: 3 on inner ring (0°/120°/240°), 3 on outer ring (60°/180°/300°) */
+  /* 8 tools: 4 main platforms on inner ring (90° apart), 4 integrations on outer (offset 45°) */
   var NODES = [
     { id: 'onode-0', key: 'n8n',    inner: true,  phase: 0   },
-    { id: 'onode-1', key: 'ghl',    inner: false, phase: 60  },
-    { id: 'onode-2', key: 'openai', inner: true,  phase: 120 },
-    { id: 'onode-3', key: 'gmail',  inner: false, phase: 180 },
-    { id: 'onode-4', key: 'make',   inner: true,  phase: 240 },
-    { id: 'onode-5', key: 'twilio', inner: false, phase: 300 }
+    { id: 'onode-1', key: 'openai', inner: false, phase: 45  },
+    { id: 'onode-2', key: 'make',   inner: true,  phase: 90  },
+    { id: 'onode-3', key: 'gmail',  inner: false, phase: 135 },
+    { id: 'onode-4', key: 'zapier', inner: true,  phase: 180 },
+    { id: 'onode-5', key: 'twilio', inner: false, phase: 225 },
+    { id: 'onode-6', key: 'ghl',    inner: true,  phase: 270 },
+    { id: 'onode-7', key: 'slack',  inner: false, phase: 315 }
   ];
 
-  var INNER_SPEED = 360 / 20000; /* deg/ms — full orbit in 20s */
-  var OUTER_SPEED = 360 / 30000; /* deg/ms — full orbit in 30s */
+  var INNER_SPEED = 360 / 24000; /* deg/ms — full orbit in 24s */
+  var OUTER_SPEED = 360 / 36000; /* deg/ms — full orbit in 36s */
 
   var hubEl = document.getElementById('orbit-hub');
   if (!hubEl) return;
@@ -3806,11 +3820,11 @@
     var r = hubEl.getBoundingClientRect();
     cx  = r.width  / 2;
     cy  = r.height / 2;
-    /* ring radii as fractions of hub dimensions */
-    irx = r.width  * 0.282;
-    iry = r.height * 0.154;
-    orx = r.width  * 0.363;
-    ory = r.height * 0.200;
+    /* ring radii — ~50% larger than original, fractions of hub dimensions */
+    irx = r.width  * 0.370;
+    iry = r.height * 0.190;
+    orx = r.width  * 0.444;
+    ory = r.height * 0.235;
   }
   measure();
   window.addEventListener('resize', measure);
