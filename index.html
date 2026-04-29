@@ -433,12 +433,12 @@
     .orbit-ring-line--inner { stroke: rgba(242,108,56,0.24); stroke-width: 1; }
     .orbit-ring-line--outer { stroke: rgba(242,108,56,0.14); stroke-width: 1; }
 
-    /* Central brain hub */
+    /* Central processor hub */
     .orbit-sphere {
       position: absolute;
       left: 50%; top: 50%;
       transform: translate(-50%, -50%);
-      width: 160px; height: 140px;
+      width: 160px; height: 160px;
       z-index: 10;
       display: flex;
       align-items: center;
@@ -460,31 +460,27 @@
       100% { opacity: 0;   transform: scale(1.55); }
     }
 
-    /* 3D brain wrap */
-    .brain-3d-wrap {
+    /* Circuit processor (center hub) */
+    .processor-wrap {
       position: relative;
-      width: 160px; height: 140px;
-      transform-style: preserve-3d;
-      animation: brain-float 9s ease-in-out infinite;
+      width: 160px; height: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    @keyframes brain-float {
-      0%,100% { transform: perspective(520px) rotateX(8deg) rotateY(-18deg); }
-      33%     { transform: perspective(520px) rotateX(5deg) rotateY(-12deg); }
-      66%     { transform: perspective(520px) rotateX(11deg) rotateY(-22deg); }
-    }
-    .brain-layer {
-      position: absolute;
-      top: 0; left: 0;
-      width: 160px; height: 140px;
+    .processor-svg {
+      width: 160px; height: 160px;
       overflow: visible;
-    }
-    .brain-layer--glow    { transform: translateZ(-15px) scale(1.08); transform-origin: center; }
-    .brain-layer--fill    { transform: translateZ(-5px); }
-    .brain-layer--outline {
-      transform: translateZ(0px);
       animation: brain-pulse 4s ease-in-out infinite;
+      transition: filter 0.4s ease;
     }
-    .brain-layer--chip    { transform: translateZ(16px); }
+    .processor-wrap.is-active .processor-svg {
+      animation: proc-active 0.7s ease-in-out infinite alternate;
+    }
+    @keyframes proc-active {
+      from { filter: drop-shadow(0 0 14px rgba(242,108,56,0.75)) drop-shadow(0 0 36px rgba(242,108,56,0.4)); }
+      to   { filter: drop-shadow(0 0 28px rgba(242,108,56,1.0)) drop-shadow(0 0 64px rgba(242,108,56,0.65)); }
+    }
     @keyframes brain-pulse {
       0%,100% { filter: drop-shadow(0 0 10px rgba(242,108,56,0.55)) drop-shadow(0 0 28px rgba(242,108,56,0.28)); }
       50%     { filter: drop-shadow(0 0 18px rgba(242,108,56,0.82)) drop-shadow(0 0 48px rgba(242,108,56,0.44)); }
@@ -538,6 +534,80 @@
     .orbit-node.is-active .orbit-icon { opacity: 1; }
     .orbit-node.is-active .orbit-node__name { color: rgba(242,108,56,0.88); }
     .orbit-node.is-dim { opacity: 0.35; }
+
+    /* ─── SIMULATION PHASES ─── */
+    .sim-terminal {
+      position: absolute;
+      left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      width: 214px;
+      background: rgba(8,12,20,0.96);
+      border: 1px solid rgba(242,108,56,0.35);
+      border-radius: 8px;
+      font-family: 'Courier New', monospace;
+      font-size: 10.5px;
+      z-index: 20;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s ease;
+      box-shadow: 0 0 30px rgba(242,108,56,0.12);
+    }
+    .sim-terminal.is-visible { opacity: 1; }
+    .sim-terminal__bar {
+      display: flex; align-items: center; gap: 5px;
+      padding: 6px 10px;
+      border-bottom: 1px solid rgba(242,108,56,0.15);
+    }
+    .sim-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .sim-dot.red    { background: #FF5F57; }
+    .sim-dot.yellow { background: #FFBD2E; }
+    .sim-dot.green  { background: #28C840; }
+    .sim-terminal__title { color: rgba(255,255,255,0.35); font-size: 10px; margin-left: 4px; }
+    .sim-terminal__body { padding: 8px 10px; min-height: 88px; line-height: 1.75; }
+    .sim-line { display: block; opacity: 0; animation: sim-line-in 0.18s ease forwards; }
+    .sim-line--cmd  { color: #4FC3F7; }
+    .sim-line--warn { color: rgba(242,108,56,0.9); }
+    .sim-line--done { color: #22c55e; }
+    @keyframes sim-line-in { to { opacity: 1; } }
+
+    .sim-status {
+      position: absolute;
+      left: 50%; bottom: 16%;
+      transform: translateX(-50%);
+      display: flex; align-items: center; gap: 8px;
+      padding: 5px 14px;
+      background: rgba(8,12,20,0.92);
+      border: 1px solid rgba(34,197,94,0.45);
+      border-radius: 20px;
+      font-size: 11px; font-weight: 700;
+      color: #fff; letter-spacing: 0.06em;
+      text-transform: uppercase;
+      z-index: 20; opacity: 0; pointer-events: none;
+      transition: opacity 0.45s ease;
+      box-shadow: 0 0 20px rgba(34,197,94,0.12);
+      white-space: nowrap;
+    }
+    .sim-status.is-visible { opacity: 1; }
+    .sim-status__dot {
+      width: 7px; height: 7px; background: #22c55e;
+      border-radius: 50%;
+      animation: blink-dot 1.5s ease-in-out infinite;
+    }
+
+    .orbit-hub.phase-diagnose .orbit-node { opacity: 0.18; transition: opacity 0.4s ease; }
+    .orbit-hub.phase-build .orbit-node,
+    .orbit-hub.phase-run   .orbit-node   { opacity: 1; transition: opacity 0.4s ease; }
+    .orbit-hub.phase-build .orbit-node .orbit-node__disc,
+    .orbit-hub.phase-run   .orbit-node .orbit-node__disc {
+      border-color: rgba(242,108,56,0.62);
+      box-shadow: 0 0 0 1px rgba(242,108,56,0.22), 0 0 20px rgba(242,108,56,0.48), 0 4px 14px rgba(0,0,0,0.55);
+    }
+    .orbit-hub.phase-build .orbit-node .orbit-node__disc img,
+    .orbit-hub.phase-build .orbit-node .orbit-icon,
+    .orbit-hub.phase-run   .orbit-node .orbit-node__disc img,
+    .orbit-hub.phase-run   .orbit-node .orbit-icon { opacity: 1; }
+    .orbit-hub.phase-build .orbit-node .orbit-node__name,
+    .orbit-hub.phase-run   .orbit-node .orbit-node__name { color: rgba(242,108,56,0.88); }
 
     /* Tabs bar below hub */
     .orbit-tabs-bar {
@@ -2020,110 +2090,74 @@
                 <ellipse cx="0" cy="0" rx="240" ry="94" class="orbit-ring-line orbit-ring-line--outer"/>
               </svg>
 
-              <!-- Central 3D tech brain -->
+              <!-- Central circuit processor -->
               <div class="orbit-sphere">
-                <div class="brain-3d-wrap">
-
-                  <!-- Layer 1: ambient glow aura (back) -->
-                  <svg class="brain-layer brain-layer--glow" viewBox="0 0 160 140" fill="none" aria-hidden="true">
+                <div class="processor-wrap" id="processor-wrap">
+                  <svg class="processor-svg" viewBox="0 0 160 160" fill="none" aria-hidden="true">
                     <defs>
-                      <filter id="bb-lg" x="-60%" y="-60%" width="220%" height="220%">
-                        <feGaussianBlur stdDeviation="14"/>
-                      </filter>
-                      <filter id="bb-sm" x="-80%" y="-80%" width="260%" height="260%">
-                        <feGaussianBlur stdDeviation="7"/>
-                      </filter>
-                    </defs>
-                    <ellipse cx="80" cy="66" rx="56" ry="47" fill="rgba(242,108,56,0.52)" filter="url(#bb-lg)"/>
-                    <ellipse cx="80" cy="76" rx="38" ry="30" fill="rgba(215,47,88,0.32)" filter="url(#bb-lg)"/>
-                    <ellipse cx="80" cy="16" rx="18" ry="10" fill="rgba(79,195,247,0.28)" filter="url(#bb-sm)"/>
-                    <ellipse cx="18" cy="65" rx="10" ry="14" fill="rgba(79,195,247,0.22)" filter="url(#bb-sm)"/>
-                    <ellipse cx="142" cy="65" rx="10" ry="14" fill="rgba(79,195,247,0.22)" filter="url(#bb-sm)"/>
-                  </svg>
-
-                  <!-- Layer 2: hemisphere fills (semi-transparent body) -->
-                  <svg class="brain-layer brain-layer--fill" viewBox="0 0 160 140" fill="none" aria-hidden="true">
-                    <defs>
-                      <radialGradient id="brain-fill-g" cx="50%" cy="44%" r="52%">
-                        <stop offset="0%"   stop-color="#F26C38" stop-opacity="0.70"/>
-                        <stop offset="45%"  stop-color="#C43250" stop-opacity="0.48"/>
-                        <stop offset="100%" stop-color="#6E142D" stop-opacity="0.0"/>
-                      </radialGradient>
-                    </defs>
-                    <path d="M80,12 C68,10 48,14 34,26 C20,38 16,54 17,68 C14,80 17,94 26,104 C36,114 52,119 68,117 C72,116 76,115 80,115 Z"
-                      fill="url(#brain-fill-g)" opacity="0.88"/>
-                    <path d="M80,12 C92,10 112,14 126,26 C140,38 144,54 143,68 C146,80 143,94 134,104 C124,114 108,119 92,117 C88,116 84,115 80,115 Z"
-                      fill="url(#brain-fill-g)" opacity="0.88"/>
-                  </svg>
-
-                  <!-- Layer 3: brain outline + folds (main visible detail) -->
-                  <svg class="brain-layer brain-layer--outline" viewBox="0 0 160 140" fill="none" aria-hidden="true">
-                    <!-- Left hemisphere -->
-                    <path d="M80,12 C68,10 48,14 34,26 C20,38 16,54 17,68 C14,80 17,94 26,104 C36,114 52,119 68,117 C72,116 76,115 80,115"
-                      stroke="#F26C38" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.95"/>
-                    <!-- Right hemisphere -->
-                    <path d="M80,12 C92,10 112,14 126,26 C140,38 144,54 143,68 C146,80 143,94 134,104 C124,114 108,119 92,117 C88,116 84,115 80,115"
-                      stroke="#F26C38" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.95"/>
-                    <!-- Center fissure -->
-                    <path d="M80,12 C79,50 81,80 80,115"
-                      stroke="rgba(242,108,56,0.42)" stroke-width="1.5" stroke-linecap="round"/>
-                    <!-- Left folds -->
-                    <path d="M24,46 C30,40 40,41 44,47"   stroke="rgba(242,108,56,0.62)" stroke-width="1.3" stroke-linecap="round"/>
-                    <path d="M18,66 C26,60 36,61 40,67"   stroke="rgba(242,108,56,0.62)" stroke-width="1.3" stroke-linecap="round"/>
-                    <path d="M20,86 C28,81 38,82 42,88"   stroke="rgba(242,108,56,0.62)" stroke-width="1.3" stroke-linecap="round"/>
-                    <path d="M38,106 C46,102 54,103 58,109" stroke="rgba(242,108,56,0.50)" stroke-width="1.2" stroke-linecap="round"/>
-                    <!-- Right folds -->
-                    <path d="M136,46 C130,40 120,41 116,47"   stroke="rgba(242,108,56,0.62)" stroke-width="1.3" stroke-linecap="round"/>
-                    <path d="M142,66 C134,60 124,61 120,67"   stroke="rgba(242,108,56,0.62)" stroke-width="1.3" stroke-linecap="round"/>
-                    <path d="M140,86 C132,81 122,82 118,88"   stroke="rgba(242,108,56,0.62)" stroke-width="1.3" stroke-linecap="round"/>
-                    <path d="M122,106 C114,102 106,103 102,109" stroke="rgba(242,108,56,0.50)" stroke-width="1.2" stroke-linecap="round"/>
-                    <!-- Top small folds -->
-                    <path d="M56,16 C62,12 70,13 74,17" stroke="rgba(242,108,56,0.55)" stroke-width="1.2" stroke-linecap="round"/>
-                    <path d="M86,17 C90,13 98,12 104,16" stroke="rgba(242,108,56,0.55)" stroke-width="1.2" stroke-linecap="round"/>
-                  </svg>
-
-                  <!-- Layer 4: AI chip + cyan neural network (front) -->
-                  <svg class="brain-layer brain-layer--chip" viewBox="0 0 160 140" fill="none" aria-hidden="true">
-                    <defs>
-                      <filter id="cyan-glow" x="-40%" y="-40%" width="180%" height="180%">
+                      <filter id="proc-glow" x="-50%" y="-50%" width="200%" height="200%">
                         <feGaussianBlur stdDeviation="2.5" result="blur"/>
                         <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
                       </filter>
+                      <filter id="proc-lg" x="-60%" y="-60%" width="220%" height="220%">
+                        <feGaussianBlur stdDeviation="14"/>
+                      </filter>
                     </defs>
-                    <!-- Neural lines from chip to brain surface -->
-                    <g stroke="#4FC3F7" stroke-width="1.2" stroke-linecap="round" opacity="0.72" filter="url(#cyan-glow)">
-                      <line x1="80" y1="56" x2="80"  y2="14"/>
-                      <line x1="72" y1="58" x2="46"  y2="22"/>
-                      <line x1="67" y1="65" x2="18"  y2="65"/>
-                      <line x1="71" y1="74" x2="30"  y2="104"/>
-                      <line x1="80" y1="74" x2="80"  y2="114"/>
-                      <line x1="89" y1="74" x2="130" y2="104"/>
-                      <line x1="93" y1="65" x2="142" y2="65"/>
-                      <line x1="88" y1="58" x2="114" y2="22"/>
+                    <!-- Ambient glow -->
+                    <ellipse cx="80" cy="80" rx="52" ry="52" fill="rgba(242,108,56,0.30)" filter="url(#proc-lg)"/>
+                    <!-- Circuit traces (8 directions, with 90° bends) -->
+                    <g stroke="#4FC3F7" stroke-width="1.2" stroke-linecap="round" opacity="0.68" filter="url(#proc-glow)">
+                      <polyline points="80,60 80,36 80,14"/>
+                      <polyline points="94,66 112,48 114,22"/>
+                      <polyline points="100,80 124,80 146,80"/>
+                      <polyline points="94,94 112,112 130,136"/>
+                      <polyline points="80,100 80,124 80,146"/>
+                      <polyline points="66,94 48,112 30,136"/>
+                      <polyline points="60,80 36,80 14,80"/>
+                      <polyline points="66,66 48,48 46,22"/>
                     </g>
-                    <!-- Neural nodes at endpoints -->
-                    <circle cx="80"  cy="14"  r="3.5" fill="#4FC3F7" class="nnode-0" filter="url(#cyan-glow)"/>
-                    <circle cx="46"  cy="22"  r="3"   fill="#00E5FF" class="nnode-1" filter="url(#cyan-glow)"/>
-                    <circle cx="18"  cy="65"  r="3"   fill="#4FC3F7" class="nnode-2" filter="url(#cyan-glow)"/>
-                    <circle cx="30"  cy="104" r="3"   fill="#00E5FF" class="nnode-3" filter="url(#cyan-glow)"/>
-                    <circle cx="80"  cy="114" r="3.5" fill="#4FC3F7" class="nnode-4" filter="url(#cyan-glow)"/>
-                    <circle cx="130" cy="104" r="3"   fill="#00E5FF" class="nnode-5" filter="url(#cyan-glow)"/>
-                    <circle cx="142" cy="65"  r="3"   fill="#4FC3F7" class="nnode-6" filter="url(#cyan-glow)"/>
-                    <circle cx="114" cy="22"  r="3"   fill="#00E5FF" class="nnode-7" filter="url(#cyan-glow)"/>
-                    <!-- AI chip body -->
-                    <rect x="67" y="56" width="26" height="18" rx="3.5"
-                      fill="rgba(8,12,28,0.90)" stroke="#F26C38" stroke-width="1.5"/>
-                    <!-- Chip circuit stubs -->
-                    <path d="M67,62 L61,62 M67,68 L61,68 M93,62 L99,62 M93,68 L99,68"
-                      stroke="rgba(79,195,247,0.55)" stroke-width="1" stroke-linecap="round"/>
-                    <path d="M74,56 L74,50 M86,56 L86,50 M74,74 L74,80 M86,74 L86,80"
-                      stroke="rgba(79,195,247,0.55)" stroke-width="1" stroke-linecap="round"/>
-                    <!-- "AI" label -->
-                    <text x="80" y="65" text-anchor="middle" dominant-baseline="middle"
-                      fill="#4FC3F7" font-size="8" font-family="Inter, sans-serif" font-weight="700" letter-spacing="1">AI</text>
+                    <!-- Endpoint nodes -->
+                    <circle cx="80"  cy="14"  r="3.5" fill="#4FC3F7" class="nnode-0" filter="url(#proc-glow)"/>
+                    <circle cx="114" cy="22"  r="3"   fill="#00E5FF" class="nnode-1" filter="url(#proc-glow)"/>
+                    <circle cx="146" cy="80"  r="3.5" fill="#4FC3F7" class="nnode-2" filter="url(#proc-glow)"/>
+                    <circle cx="130" cy="136" r="3"   fill="#00E5FF" class="nnode-3" filter="url(#proc-glow)"/>
+                    <circle cx="80"  cy="146" r="3.5" fill="#4FC3F7" class="nnode-4" filter="url(#proc-glow)"/>
+                    <circle cx="30"  cy="136" r="3"   fill="#00E5FF" class="nnode-5" filter="url(#proc-glow)"/>
+                    <circle cx="14"  cy="80"  r="3.5" fill="#4FC3F7" class="nnode-6" filter="url(#proc-glow)"/>
+                    <circle cx="46"  cy="22"  r="3"   fill="#00E5FF" class="nnode-7" filter="url(#proc-glow)"/>
+                    <!-- Chip body -->
+                    <rect x="56" y="56" width="48" height="48" rx="6"
+                      fill="rgba(8,12,28,0.93)" stroke="#F26C38" stroke-width="1.8"/>
+                    <!-- Inner chip detail -->
+                    <rect x="62" y="62" width="36" height="36" rx="4"
+                      fill="none" stroke="rgba(242,108,56,0.28)" stroke-width="1"/>
+                    <!-- Circuit stubs on chip edges -->
+                    <path d="M63,70 L56,70 M63,80 L56,80 M63,90 L56,90" stroke="rgba(79,195,247,0.5)" stroke-width="1" stroke-linecap="round"/>
+                    <path d="M97,70 L104,70 M97,80 L104,80 M97,90 L104,90" stroke="rgba(79,195,247,0.5)" stroke-width="1" stroke-linecap="round"/>
+                    <path d="M70,63 L70,56 M80,63 L80,56 M90,63 L90,56" stroke="rgba(79,195,247,0.5)" stroke-width="1" stroke-linecap="round"/>
+                    <path d="M70,97 L70,104 M80,97 L80,104 M90,97 L90,104" stroke="rgba(79,195,247,0.5)" stroke-width="1" stroke-linecap="round"/>
+                    <!-- SYS label -->
+                    <text x="80" y="83" text-anchor="middle" dominant-baseline="middle"
+                      fill="#4FC3F7" font-size="10" font-family="'Courier New', monospace" font-weight="700" letter-spacing="2">SYS</text>
                   </svg>
-
                 </div>
+              </div>
+
+              <!-- Phase 1: Diagnostic terminal -->
+              <div class="sim-terminal" id="sim-terminal">
+                <div class="sim-terminal__bar">
+                  <span class="sim-dot red"></span>
+                  <span class="sim-dot yellow"></span>
+                  <span class="sim-dot green"></span>
+                  <span class="sim-terminal__title">diagnostic.sys</span>
+                </div>
+                <div class="sim-terminal__body" id="sim-lines"></div>
+              </div>
+
+              <!-- Phase 3: AI Powered status -->
+              <div class="sim-status" id="sim-status">
+                <span class="sim-status__dot"></span>
+                AI Powered 24/7
               </div>
 
               <!-- Tool nodes — inner ring: n8n, Make, Zapier, GHL (4 main platforms) -->
@@ -3931,7 +3965,7 @@
     lastTs = ts;
 
     state.forEach(function (s) {
-      if (!paused) {
+      if (!paused && !window.simPhasePaused) {
         var spd = s.cfg.inner ? INNER_SPEED : OUTER_SPEED;
         s.angle = (s.angle + spd * dt) % 360;
       }
@@ -4005,6 +4039,86 @@
   renderInfo(0);
   setTools(SCENARIOS[0].tools);
   requestAnimationFrame(function () { moveInk(tabEls[0]); });
+})();
+</script>
+
+<!-- ─── NARRATIVE PHASE CONTROLLER ─── -->
+<script>
+(function () {
+  var hubEl    = document.getElementById('orbit-hub');
+  var termEl   = document.getElementById('sim-terminal');
+  var linesEl  = document.getElementById('sim-lines');
+  var statusEl = document.getElementById('sim-status');
+  var procEl   = document.getElementById('processor-wrap');
+  if (!hubEl || !termEl || !linesEl || !statusEl) return;
+
+  var LINES = [
+    { text: '$ scanning workflow...', cls: 'sim-line--cmd'  },
+    { text: '→ Manual follow-ups: untracked', cls: 'sim-line--warn' },
+    { text: '→ Missed leads: ~23/day',         cls: 'sim-line--warn' },
+    { text: '→ Repetitive tasks: 4hrs/week',   cls: 'sim-line--warn' },
+    { text: '→ Diagnosis complete. Building…', cls: 'sim-line--done' }
+  ];
+
+  var phaseTimer = null;
+  var lineTimer  = null;
+
+  function clear() {
+    clearTimeout(phaseTimer);
+    clearTimeout(lineTimer);
+  }
+
+  function setPhase(name) {
+    hubEl.classList.remove('phase-diagnose', 'phase-build', 'phase-run');
+    if (name) hubEl.classList.add('phase-' + name);
+  }
+
+  function typeLines(cb) {
+    linesEl.innerHTML = '';
+    var i = 0;
+    (function next() {
+      if (i >= LINES.length) { cb(); return; }
+      var span = document.createElement('span');
+      span.className = 'sim-line ' + LINES[i].cls;
+      span.textContent = LINES[i].text;
+      linesEl.appendChild(span);
+      i++;
+      lineTimer = setTimeout(next, 430);
+    })();
+  }
+
+  function phase1() {
+    clear();
+    window.simPhasePaused = false;
+    setPhase('diagnose');
+    if (procEl) procEl.classList.remove('is-active');
+    statusEl.classList.remove('is-visible');
+    termEl.classList.add('is-visible');
+    typeLines(function () {
+      phaseTimer = setTimeout(phase2, 500);
+    });
+  }
+
+  function phase2() {
+    clear();
+    setPhase('build');
+    termEl.classList.remove('is-visible');
+    if (procEl) procEl.classList.add('is-active');
+    phaseTimer = setTimeout(phase3, 2800);
+  }
+
+  function phase3() {
+    clear();
+    window.simPhasePaused = true;
+    setPhase('run');
+    statusEl.classList.add('is-visible');
+    phaseTimer = setTimeout(function () {
+      statusEl.classList.remove('is-visible');
+      phaseTimer = setTimeout(phase1, 500);
+    }, 2800);
+  }
+
+  setTimeout(phase1, 900);
 })();
 </script>
 
