@@ -102,7 +102,6 @@
   var backdrop   = null;
   var vapiState  = 'idle'; // 'idle' | 'connecting' | 'active'
   var vapiInst   = null;
-  var vapiWired  = false;
 
   function setFabIdle() {
     vapiState = 'idle';
@@ -187,13 +186,16 @@
 
     if (action === 'voice') {
       if (vapiState !== 'idle') return;
-      vapiInst = window.vapiInstance;
       if (!vapiInst) {
-        showVoiceError('⏳ Voice loading... try again in a moment');
-        return;
-      }
-      if (!vapiWired) {
-        vapiWired = true;
+        if (!window.vapiSDK) {
+          showVoiceError('⏳ Still loading — try again in a moment');
+          return;
+        }
+        vapiInst = window.vapiSDK.run({
+          apiKey:    'f19760ad-d976-43e5-80df-6a6f6cec71bb',
+          assistant: VAPI_ASSISTANT_ID,
+          config:    {}
+        });
         vapiInst.on('call-start', function () { setFabActive(); });
         vapiInst.on('call-end',   function () { setFabIdle(); });
         vapiInst.on('error',      function (e) {
