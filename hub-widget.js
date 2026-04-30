@@ -192,9 +192,9 @@
           return;
         }
         vapiInst = window.vapiSDK.run({
-          apiKey:    'f19760ad-d976-43e5-80df-6a6f6cec71bb',
-          assistant: VAPI_ASSISTANT_ID,
-          config:    {}
+          apiKey:       'f19760ad-d976-43e5-80df-6a6f6cec71bb',
+          assistant:    VAPI_ASSISTANT_ID,
+          buttonConfig: { position: 'bottom-right', offset: '-9999px' }
         });
         vapiInst.on('call-start', function () { setFabActive(); });
         vapiInst.on('call-end',   function () { setFabIdle(); });
