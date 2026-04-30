@@ -188,24 +188,28 @@
       if (vapiState !== 'idle') return;
       closeMenu();
       setFabConnecting();
-      import('https://cdn.jsdelivr.net/npm/@vapi-ai/web/+esm')
+      import('https://esm.sh/@vapi-ai/web')
         .then(function (m) {
           var VapiClass = m.default;
           vapiInst = new VapiClass(VAPI_PUBLIC_KEY);
           vapiInst.on('call-start', function () { setFabActive(); });
           vapiInst.on('call-end',   function () { setFabIdle(); vapiInst = null; });
           vapiInst.on('error',      function (e) {
+            console.error('[VAPI error]', e);
             setFabIdle();
             vapiInst = null;
             var msg = (e && e.message && e.message.toLowerCase().includes('permission'))
               ? '❌ Mic blocked — check browser settings'
               : '❌ Connection failed — try again';
+            openMenu();
             showVoiceError(msg);
           });
           return vapiInst.start(VAPI_ASSISTANT_ID);
         })
-        .catch(function () {
+        .catch(function (err) {
+          console.error('[VAPI load error]', err);
           setFabIdle();
+          openMenu();
           showVoiceError('❌ Failed to load voice SDK');
         });
       return;
