@@ -187,6 +187,7 @@
     if (action === 'voice') {
       if (vapiState !== 'idle') return;
       if (!vapiInst) {
+        console.log('[VAPI] vapiSDK available:', typeof window.vapiSDK);
         if (!window.vapiSDK) {
           showVoiceError('⏳ Still loading — try again in a moment');
           return;
