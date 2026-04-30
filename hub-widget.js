@@ -1,7 +1,6 @@
 (function () {
   'use strict';
 
-  var VAPI_PUBLIC_KEY   = 'f19760ad-d976-43e5-80df-6a6f6cec71bb';
   var VAPI_ASSISTANT_ID = 'cc2e1700-d4e2-4ce4-9839-dcb8956dcc1b';
 
   /* ── CSS ── */
@@ -26,6 +25,7 @@
     '.hub-soon{font-size:9px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;background:linear-gradient(135deg,#F26C38,#D72F58);color:#fff;border-radius:4px;padding:2px 5px;margin-left:6px;vertical-align:middle;display:inline-block;line-height:1.4}',
 
     '#rc-hub-backdrop{position:fixed;inset:0;z-index:99998;background:transparent}',
+    '#vapi-support-btn{display:none!important;pointer-events:none!important}',
 
     '@media(max-width:420px){.hub-opt{padding:9px 12px 9px 10px}.hub-opt-icon{width:30px;height:30px;font-size:15px}}',
 
@@ -102,6 +102,7 @@
   var backdrop   = null;
   var vapiState  = 'idle'; // 'idle' | 'connecting' | 'active'
   var vapiInst   = null;
+  var vapiWired  = false;
 
   function setFabIdle() {
     vapiState = 'idle';
@@ -172,7 +173,7 @@
   fab.addEventListener('click', function (e) {
     e.stopPropagation();
     if (vapiState === 'active' || vapiState === 'connecting') {
-      if (vapiInst) vapiInst.stop();
+      if (window.vapiInstance) window.vapiInstance.stop();
       setFabIdle();
       return;
     }
@@ -186,32 +187,28 @@
 
     if (action === 'voice') {
       if (vapiState !== 'idle') return;
+      vapiInst = window.vapiInstance;
+      if (!vapiInst) {
+        showVoiceError('⏳ Voice loading... try again in a moment');
+        return;
+      }
+      if (!vapiWired) {
+        vapiWired = true;
+        vapiInst.on('call-start', function () { setFabActive(); });
+        vapiInst.on('call-end',   function () { setFabIdle(); });
+        vapiInst.on('error',      function (e) {
+          console.error('[VAPI error]', e);
+          setFabIdle();
+          var msg = (e && e.message && e.message.toLowerCase().includes('permission'))
+            ? '❌ Mic blocked — check browser settings'
+            : '❌ Connection failed — try again';
+          openMenu();
+          showVoiceError(msg);
+        });
+      }
       closeMenu();
       setFabConnecting();
-      import('https://esm.sh/@vapi-ai/web')
-        .then(function (m) {
-          var VapiClass = m.default;
-          vapiInst = new VapiClass(VAPI_PUBLIC_KEY);
-          vapiInst.on('call-start', function () { setFabActive(); });
-          vapiInst.on('call-end',   function () { setFabIdle(); vapiInst = null; });
-          vapiInst.on('error',      function (e) {
-            console.error('[VAPI error]', e);
-            setFabIdle();
-            vapiInst = null;
-            var msg = (e && e.message && e.message.toLowerCase().includes('permission'))
-              ? '❌ Mic blocked — check browser settings'
-              : '❌ Connection failed — try again';
-            openMenu();
-            showVoiceError(msg);
-          });
-          return vapiInst.start(VAPI_ASSISTANT_ID);
-        })
-        .catch(function (err) {
-          console.error('[VAPI load error]', err);
-          setFabIdle();
-          openMenu();
-          showVoiceError('❌ Failed to load voice SDK');
-        });
+      vapiInst.start(VAPI_ASSISTANT_ID);
       return;
     }
 
