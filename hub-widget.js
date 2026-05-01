@@ -1,8 +1,6 @@
 (function () {
   'use strict';
 
-  var VAPI_ASSISTANT_ID = 'cc2e1700-d4e2-4ce4-9839-dcb8956dcc1b';
-
   /* ── CSS ── */
   var style = document.createElement('style');
   style.textContent = [
@@ -25,15 +23,8 @@
     '.hub-soon{font-size:9px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;background:linear-gradient(135deg,#F26C38,#D72F58);color:#fff;border-radius:4px;padding:2px 5px;margin-left:6px;vertical-align:middle;display:inline-block;line-height:1.4}',
 
     '#rc-hub-backdrop{position:fixed;inset:0;z-index:99998;background:transparent}',
-    '#vapi-support-btn{display:none!important;pointer-events:none!important}',
 
-    '@media(max-width:420px){.hub-opt{padding:9px 12px 9px 10px}.hub-opt-icon{width:30px;height:30px;font-size:15px}}',
-
-    '#rc-hub-fab.hub-connecting{background:linear-gradient(135deg,#F26C38,#D72F58);animation:none;position:relative}',
-    '#rc-hub-fab.hub-connecting::after{content:"";position:absolute;inset:-3px;border-radius:50%;border:3px solid transparent;border-top-color:#fff;animation:hub-spin .75s linear infinite}',
-    '@keyframes hub-spin{to{transform:rotate(360deg)}}',
-    '#rc-hub-fab.hub-call-active{background:#EF4444;animation:hub-call-pulse 1s ease-in-out infinite}',
-    '@keyframes hub-call-pulse{0%,100%{box-shadow:0 0 10px rgba(239,68,68,.6),0 0 28px rgba(239,68,68,.25)}50%{box-shadow:0 0 22px rgba(239,68,68,.9),0 0 55px rgba(239,68,68,.45)}}'
+    '@media(max-width:420px){.hub-opt{padding:9px 12px 9px 10px}.hub-opt-icon{width:30px;height:30px;font-size:15px}}'
   ].join('');
   document.head.appendChild(style);
 
@@ -46,8 +37,8 @@
       '<button class="hub-opt" data-action="voice" role="menuitem">',
         '<span class="hub-opt-icon" style="background:rgba(167,139,250,.14)">🎤</span>',
         '<span class="hub-opt-text">',
-          '<span class="hub-opt-label">Voice Receptionist</span>',
-          '<span class="hub-opt-sub" id="hub-voice-sub">Talk to my AI booking assistant</span>',
+          '<span class="hub-opt-label">Voice Receptionist<span class="hub-soon">Soon</span></span>',
+          '<span class="hub-opt-sub" id="hub-voice-sub">Talk to Roc AI booking receptionist</span>',
         '</span>',
       '</button>',
 
@@ -84,10 +75,6 @@
       '<svg id="hub-icon-open" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:none">',
         '<path d="M18 6L6 18M6 6l12 12"/>',
       '</svg>',
-      '<svg id="hub-icon-mic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none">',
-        '<rect x="9" y="2" width="6" height="11" rx="3"/>',
-        '<path d="M19 10a7 7 0 0 1-14 0M12 19v3M9 22h6"/>',
-      '</svg>',
     '</button>'
   ].join('');
   document.body.appendChild(hub);
@@ -96,49 +83,9 @@
   var menu       = document.getElementById('rc-hub-menu');
   var iconClosed = document.getElementById('hub-icon-closed');
   var iconOpen   = document.getElementById('hub-icon-open');
-  var iconMic    = document.getElementById('hub-icon-mic');
   var voiceSub   = document.getElementById('hub-voice-sub');
   var isOpen     = false;
   var backdrop   = null;
-  var vapiState  = 'idle'; // 'idle' | 'connecting' | 'active'
-  var vapiInst   = null;
-
-  function setFabIdle() {
-    vapiState = 'idle';
-    fab.classList.remove('hub-connecting', 'hub-call-active');
-    fab.style.animation = '';
-    iconClosed.style.display = 'block';
-    iconOpen.style.display   = 'none';
-    iconMic.style.display    = 'none';
-  }
-
-  function setFabConnecting() {
-    vapiState = 'connecting';
-    fab.classList.add('hub-connecting');
-    fab.classList.remove('hub-call-active');
-    iconClosed.style.display = 'none';
-    iconOpen.style.display   = 'none';
-    iconMic.style.display    = 'none';
-  }
-
-  function setFabActive() {
-    vapiState = 'active';
-    fab.classList.remove('hub-connecting');
-    fab.classList.add('hub-call-active');
-    iconClosed.style.display = 'none';
-    iconOpen.style.display   = 'none';
-    iconMic.style.display    = 'block';
-  }
-
-  function showVoiceError(msg) {
-    var orig = voiceSub.textContent;
-    voiceSub.textContent = msg;
-    voiceSub.style.color = '#EF4444';
-    setTimeout(function () {
-      voiceSub.textContent = orig;
-      voiceSub.style.color = '';
-    }, 3000);
-  }
 
   function onBackdropClick() { closeMenu(); }
 
@@ -171,11 +118,6 @@
 
   fab.addEventListener('click', function (e) {
     e.stopPropagation();
-    if (vapiState === 'active' || vapiState === 'connecting') {
-      if (window.vapiInstance) window.vapiInstance.stop();
-      setFabIdle();
-      return;
-    }
     if (isOpen) closeMenu(); else openMenu();
   });
 
@@ -185,33 +127,14 @@
     var action = btn.getAttribute('data-action');
 
     if (action === 'voice') {
-      if (vapiState !== 'idle') return;
-      if (!vapiInst) {
-        console.log('[VAPI] vapiSDK available:', typeof window.vapiSDK);
-        if (!window.vapiSDK) {
-          showVoiceError('⏳ Still loading — try again in a moment');
-          return;
-        }
-        vapiInst = window.vapiSDK.run({
-          apiKey:       'f19760ad-d976-43e5-80df-6a6f6cec71bb',
-          assistant:    VAPI_ASSISTANT_ID,
-          buttonConfig: { position: 'bottom-right', offset: '-9999px' }
-        });
-        vapiInst.on('call-start', function () { setFabActive(); });
-        vapiInst.on('call-end',   function () { setFabIdle(); });
-        vapiInst.on('error',      function (e) {
-          console.error('[VAPI error]', e);
-          setFabIdle();
-          var msg = (e && e.message && e.message.toLowerCase().includes('permission'))
-            ? '❌ Mic blocked — check browser settings'
-            : '❌ Connection failed — try again';
-          openMenu();
-          showVoiceError(msg);
-        });
-      }
-      closeMenu();
-      setFabConnecting();
-      vapiInst.start(VAPI_ASSISTANT_ID);
+      var orig = voiceSub.textContent;
+      if (orig === '🚀 Coming soon — stay tuned!') return;
+      voiceSub.textContent = '🚀 Coming soon — stay tuned!';
+      btn.style.borderColor = 'rgba(242,108,56,.6)';
+      setTimeout(function () {
+        voiceSub.textContent = orig;
+        btn.style.borderColor = '';
+      }, 2500);
       return;
     }
 
