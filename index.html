@@ -2262,6 +2262,43 @@
       border-color: rgba(242,108,56,0.65);
       box-shadow: 0 0 12px rgba(242,108,56,0.2), inset 0 0 8px rgba(242,108,56,0.04);
     }
+    .sim-audit-board {
+      width: 100%;
+      background: rgba(6,9,18,0.97);
+      border: 1px solid rgba(242,108,56,0.28);
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    #sim-p1:hover .sim-audit-board {
+      border-color: rgba(242,108,56,0.65);
+      box-shadow: 0 0 12px rgba(242,108,56,0.2), inset 0 0 8px rgba(242,108,56,0.04);
+    }
+    .sim-audit-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 5px 10px;
+      border-bottom: 1px solid rgba(242,108,56,0.12);
+    }
+    .sim-audit-title {
+      font-family: 'Courier New', monospace;
+      font-size: 10px; font-weight: 600; letter-spacing: 0.05em;
+      color: rgba(255,255,255,0.6);
+    }
+    .sim-audit-badge {
+      font-family: 'Courier New', monospace;
+      font-size: 9px;
+      background: rgba(242,108,56,0.12);
+      color: rgba(242,108,56,0.9);
+      border: 1px solid rgba(242,108,56,0.28);
+      border-radius: 4px;
+      padding: 1px 6px;
+      animation: audit-pulse 2s ease-in-out infinite;
+    }
+    @keyframes audit-pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.45; }
+    }
     .sim-mini-bar {
       display: flex; gap: 4px; align-items: center;
       padding: 4px 7px;
@@ -2456,11 +2493,10 @@
               <!-- Panel 1: Diagnose -->
               <div class="sim-panel" id="sim-p1">
                 <div class="sim-panel__visual">
-                  <div class="sim-mini-terminal">
-                    <div class="sim-mini-bar">
-                      <span class="sim-dot red"></span>
-                      <span class="sim-dot yellow"></span>
-                      <span class="sim-dot green"></span>
+                  <div class="sim-audit-board">
+                    <div class="sim-audit-header">
+                      <span class="sim-audit-title">Workflow Audit</span>
+                      <span class="sim-audit-badge">&#x25CF; Scanning</span>
                     </div>
                     <div class="sim-mini-lines" id="mini-lines"></div>
                   </div>
@@ -4347,10 +4383,11 @@
   if (!panels[0]) return;
 
   var LINES = [
-    { text: '$ scanning workflow...', cls: 'sim-line--cmd'  },
-    { text: '→ Manual tasks: untracked',  cls: 'sim-line--warn' },
-    { text: '→ Missed leads: ~23/day',    cls: 'sim-line--warn' },
-    { text: '→ Diagnosis complete.',      cls: 'sim-line--done' }
+    { text: '⬡ Scanning workflow...',         cls: 'sim-line--cmd'  },
+    { text: '→ Leads entered by hand  ⚠',    cls: 'sim-line--warn' },
+    { text: '→ Follow-ups missed daily ⚠',   cls: 'sim-line--warn' },
+    { text: '→ Reports rebuilt weekly  ⚠',   cls: 'sim-line--warn' },
+    { text: '✓ 3 revenue leaks mapped.',      cls: 'sim-line--done' }
   ];
 
   var phaseTimer = null;
