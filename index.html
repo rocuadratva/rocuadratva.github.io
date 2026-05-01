@@ -2210,36 +2210,6 @@
       to   { transform: translate(10%, 10%);   opacity: 1;    }
     }
     .sim-connector { display: none; }
-    /* ── Timeline strip ── */
-    .sim-timeline {
-      display: flex; align-items: center;
-      width: 100%; max-width: 360px;
-      margin: 22px auto 0;
-      gap: 8px;
-    }
-    .sim-tl-dot {
-      width: 8px; height: 8px; border-radius: 50%;
-      background: rgba(255,255,255,0.15);
-      flex-shrink: 0;
-      transition: background 0.5s, box-shadow 0.5s;
-    }
-    .sim-tl-dot.is-active {
-      background: #F26C38;
-      box-shadow: 0 0 10px rgba(242,108,56,0.75);
-    }
-    .sim-tl-dot.is-done { background: rgba(242,108,56,0.4); }
-    .sim-tl-bar {
-      flex: 1; height: 2px;
-      background: rgba(255,255,255,0.1);
-      border-radius: 1px;
-      position: relative; overflow: hidden;
-    }
-    .sim-tl-fill {
-      position: absolute; top: 0; left: 0;
-      height: 100%; width: 0%;
-      background: linear-gradient(90deg, #F26C38, #D72F58);
-      border-radius: 1px;
-    }
     .sim-panel__visual {
       width: 100%; min-height: 160px; max-height: 160px; overflow: hidden;
       display: flex; align-items: flex-start; justify-content: center;
@@ -2577,15 +2547,6 @@
                 </div>
               </div>
 
-            </div>
-
-            <!-- Timeline strip -->
-            <div class="sim-timeline" id="sim-timeline" aria-hidden="true">
-              <span class="sim-tl-dot is-active" data-ti="0"></span>
-              <span class="sim-tl-bar" data-ti="0"><span class="sim-tl-fill"></span></span>
-              <span class="sim-tl-dot" data-ti="1"></span>
-              <span class="sim-tl-bar" data-ti="1"><span class="sim-tl-fill"></span></span>
-              <span class="sim-tl-dot" data-ti="2"></span>
             </div>
 
           </div>
@@ -4492,8 +4453,6 @@
   var miniLinesEl = document.getElementById('mini-lines');
   var heroOrbEl   = document.getElementById('hero-phase-orb');
   var showcase    = document.querySelector('.sim-showcase');
-  var tlDots      = document.querySelectorAll('.sim-tl-dot');
-  var tlFills     = document.querySelectorAll('.sim-tl-fill');
 
   if (!panels[0]) return;
 
@@ -4517,7 +4476,6 @@
   var phaseTimer   = null;
   var lineTimer    = null;
   var breatheTween = null;
-  var tlTween      = null;
   var phaseStart   = null;
 
   function clearTimers() {
@@ -4543,30 +4501,11 @@
         rotationY: tiltY,
         rotationX: 0,
         opacity:   isActive ? 1 : 0.25,
-        filter:    isActive ? 'blur(0px)' : 'blur(2px)',
+        filter:    'blur(0px)',
         duration:  0.7,
         ease:      'power2.inOut',
         overwrite: 'auto'
       });
-    });
-
-    // Timeline dots
-    tlDots.forEach(function (d, i) {
-      d.classList.toggle('is-active', i === idx);
-      d.classList.toggle('is-done',   i < idx);
-    });
-
-    // Timeline fill bars
-    if (tlTween) { tlTween.kill(); tlTween = null; }
-    tlFills.forEach(function (f, i) {
-      if (i < idx) {
-        gsap.set(f, { width: '100%' });
-      } else if (i === idx) {
-        gsap.set(f, { width: '0%' });
-        tlTween = gsap.to(f, { width: '100%', duration: dur, ease: 'none' });
-      } else {
-        gsap.set(f, { width: '0%' });
-      }
     });
 
     // Orb color temperature
@@ -4641,7 +4580,6 @@
     if (breatheTween) { breatheTween.kill(); breatheTween = null; }
     var ap = panels[activeIdx];
     if (ap) gsap.to(ap, { scale: 1.06, z: 55, duration: 0.5, ease: 'power2.out', overwrite: 'auto' });
-    if (tlTween) { tlTween.kill(); tlTween = null; }
     var idx = activeIdx;
     if (ap) ap.classList.remove('is-active');
     setTimeout(function () { advanceToPhase(idx); }, 60);
