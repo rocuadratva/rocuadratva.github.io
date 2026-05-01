@@ -2227,7 +2227,7 @@
       to   { opacity: 1; }
     }
     .sim-panel__visual {
-      width: 100%; min-height: 180px;
+      width: 100%; flex: 1;
       display: flex; align-items: center; justify-content: center;
     }
     /* Mini terminal */
@@ -2303,65 +2303,90 @@
       border-bottom: 1px solid rgba(242,108,56,0.12);
     }
     .sim-mini-lines { padding: 10px 11px; min-height: 100px; line-height: 1.9; color: #909090; }
-    /* Fix-Applied card (Panel 2) */
-    .sim-fix-card {
-      width: 100%; max-width: 172px;
-      display: flex; flex-direction: column; gap: 7px;
+    /* ── Panel 2: Fix Board ── */
+    .sim-fix-board {
+      width: 100%;
+      background: rgba(6,9,18,0.97);
+      border: 1px solid rgba(242,108,56,0.28);
+      border-radius: 8px; overflow: hidden;
     }
-    .sim-fix-title {
-      font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.35);
-      text-transform: uppercase; letter-spacing: 0.12em;
-      font-family: 'Courier New', monospace; margin-bottom: 2px;
+    .sim-fix-board__header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 5px 10px;
+      border-bottom: 1px solid rgba(242,108,56,0.12);
+    }
+    .sim-fix-board__title {
+      font-family: 'Courier New', monospace;
+      font-size: 10px; font-weight: 600; letter-spacing: 0.05em;
+      color: rgba(255,255,255,0.6);
+    }
+    .sim-fix-board__badge {
+      font-family: 'Courier New', monospace; font-size: 9px;
+      background: rgba(242,108,56,0.12);
+      color: rgba(242,108,56,0.9);
+      border: 1px solid rgba(242,108,56,0.28);
+      border-radius: 4px; padding: 1px 6px;
+      transition: color 0.3s, background 0.3s, border-color 0.3s;
+    }
+    .sim-fix-board__body {
+      padding: 10px 11px;
+      display: flex; flex-direction: column; gap: 0;
     }
     .sim-fix-row {
-      display: flex; align-items: center; gap: 5px;
-      font-family: 'Courier New', monospace; font-size: 9px; white-space: nowrap;
+      display: flex; align-items: center; gap: 6px;
+      font-family: 'Courier New', monospace; font-size: 9px; line-height: 2;
     }
-    .sim-fix-icon {
-      font-size: 10px; width: 13px; flex-shrink: 0;
-      color: #F26C38; transition: color 0.25s;
+    .sim-fix-old {
+      color: rgba(242,108,56,0.8);
+      position: relative;
+      transition: opacity 0.3s;
     }
-    .sim-fix-icon.is-fixed { color: #00e676; }
-    .sim-fix-label { color: rgba(255,255,255,0.4); }
-    .sim-fix-result { color: rgba(79,195,247,0.65); flex-shrink: 0; }
-    /* Run visual */
-    .sim-run-visual { display: flex; flex-direction: column; align-items: center; gap: 8px; }
-    /* Dot wrapper holds the green dot + expanding pulse rings */
-    .sim-dot-wrap { position: relative; width: 12px; height: 12px; }
-    .sim-run-dot {
-      width: 12px; height: 12px; background: #00e676; border-radius: 50%;
-      animation: blink-dot 1.5s ease-in-out infinite;
-      box-shadow: 0 0 10px rgba(0,230,118,0.9), 0 0 24px rgba(0,230,118,0.45);
-      position: relative; z-index: 1;
+    .sim-fix-old::after {
+      content: ''; position: absolute; left: 0; top: 50%;
+      width: 0; height: 1px;
+      background: rgba(242,108,56,0.8);
+      transition: width 0.3s ease;
     }
-    .sim-pulse-ring {
-      position: absolute;
-      inset: 0; border-radius: 50%;
-      border: 1.5px solid rgba(0,230,118,0.7);
-      opacity: 0; pointer-events: none;
+    .sim-fix-old.is-struck::after { width: 100%; }
+    .sim-fix-old.is-struck { opacity: 0.35; }
+    .sim-fix-new {
+      color: rgba(79,195,247,0.9);
+      opacity: 0; transition: opacity 0.35s;
     }
-    #sim-p3.is-active .sim-pulse-ring:nth-child(2) { animation: pulse-ring 2s ease-out infinite 0s;    }
-    #sim-p3.is-active .sim-pulse-ring:nth-child(3) { animation: pulse-ring 2s ease-out infinite 0.65s; }
-    #sim-p3.is-active .sim-pulse-ring:nth-child(4) { animation: pulse-ring 2s ease-out infinite 1.3s;  }
-    #sim-p3:hover    .sim-pulse-ring:nth-child(2)  { animation: pulse-ring 2s ease-out infinite 0s;    }
-    #sim-p3:hover    .sim-pulse-ring:nth-child(3)  { animation: pulse-ring 2s ease-out infinite 0.65s; }
-    #sim-p3:hover    .sim-pulse-ring:nth-child(4)  { animation: pulse-ring 2s ease-out infinite 1.3s;  }
-    @keyframes pulse-ring {
-      0%   { transform: scale(0.8); opacity: 0.75; }
-      100% { transform: scale(4.5); opacity: 0; }
+    .sim-fix-new.is-visible { opacity: 1; }
+    /* ── Panel 3: Run Board ── */
+    .sim-run-board {
+      width: 100%;
+      background: rgba(6,9,18,0.97);
+      border: 1px solid rgba(242,108,56,0.28);
+      border-radius: 8px; overflow: hidden;
     }
-    .sim-live-badge {
-      font-size: 10px; font-weight: 700;
-      color: #00e676; letter-spacing: 0.1em;
+    .sim-run-board__header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 5px 10px;
+      border-bottom: 1px solid rgba(242,108,56,0.12);
+    }
+    .sim-run-board__title {
       font-family: 'Courier New', monospace;
-      opacity: 0.85;
+      font-size: 10px; font-weight: 600; letter-spacing: 0.05em;
+      color: rgba(255,255,255,0.6);
+    }
+    .sim-run-board__badge {
+      font-family: 'Courier New', monospace; font-size: 9px;
+      background: rgba(0,230,118,0.1);
+      color: #00e676;
+      border: 1px solid rgba(0,230,118,0.3);
+      border-radius: 4px; padding: 1px 6px;
+      animation: audit-pulse 2s ease-in-out infinite;
+    }
+    .sim-run-board__body {
+      padding: 8px 11px; overflow: hidden;
+      display: flex; flex-direction: column; gap: 3px;
     }
     /* Scrolling event log on Panel 3 */
     .sim-event-log {
-      width: 100%; max-width: 164px;
-      min-height: 50px; overflow: hidden;
+      width: 100%; overflow: hidden;
       display: flex; flex-direction: column; gap: 3px;
-      margin-top: 4px;
     }
     .sim-event-line {
       display: flex; align-items: center; gap: 4px;
@@ -2476,22 +2501,24 @@
               <!-- Panel 2: Fix -->
               <div class="sim-panel" id="sim-p2">
                 <div class="sim-panel__visual">
-                  <div class="sim-fix-card" id="sim-fix-card">
-                    <div class="sim-fix-title">Fix Applied</div>
-                    <div class="sim-fix-row">
-                      <span class="sim-fix-icon">⚠</span>
-                      <span class="sim-fix-label">leads by hand</span>
-                      <span class="sim-fix-result">→ CRM auto-log</span>
+                  <div class="sim-fix-board">
+                    <div class="sim-fix-board__header">
+                      <span class="sim-fix-board__title">Fix Applied</span>
+                      <span class="sim-fix-board__badge" id="sim-fix-badge">&#x25CF; Pending</span>
                     </div>
-                    <div class="sim-fix-row">
-                      <span class="sim-fix-icon">⚠</span>
-                      <span class="sim-fix-label">follow-ups missed</span>
-                      <span class="sim-fix-result">→ auto-reminded</span>
-                    </div>
-                    <div class="sim-fix-row">
-                      <span class="sim-fix-icon">⚠</span>
-                      <span class="sim-fix-label">reports rebuilt</span>
-                      <span class="sim-fix-result">→ auto-generated</span>
+                    <div class="sim-fix-board__body">
+                      <div class="sim-fix-row">
+                        <span class="sim-fix-old">leads by hand</span>
+                        <span class="sim-fix-new">→ CRM auto-log</span>
+                      </div>
+                      <div class="sim-fix-row">
+                        <span class="sim-fix-old">missed follow-ups</span>
+                        <span class="sim-fix-new">→ auto-reminded</span>
+                      </div>
+                      <div class="sim-fix-row">
+                        <span class="sim-fix-old">reports rebuilt</span>
+                        <span class="sim-fix-new">→ auto-generated</span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -2517,15 +2544,12 @@
               <!-- Panel 3: Automated -->
               <div class="sim-panel" id="sim-p3">
                 <div class="sim-panel__visual">
-                  <div class="sim-run-visual">
-                    <div class="sim-dot-wrap">
-                      <div class="sim-run-dot"></div>
-                      <div class="sim-pulse-ring"></div>
-                      <div class="sim-pulse-ring"></div>
-                      <div class="sim-pulse-ring"></div>
+                  <div class="sim-run-board">
+                    <div class="sim-run-board__header">
+                      <span class="sim-run-board__title">Live Automation</span>
+                      <span class="sim-run-board__badge">&#x25CF; LIVE · 24/7</span>
                     </div>
-                    <div class="sim-live-badge">● LIVE · 24/7</div>
-                    <div class="sim-event-log" id="sim-event-log"></div>
+                    <div class="sim-run-board__body" id="sim-event-log"></div>
                   </div>
                 </div>
                 <div class="sim-panel__footer">
@@ -4408,24 +4432,40 @@
 <!-- ─── GSAP (event log on Panel 3) ─── -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script>
-(function initFixCard() {
-  var p2 = document.getElementById('sim-p2');
+(function initFixBoard() {
+  var p2    = document.getElementById('sim-p2');
+  var badge = document.getElementById('sim-fix-badge');
   if (!p2) return;
-  var icons = p2.querySelectorAll('.sim-fix-icon');
+  var rows  = p2.querySelectorAll('.sim-fix-row');
 
   function activate() {
-    icons.forEach(function(icon, i) {
+    rows.forEach(function(row, i) {
       setTimeout(function() {
-        icon.textContent = '✓';
-        icon.classList.add('is-fixed');
-      }, i * 320);
+        var old = row.querySelector('.sim-fix-old');
+        var nw  = row.querySelector('.sim-fix-new');
+        if (old) old.classList.add('is-struck');
+        setTimeout(function() {
+          if (nw) nw.classList.add('is-visible');
+          if (i === rows.length - 1 && badge) {
+            badge.textContent = '✓ 3/3 done';
+            badge.style.cssText = 'color:#00e676;background:rgba(0,230,118,0.1);border-color:rgba(0,230,118,0.3)';
+          }
+        }, 220);
+      }, i * 400);
     });
   }
+
   function reset() {
-    icons.forEach(function(icon) {
-      icon.textContent = '⚠';
-      icon.classList.remove('is-fixed');
+    rows.forEach(function(row) {
+      var old = row.querySelector('.sim-fix-old');
+      var nw  = row.querySelector('.sim-fix-new');
+      if (old) old.classList.remove('is-struck');
+      if (nw)  nw.classList.remove('is-visible');
     });
+    if (badge) {
+      badge.textContent = '● Pending';
+      badge.style.cssText = '';
+    }
   }
 
   new MutationObserver(function() {
@@ -4441,14 +4481,14 @@
   if (!p3 || !log) return;
 
   var EVENTS = [
-    ['Lead captured',        '→ Notion'       ],
-    ['Follow-up email sent', '→ client@co.com'],
-    ['Slack notified',       '→ #new-clients' ],
-    ['Invoice drafted',      '→ PDF export'   ],
-    ['CRM updated',          '→ HubSpot'      ],
-    ['Task scheduled',       '→ Monday.com'   ],
-    ['Report generated',     '→ Google Drive' ],
-    ['Webhook triggered',    '→ n8n workflow' ],
+    ['Lead auto-logged',     '→ CRM'          ],
+    ['Follow-up sent',       '→ client'       ],
+    ['Report generated',     '→ Drive'        ],
+    ['New lead captured',    '→ CRM logged'   ],
+    ['Missed follow-up',     '→ auto-reminded'],
+    ['Weekly report',        '→ auto-sent'    ],
+    ['Lead auto-logged',     '→ CRM'          ],
+    ['Follow-up queued',     '→ auto-seq'     ],
   ];
 
   var MAX   = 3;      // max lines visible at once
