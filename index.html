@@ -2160,9 +2160,8 @@
       border-radius: 18px;
       padding: 28px 20px 22px;
       display: flex; flex-direction: column; align-items: center; gap: 16px;
-      transition: border-color 0.4s, box-shadow 0.4s, opacity 0.4s, transform 0.4s;
+      transition: border-color 0.4s, box-shadow 0.4s, opacity 0.4s;
       opacity: 0.28;
-      transform: scale(0.96);
       position: relative;
       overflow: hidden;
     }
@@ -2170,7 +2169,6 @@
       border-color: rgba(242,108,56,0.7);
       box-shadow: 0 0 40px rgba(242,108,56,0.22), 0 10px 30px rgba(0,0,0,0.5), inset 0 0 20px rgba(242,108,56,0.06);
       opacity: 1;
-      transform: scale(1.05);
     }
     /* Ambient glow drift */
     .sim-panel::before {
@@ -2305,73 +2303,27 @@
       border-bottom: 1px solid rgba(242,108,56,0.12);
     }
     .sim-mini-lines { padding: 10px 11px; min-height: 100px; line-height: 1.9; color: #909090; }
-    /* Mini orbital */
-    .sim-mini-orbit { position: relative; width: 160px; height: 160px; }
-    .sim-mini-orbit::before {
-      content: '';
-      position: absolute; left: 50%; top: 50%;
-      width: 136px; height: 136px; margin: -68px;
-      border-radius: 50%;
-      border: 1px dashed rgba(242,108,56,0.32);
-      pointer-events: none;
+    /* Fix-Applied card (Panel 2) */
+    .sim-fix-card {
+      width: 100%; max-width: 172px;
+      display: flex; flex-direction: column; gap: 7px;
     }
-    .sim-mini-proc {
-      position: absolute; left: 50%; top: 50%;
-      transform: translate(-50%, -50%);
-      width: 54px; height: 54px;
-      background: rgba(8,12,28,0.95);
-      border: 1.5px solid #F26C38; border-radius: 9px;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      color: #4FC3F7;
-      font-family: 'Courier New', monospace; font-size: 8.5px; font-weight: 700; letter-spacing: 1px;
-      gap: 3px; z-index: 2;
+    .sim-fix-title {
+      font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.35);
+      text-transform: uppercase; letter-spacing: 0.12em;
+      font-family: 'Courier New', monospace; margin-bottom: 2px;
     }
-    .sim-mini-proc__cursor { width: 18px; height: 1.5px; background: #4FC3F7; animation: chip-cursor 1s step-end infinite; }
-    .sim-mini-node {
-      position: absolute; left: 50%; top: 50%;
-      width: 28px; height: 28px;
-      margin-left: -14px; margin-top: -14px;
-      transform-origin: 14px 14px;
+    .sim-fix-row {
+      display: flex; align-items: center; gap: 5px;
+      font-family: 'Courier New', monospace; font-size: 9px; white-space: nowrap;
     }
-    .sim-mini-node img {
-      width: 24px; height: 24px; object-fit: contain;
-      background: rgba(10,11,24,0.92);
-      border: 1px solid rgba(255,255,255,0.14);
-      border-radius: 6px; padding: 3px; display: block;
-      transition: transform 0.2s, box-shadow 0.2s, border-color 0.3s;
+    .sim-fix-icon {
+      font-size: 10px; width: 13px; flex-shrink: 0;
+      color: #F26C38; transition: color 0.25s;
     }
-    .sim-mini-node--n8n    { animation: mini-spin 8s linear infinite 0s;  }
-    .sim-mini-node--make   { animation: mini-spin 8s linear infinite -2s; }
-    .sim-mini-node--zapier { animation: mini-spin 8s linear infinite -4s; }
-    .sim-mini-node--openai { animation: mini-spin 8s linear infinite -6s; }
-    @keyframes mini-spin {
-      from { transform: rotate(0deg)   translateX(68px) rotate(0deg);   }
-      to   { transform: rotate(360deg) translateX(68px) rotate(-360deg); }
-    }
-    /* Option 4: Burst on Panel 2 activation */
-    .sim-mini-proc.is-bursting {
-      animation: proc-burst 0.65s ease-out forwards;
-    }
-    @keyframes proc-burst {
-      0%   { box-shadow: 0 0 0 0 rgba(242,108,56,0);  border-color: #F26C38; }
-      35%  { box-shadow: 0 0 0 10px rgba(242,108,56,0.35), 0 0 24px rgba(242,108,56,0.6); border-color: #ffaa70; }
-      100% { box-shadow: 0 0 0 0 rgba(242,108,56,0);  border-color: #F26C38; }
-    }
-    .sim-mini-orbit.is-bursting::after {
-      animation: orbit-burst 0.65s ease-out forwards;
-    }
-    @keyframes orbit-burst {
-      0%   { border-color: rgba(242,108,56,0.28); transform: translate(-50%,-50%) scale(1); }
-      40%  { border-color: rgba(242,108,56,0.7);  transform: translate(-50%,-50%) scale(1.12); }
-      100% { border-color: rgba(242,108,56,0.28); transform: translate(-50%,-50%) scale(1); }
-    }
-    /* Particle streams */
-    .sim-particles { position: absolute; inset: 0; pointer-events: none; z-index: 3; }
-    .sim-particle  { position: absolute; width: 3px; height: 3px; border-radius: 50%; opacity: 0; }
-    /* Hover enhancements */
-    #sim-p2:hover .sim-mini-orbit::before { border-color: rgba(242,108,56,0.65); transition: border-color 0.3s; }
-    #sim-p2:hover .sim-mini-node img     { border-color: rgba(242,108,56,0.55); box-shadow: 0 0 8px rgba(242,108,56,0.35); }
-    #sim-p2 .sim-mini-node:hover img     { transform: scale(1.25); box-shadow: 0 0 14px rgba(242,108,56,0.8); }
+    .sim-fix-icon.is-fixed { color: #00e676; }
+    .sim-fix-label { color: rgba(255,255,255,0.4); }
+    .sim-fix-result { color: rgba(79,195,247,0.65); flex-shrink: 0; }
     /* Run visual */
     .sim-run-visual { display: flex; flex-direction: column; align-items: center; gap: 8px; }
     /* Dot wrapper holds the green dot + expanding pulse rings */
@@ -2398,9 +2350,12 @@
       0%   { transform: scale(0.8); opacity: 0.75; }
       100% { transform: scale(4.5); opacity: 0; }
     }
-    .sim-run-badge { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.12em; }
-    .sim-run-time  { font-size: 58px; font-weight: 700; font-family: 'Space Grotesk', sans-serif; color: #00e676; letter-spacing: -0.02em; line-height: 1; }
-    .sim-run-slash { color: rgba(255,255,255,0.25); font-weight: 300; }
+    .sim-live-badge {
+      font-size: 10px; font-weight: 700;
+      color: #00e676; letter-spacing: 0.1em;
+      font-family: 'Courier New', monospace;
+      opacity: 0.85;
+    }
     /* Scrolling event log on Panel 3 */
     .sim-event-log {
       width: 100%; max-width: 164px;
@@ -2428,8 +2383,6 @@
     @media (max-width: 600px) {
       .sim-connector svg { width: 14px; height: 14px; }
       .sim-panel { padding: 16px 10px 14px; border-radius: 14px; }
-      .sim-mini-orbit { width: 108px; height: 108px; }
-      .sim-run-time { font-size: 36px; }
     }
   </style>
 </head>
@@ -2520,47 +2473,32 @@
                 </svg>
               </div>
 
-              <!-- Panel 2: Build -->
+              <!-- Panel 2: Fix -->
               <div class="sim-panel" id="sim-p2">
                 <div class="sim-panel__visual">
-                  <div class="sim-mini-orbit">
-                    <div class="sim-mini-proc">
-                      AI SYS
-                      <div class="sim-mini-proc__cursor"></div>
+                  <div class="sim-fix-card" id="sim-fix-card">
+                    <div class="sim-fix-title">Fix Applied</div>
+                    <div class="sim-fix-row">
+                      <span class="sim-fix-icon">⚠</span>
+                      <span class="sim-fix-label">leads by hand</span>
+                      <span class="sim-fix-result">→ CRM auto-log</span>
                     </div>
-                    <div class="sim-mini-node sim-mini-node--n8n">
-                      <img src="https://cdn.simpleicons.org/n8n/ffffff" alt="n8n" loading="lazy">
+                    <div class="sim-fix-row">
+                      <span class="sim-fix-icon">⚠</span>
+                      <span class="sim-fix-label">follow-ups missed</span>
+                      <span class="sim-fix-result">→ auto-reminded</span>
                     </div>
-                    <div class="sim-mini-node sim-mini-node--make">
-                      <img src="https://cdn.simpleicons.org/make/ffffff" alt="Make" loading="lazy">
-                    </div>
-                    <div class="sim-mini-node sim-mini-node--zapier">
-                      <img src="https://cdn.simpleicons.org/zapier/ffffff" alt="Zapier" loading="lazy">
-                    </div>
-                    <div class="sim-mini-node sim-mini-node--openai">
-                      <img src="https://cdn.simpleicons.org/openai/ffffff" alt="OpenAI" loading="lazy">
-                    </div>
-                    <!-- Particle stream dots: 3 per node × 4 nodes -->
-                    <div class="sim-particles">
-                      <div class="sim-particle" data-src="n8n"></div>
-                      <div class="sim-particle" data-src="n8n"></div>
-                      <div class="sim-particle" data-src="n8n"></div>
-                      <div class="sim-particle" data-src="make"></div>
-                      <div class="sim-particle" data-src="make"></div>
-                      <div class="sim-particle" data-src="make"></div>
-                      <div class="sim-particle" data-src="zapier"></div>
-                      <div class="sim-particle" data-src="zapier"></div>
-                      <div class="sim-particle" data-src="zapier"></div>
-                      <div class="sim-particle" data-src="openai"></div>
-                      <div class="sim-particle" data-src="openai"></div>
-                      <div class="sim-particle" data-src="openai"></div>
+                    <div class="sim-fix-row">
+                      <span class="sim-fix-icon">⚠</span>
+                      <span class="sim-fix-label">reports rebuilt</span>
+                      <span class="sim-fix-result">→ auto-generated</span>
                     </div>
                   </div>
                 </div>
                 <div class="sim-panel__footer">
                   <div class="sim-panel__step">02</div>
-                  <div class="sim-panel__label">Design &amp; Build</div>
-                  <p class="sim-panel__desc">AI automation system</p>
+                  <div class="sim-panel__label">Fix</div>
+                  <p class="sim-panel__desc">Waste stripped. Process rebuilt lean.</p>
                 </div>
               </div>
 
@@ -2586,8 +2524,7 @@
                       <div class="sim-pulse-ring"></div>
                       <div class="sim-pulse-ring"></div>
                     </div>
-                    <div class="sim-run-badge">AI Powered</div>
-                    <div class="sim-run-time">24<span class="sim-run-slash">/</span>7</div>
+                    <div class="sim-live-badge">● LIVE · 24/7</div>
                     <div class="sim-event-log" id="sim-event-log"></div>
                   </div>
                 </div>
@@ -4392,8 +4329,6 @@
 
   var phaseTimer = null;
   var lineTimer  = null;
-  var p2proc  = document.querySelector('#sim-p2 .sim-mini-proc');
-  var p2orbit = document.querySelector('#sim-p2 .sim-mini-orbit');
 
   function clear() {
     clearTimeout(phaseTimer);
@@ -4407,19 +4342,6 @@
       p.classList.toggle('is-active', active);
     });
     conns.forEach(function (c, i) { c.classList.toggle('is-active', i < idx); });
-  }
-
-  function burst() {
-    if (!p2proc || !p2orbit) return;
-    p2proc.classList.remove('is-bursting');
-    p2orbit.classList.remove('is-bursting');
-    void p2proc.offsetWidth;
-    p2proc.classList.add('is-bursting');
-    p2orbit.classList.add('is-bursting');
-    setTimeout(function () {
-      p2proc.classList.remove('is-bursting');
-      p2orbit.classList.remove('is-bursting');
-    }, 800);
   }
 
   function typeLines(el, lines, cb) {
@@ -4451,7 +4373,6 @@
   function phase2() {
     clear();
     setActive(1, 3);
-    burst();
     phaseTimer = setTimeout(phase3, 3000);
   }
 
@@ -4484,56 +4405,32 @@
 })();
 </script>
 
-<!-- ─── GSAP (particle streams on AI SYS panel) ─── -->
+<!-- ─── GSAP (event log on Panel 3) ─── -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script>
-(function initAISYSParticles() {
-  if (typeof gsap === 'undefined') return;
-  var orbit = document.querySelector('#sim-p2 .sim-mini-orbit');
-  if (!orbit) return;
-  var proc = document.querySelector('#sim-p2 .sim-mini-proc');
+(function initFixCard() {
+  var p2 = document.getElementById('sim-p2');
+  if (!p2) return;
+  var icons = p2.querySelectorAll('.sim-fix-icon');
 
-  // Orbit container 160×160, center at (80,80), orbit radius 68px.
-  // Each node gets a fixed source zone at the ring edge.
-  var NODES = [
-    { src: 'n8n',    x: 78.5,  y: 10.5,  color: '#F26C38' },
-    { src: 'make',   x: 10.5,  y: 78.5,  color: '#a855f7' },
-    { src: 'zapier', x: 78.5,  y: 146.5, color: '#ff6b35' },
-    { src: 'openai', x: 146.5, y: 78.5,  color: '#4FC3F7' }
-  ];
-
-  var TRAVEL = 0.85;   // seconds to reach center
-  var CYCLE  = 1.6;    // full cycle: travel + pause at source
-  var PER    = 3;      // particles per node
-  var CX = 78.5, CY = 78.5;
-
-  NODES.forEach(function(node, ni) {
-    var particles = orbit.querySelectorAll('.sim-particle[data-src="' + node.src + '"]');
-    // Offset each node group so all 4 nodes fire at different times
-    var nodeOffset = (CYCLE / NODES.length) * ni;
-
-    particles.forEach(function(p, i) {
-      gsap.set(p, { left: node.x, top: node.y, opacity: 0,
-                    backgroundColor: node.color,
-                    boxShadow: '0 0 4px ' + node.color });
-
-      var delay = nodeOffset + (CYCLE / PER) * i;
-
-      function fire() {
-        gsap.timeline({ onComplete: fire })
-          .set(p, { left: node.x, top: node.y, opacity: 0 })
-          .to(p, { opacity: 1, duration: 0.12, ease: 'none' })
-          .to(p, { left: CX, top: CY, duration: TRAVEL, ease: 'power2.in' }, '<')
-          .to(p, { opacity: 0, duration: 0.14, ease: 'none' }, '-=0.18')
-          .call(function() {
-            if (proc) gsap.to(proc, { scale: 1.07, duration: 0.07, yoyo: true, repeat: 1, ease: 'power2.out', overwrite: 'auto' });
-          })
-          .to(p, { duration: CYCLE - TRAVEL - 0.12 });
-      }
-
-      gsap.delayedCall(delay, fire);
+  function activate() {
+    icons.forEach(function(icon, i) {
+      setTimeout(function() {
+        icon.textContent = '✓';
+        icon.classList.add('is-fixed');
+      }, i * 320);
     });
-  });
+  }
+  function reset() {
+    icons.forEach(function(icon) {
+      icon.textContent = '⚠';
+      icon.classList.remove('is-fixed');
+    });
+  }
+
+  new MutationObserver(function() {
+    p2.classList.contains('is-active') ? activate() : reset();
+  }).observe(p2, { attributes: true, attributeFilter: ['class'] });
 })();
 
 // Panel 3: scrolling event log — new automation event appears every second
