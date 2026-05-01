@@ -222,6 +222,18 @@
     }
 
     .section--hero > * { position: relative; z-index: 1; }
+    .hero-phase-orb {
+      position: absolute;
+      width: 640px; height: 640px;
+      left: 62%; top: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      filter: blur(90px);
+      pointer-events: none;
+      z-index: 0;
+      background-color: rgba(79,195,247,0.12);
+      transition: background-color 2s ease;
+    }
 
     /* ── Hero tab card ── */
     .lp-tabcard {
@@ -2152,7 +2164,10 @@
 
     /* ─── 3-PANEL SHOWCASE ─── */
     .sim-showcase { width: 100%; max-width: 720px; }
-    .sim-panels { display: flex; align-items: stretch; width: 100%; gap: 0; }
+    .sim-panels {
+      display: flex; align-items: stretch; width: 100%; gap: 0;
+      perspective: 1200px; perspective-origin: 50% 50%;
+    }
     .sim-panel {
       flex: 1; min-width: 0;
       background: rgba(16,16,24,0.82);
@@ -2160,10 +2175,12 @@
       border-radius: 18px;
       padding: 28px 20px 22px;
       display: flex; flex-direction: column; align-items: center; gap: 16px;
-      transition: border-color 0.4s, box-shadow 0.4s, opacity 0.4s;
+      transition: border-color 0.5s, box-shadow 0.5s;
       opacity: 0.28;
       position: relative;
       overflow: hidden;
+      will-change: transform, opacity, filter;
+      transform-origin: center center;
     }
     .sim-panel.is-active {
       border-color: rgba(242,108,56,0.7);
@@ -2192,39 +2209,36 @@
       from { transform: translate(-10%, -10%); opacity: 0.75; }
       to   { transform: translate(10%, 10%);   opacity: 1;    }
     }
-    /* Option 3: Progress bar */
-    .sim-panel::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0;
-      height: 2.5px; width: 0%;
+    .sim-connector { display: none; }
+    /* ── Timeline strip ── */
+    .sim-timeline {
+      display: flex; align-items: center;
+      width: 100%; max-width: 360px;
+      margin: 22px auto 0;
+      gap: 8px;
+    }
+    .sim-tl-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+      flex-shrink: 0;
+      transition: background 0.5s, box-shadow 0.5s;
+    }
+    .sim-tl-dot.is-active {
+      background: #F26C38;
+      box-shadow: 0 0 10px rgba(242,108,56,0.75);
+    }
+    .sim-tl-dot.is-done { background: rgba(242,108,56,0.4); }
+    .sim-tl-bar {
+      flex: 1; height: 2px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 1px;
+      position: relative; overflow: hidden;
+    }
+    .sim-tl-fill {
+      position: absolute; top: 0; left: 0;
+      height: 100%; width: 0%;
       background: linear-gradient(90deg, #F26C38, #D72F58);
-      border-radius: 0 0 14px 14px;
-    }
-    .sim-panel.is-active::after {
-      animation: panel-progress var(--phase-dur, 3s) linear forwards;
-    }
-    @keyframes panel-progress { from { width: 0%; } to { width: 100%; } }
-    .sim-connector {
-      display: flex; align-items: center; justify-content: center;
-      padding: 0 5px; flex-shrink: 0;
-      color: rgba(255,255,255,0.18);
-      transition: color 0.3s;
-    }
-    .sim-connector.is-active { color: rgba(242,108,56,0.85); }
-    .sim-connector.is-active .conn-line {
-      animation: line-draw 0.5s ease-out forwards;
-    }
-    .sim-connector.is-active .conn-head {
-      animation: head-appear 0.15s 0.45s ease-out forwards;
-    }
-    @keyframes line-draw {
-      from { stroke-dashoffset: 28; }
-      to   { stroke-dashoffset: 0;  }
-    }
-    @keyframes head-appear {
-      from { opacity: 0; }
-      to   { opacity: 1; }
+      border-radius: 1px;
     }
     .sim-panel__visual {
       width: 100%; min-height: 160px; max-height: 160px; overflow: hidden;
@@ -2442,6 +2456,7 @@
        HERO
   ═══════════════════════════════════ -->
   <section id="hero" class="section section--hero">
+    <div class="hero-phase-orb" id="hero-phase-orb" aria-hidden="true"></div>
 
     <!-- Two-column split -->
     <div class="hero__row">
@@ -2562,6 +2577,15 @@
                 </div>
               </div>
 
+            </div>
+
+            <!-- Timeline strip -->
+            <div class="sim-timeline" id="sim-timeline" aria-hidden="true">
+              <span class="sim-tl-dot is-active" data-ti="0"></span>
+              <span class="sim-tl-bar" data-ti="0"><span class="sim-tl-fill"></span></span>
+              <span class="sim-tl-dot" data-ti="1"></span>
+              <span class="sim-tl-bar" data-ti="1"><span class="sim-tl-fill"></span></span>
+              <span class="sim-tl-dot" data-ti="2"></span>
             </div>
 
           </div>
@@ -4331,89 +4355,7 @@
 })();
 </script>
 
-<!-- ─── PANEL PHASE CONTROLLER ─── -->
-<script>
-(function () {
-  var panels = [
-    document.getElementById('sim-p1'),
-    document.getElementById('sim-p2'),
-    document.getElementById('sim-p3')
-  ];
-  var conns = [
-    document.getElementById('sim-c1'),
-    document.getElementById('sim-c2')
-  ];
-  var miniLinesEl = document.getElementById('mini-lines');
-  if (!panels[0]) return;
-
-  var LINES = [
-    { text: '⬡ Scanning workflow...',         cls: 'sim-line--cmd'  },
-    { text: '→ Leads entered by hand  ⚠',    cls: 'sim-line--warn' },
-    { text: '→ Follow-ups missed daily ⚠',   cls: 'sim-line--warn' },
-    { text: '→ Reports rebuilt weekly  ⚠',   cls: 'sim-line--warn' },
-    { text: '✓ 3 revenue leaks mapped.',      cls: 'sim-line--done' }
-  ];
-
-  var phaseTimer = null;
-  var lineTimer  = null;
-
-  function clear() {
-    clearTimeout(phaseTimer);
-    clearTimeout(lineTimer);
-  }
-
-  function setActive(idx, dur) {
-    panels.forEach(function (p, i) {
-      var active = i === idx;
-      if (active) { p.style.setProperty('--phase-dur', (dur || 3) + 's'); }
-      p.classList.toggle('is-active', active);
-    });
-    conns.forEach(function (c, i) { c.classList.toggle('is-active', i < idx); });
-  }
-
-  function typeLines(el, lines, cb) {
-    el.innerHTML = '';
-    var i = 0;
-    (function next() {
-      if (i >= lines.length) { if (cb) cb(); return; }
-      var span = document.createElement('span');
-      span.className = 'sim-line ' + lines[i].cls;
-      span.textContent = lines[i].text;
-      el.appendChild(span);
-      i++;
-      lineTimer = setTimeout(next, 620);
-    })();
-  }
-
-  function phase1() {
-    clear();
-    setActive(0, 4.2);
-    if (miniLinesEl) {
-      typeLines(miniLinesEl, LINES, function () {
-        phaseTimer = setTimeout(phase2, 1000);
-      });
-    } else {
-      phaseTimer = setTimeout(phase2, 4500);
-    }
-  }
-
-  function phase2() {
-    clear();
-    setActive(1, 4.5);
-    phaseTimer = setTimeout(phase3, 4500);
-  }
-
-  function phase3() {
-    clear();
-    setActive(2, 4.5);
-    phaseTimer = setTimeout(function () {
-      phaseTimer = setTimeout(phase1, 600);
-    }, 4500);
-  }
-
-  setTimeout(phase1, 800);
-})();
-</script>
+<!-- ─── PANEL PHASE CONTROLLER (initialized after GSAP below) ─── -->
 
 <!-- ─── LIVE HUB TABS ─── -->
 <script>
@@ -4538,26 +4480,207 @@
   }).observe(p3, { attributes: true, attributeFilter: ['class'] });
 })();
 
-// Hero right column: subtle mouse parallax
-(function initHeroParallax() {
+// ─── PANEL PHASE CONTROLLER + CURSOR TILT ───
+(function initPanelController() {
   if (typeof gsap === 'undefined') return;
-  if (window.innerWidth < 768) return;
-  var hero  = document.getElementById('hero');
-  var right = document.querySelector('.hero__right');
-  if (!hero || !right) return;
 
-  var MAX_X = 12, MAX_Y = 7;
+  var panels     = [
+    document.getElementById('sim-p1'),
+    document.getElementById('sim-p2'),
+    document.getElementById('sim-p3')
+  ];
+  var miniLinesEl = document.getElementById('mini-lines');
+  var heroOrbEl   = document.getElementById('hero-phase-orb');
+  var showcase    = document.querySelector('.sim-showcase');
+  var tlDots      = document.querySelectorAll('.sim-tl-dot');
+  var tlFills     = document.querySelectorAll('.sim-tl-fill');
 
-  hero.addEventListener('mousemove', function(e) {
-    var r  = hero.getBoundingClientRect();
-    var dx = (e.clientX - (r.left + r.width  / 2)) / (r.width  / 2);
-    var dy = (e.clientY - (r.top  + r.height / 2)) / (r.height / 2);
-    gsap.to(right, { x: dx * MAX_X, y: dy * MAX_Y, duration: 0.9, ease: 'power2.out' });
+  if (!panels[0]) return;
+
+  var LINES = [
+    { text: '⬡ Scanning workflow...',        cls: 'sim-line--cmd'  },
+    { text: '→ Leads entered by hand  ⚠',   cls: 'sim-line--warn' },
+    { text: '→ Follow-ups missed daily ⚠',  cls: 'sim-line--warn' },
+    { text: '→ Reports rebuilt weekly  ⚠',  cls: 'sim-line--warn' },
+    { text: '✓ 3 revenue leaks mapped.',     cls: 'sim-line--done' }
+  ];
+
+  var PHASE_DURS = [4.2, 4.5, 4.5];
+  var ORB_COLORS = [
+    'rgba(79,195,247,0.14)',
+    'rgba(242,168,56,0.17)',
+    'rgba(0,230,118,0.13)'
+  ];
+
+  var activeIdx    = -1;
+  var isPaused     = false;
+  var phaseTimer   = null;
+  var lineTimer    = null;
+  var breatheTween = null;
+  var tlTween      = null;
+  var phaseStart   = null;
+
+  function clearTimers() {
+    clearTimeout(phaseTimer);
+    clearTimeout(lineTimer);
+  }
+
+  function setActive(idx) {
+    activeIdx = idx;
+    phaseStart = Date.now();
+    var dur = PHASE_DURS[idx];
+
+    panels.forEach(function (p, i) {
+      p.classList.toggle('is-active', i === idx);
+    });
+
+    panels.forEach(function (p, i) {
+      var isActive = i === idx;
+      var tiltY    = i < idx ? -22 : i > idx ? 22 : 0;
+      gsap.to(p, {
+        z:         isActive ? 55 : -35,
+        scale:     isActive ? 1.06 : 0.91,
+        rotationY: tiltY,
+        rotationX: 0,
+        opacity:   isActive ? 1 : 0.25,
+        filter:    isActive ? 'blur(0px)' : 'blur(2px)',
+        duration:  0.7,
+        ease:      'power2.inOut',
+        overwrite: 'auto'
+      });
+    });
+
+    // Timeline dots
+    tlDots.forEach(function (d, i) {
+      d.classList.toggle('is-active', i === idx);
+      d.classList.toggle('is-done',   i < idx);
+    });
+
+    // Timeline fill bars
+    if (tlTween) { tlTween.kill(); tlTween = null; }
+    tlFills.forEach(function (f, i) {
+      if (i < idx) {
+        gsap.set(f, { width: '100%' });
+      } else if (i === idx) {
+        gsap.set(f, { width: '0%' });
+        tlTween = gsap.to(f, { width: '100%', duration: dur, ease: 'none' });
+      } else {
+        gsap.set(f, { width: '0%' });
+      }
+    });
+
+    // Orb color temperature
+    if (heroOrbEl) heroOrbEl.style.backgroundColor = ORB_COLORS[idx];
+  }
+
+  function typeLines(el, lines, cb) {
+    el.innerHTML = '';
+    var i = 0;
+    (function next() {
+      if (i >= lines.length) { if (cb) cb(); return; }
+      var span = document.createElement('span');
+      span.className = 'sim-line ' + lines[i].cls;
+      span.textContent = lines[i].text;
+      el.appendChild(span);
+      i++;
+      lineTimer = setTimeout(next, 620);
+    })();
+  }
+
+  function advanceToPhase(idx) {
+    if (idx === 0) phase1();
+    else if (idx === 1) phase2();
+    else phase3();
+  }
+
+  function phase1() {
+    clearTimers();
+    setActive(0);
+    if (miniLinesEl) {
+      typeLines(miniLinesEl, LINES, function () {
+        if (!isPaused) phaseTimer = setTimeout(phase2, 1000);
+      });
+    } else {
+      if (!isPaused) phaseTimer = setTimeout(phase2, 4500);
+    }
+  }
+
+  function phase2() {
+    clearTimers();
+    setActive(1);
+    if (!isPaused) phaseTimer = setTimeout(phase3, 4500);
+  }
+
+  function phase3() {
+    clearTimers();
+    setActive(2);
+    if (!isPaused) phaseTimer = setTimeout(function () {
+      if (!isPaused) phaseTimer = setTimeout(phase1, 600);
+    }, 4500);
+  }
+
+  // ── Hover pause / resume ──
+  function pauseLoop() {
+    if (isPaused) return;
+    isPaused = true;
+    clearTimers();
+    if (tlTween) tlTween.pause();
+    var ap = panels[activeIdx];
+    if (ap && !breatheTween) {
+      breatheTween = gsap.to(ap, {
+        scale: 1.13, z: 70,
+        duration: 1.4, ease: 'sine.inOut',
+        yoyo: true, repeat: -1, overwrite: 'auto'
+      });
+    }
+  }
+
+  function resumeLoop() {
+    if (!isPaused) return;
+    isPaused = false;
+    if (breatheTween) { breatheTween.kill(); breatheTween = null; }
+    var ap = panels[activeIdx];
+    if (ap) gsap.to(ap, { scale: 1.06, z: 55, duration: 0.5, ease: 'power2.out', overwrite: 'auto' });
+    if (tlTween) { tlTween.kill(); tlTween = null; }
+    var idx = activeIdx;
+    if (ap) ap.classList.remove('is-active');
+    setTimeout(function () { advanceToPhase(idx); }, 60);
+  }
+
+  panels.forEach(function (p, i) {
+    p.addEventListener('mouseenter', function () { if (i === activeIdx) pauseLoop(); });
+    p.addEventListener('mouseleave', function () { if (isPaused) resumeLoop(); });
   });
 
-  hero.addEventListener('mouseleave', function() {
-    gsap.to(right, { x: 0, y: 0, duration: 1.1, ease: 'power2.out' });
-  });
+  // ── Cursor proximity tilt ──
+  if (showcase && window.innerWidth >= 768) {
+    showcase.addEventListener('mousemove', function (e) {
+      if (activeIdx < 0) return;
+      var ap = panels[activeIdx];
+      var r  = ap.getBoundingClientRect();
+      var dx = Math.max(-1, Math.min(1, (e.clientX - (r.left + r.width  / 2)) / (r.width  / 2)));
+      var dy = Math.max(-1, Math.min(1, (e.clientY - (r.top  + r.height / 2)) / (r.height / 2)));
+
+      gsap.to(ap, { rotationX: -dy * 7, rotationY: dx * 10, duration: 0.35, ease: 'power2.out', overwrite: 'auto' });
+
+      panels.forEach(function (p, i) {
+        if (i === activeIdx) return;
+        var baseY = i < activeIdx ? -22 : 22;
+        gsap.to(p, { rotationY: baseY + (i < activeIdx ? -dx * 5 : dx * 5), duration: 0.35, ease: 'power2.out', overwrite: 'auto' });
+      });
+    });
+
+    showcase.addEventListener('mouseleave', function () {
+      if (activeIdx < 0) return;
+      gsap.to(panels[activeIdx], { rotationX: 0, rotationY: 0, duration: 0.8, ease: 'power2.out', overwrite: 'auto' });
+      panels.forEach(function (p, i) {
+        if (i === activeIdx) return;
+        gsap.to(p, { rotationY: i < activeIdx ? -22 : 22, duration: 0.8, ease: 'power2.out', overwrite: 'auto' });
+      });
+    });
+  }
+
+  setTimeout(phase1, 800);
 })();
 </script>
 
