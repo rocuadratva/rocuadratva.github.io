@@ -2302,7 +2302,7 @@
       padding: 4px 7px;
       border-bottom: 1px solid rgba(242,108,56,0.12);
     }
-    .sim-mini-lines { padding: 10px 11px; min-height: 100px; line-height: 1.9; color: #909090; }
+    .sim-mini-lines { padding: 10px 11px; min-height: 100px; line-height: 1.9; color: #909090; font-family: 'Courier New', monospace; font-size: 9px; }
     /* ── Panel 2: Fix Board ── */
     .sim-fix-board {
       width: 100%;
@@ -2335,6 +2335,7 @@
     .sim-fix-row {
       display: flex; align-items: center; gap: 6px;
       font-family: 'Courier New', monospace; font-size: 9px; line-height: 2;
+      white-space: nowrap; overflow: hidden;
     }
     .sim-fix-old {
       color: rgba(242,108,56,0.8);
@@ -2509,15 +2510,15 @@
                     <div class="sim-fix-board__body">
                       <div class="sim-fix-row">
                         <span class="sim-fix-old">leads by hand</span>
-                        <span class="sim-fix-new">→ CRM auto-log</span>
+                        <span class="sim-fix-new">→ CRM</span>
                       </div>
                       <div class="sim-fix-row">
                         <span class="sim-fix-old">missed follow-ups</span>
-                        <span class="sim-fix-new">→ auto-reminded</span>
+                        <span class="sim-fix-new">→ auto-seq</span>
                       </div>
                       <div class="sim-fix-row">
                         <span class="sim-fix-old">reports rebuilt</span>
-                        <span class="sim-fix-new">→ auto-generated</span>
+                        <span class="sim-fix-new">→ auto-built</span>
                       </div>
                     </div>
                   </div>
@@ -4378,34 +4379,34 @@
       span.textContent = lines[i].text;
       el.appendChild(span);
       i++;
-      lineTimer = setTimeout(next, 460);
+      lineTimer = setTimeout(next, 620);
     })();
   }
 
   function phase1() {
     clear();
-    setActive(0, 2.54);
+    setActive(0, 4.2);
     if (miniLinesEl) {
       typeLines(miniLinesEl, LINES, function () {
-        phaseTimer = setTimeout(phase2, 700);
+        phaseTimer = setTimeout(phase2, 1000);
       });
     } else {
-      phaseTimer = setTimeout(phase2, 3200);
+      phaseTimer = setTimeout(phase2, 4500);
     }
   }
 
   function phase2() {
     clear();
-    setActive(1, 3);
-    phaseTimer = setTimeout(phase3, 3000);
+    setActive(1, 4.5);
+    phaseTimer = setTimeout(phase3, 4500);
   }
 
   function phase3() {
     clear();
-    setActive(2, 3.4);
+    setActive(2, 4.5);
     phaseTimer = setTimeout(function () {
-      phaseTimer = setTimeout(phase1, 400);
-    }, 3000);
+      phaseTimer = setTimeout(phase1, 600);
+    }, 4500);
   }
 
   setTimeout(phase1, 800);
@@ -4451,7 +4452,7 @@
             badge.style.cssText = 'color:#00e676;background:rgba(0,230,118,0.1);border-color:rgba(0,230,118,0.3)';
           }
         }, 220);
-      }, i * 400);
+      }, i * 550);
     });
   }
 
