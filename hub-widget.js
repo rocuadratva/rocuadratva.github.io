@@ -37,8 +37,8 @@
       '<button class="hub-opt" data-action="voice" role="menuitem">',
         '<span class="hub-opt-icon" style="background:rgba(167,139,250,.14)">🎤</span>',
         '<span class="hub-opt-text">',
-          '<span class="hub-opt-label">Voice Receptionist<span class="hub-soon">Soon</span></span>',
-          '<span class="hub-opt-sub" id="hub-voice-sub">Talk to Roc AI booking receptionist</span>',
+          '<span class="hub-opt-label">Voice Receptionist</span>',
+          '<span class="hub-opt-sub" id="hub-voice-sub">Talk to my AI booking assistant →</span>',
         '</span>',
       '</button>',
 
@@ -127,14 +127,8 @@
     var action = btn.getAttribute('data-action');
 
     if (action === 'voice') {
-      var orig = voiceSub.textContent;
-      if (orig === '🚀 Coming soon — stay tuned!') return;
-      voiceSub.textContent = '🚀 Coming soon — stay tuned!';
-      btn.style.borderColor = 'rgba(242,108,56,.6)';
-      setTimeout(function () {
-        voiceSub.textContent = orig;
-        btn.style.borderColor = '';
-      }, 2500);
+      closeMenu();
+      window.open('https://vapi.ai?demo=true&shareKey=f19760ad-d976-43e5-80df-6a6f6cec71bb&assistantId=cc2e1700-d4e2-4ce4-9839-dcb8956dcc1b', '_blank', 'noopener');
       return;
     }
 
