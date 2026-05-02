@@ -2322,8 +2322,8 @@
       display: flex; flex-direction: column; gap: 0;
     }
     .sim-fix-row {
-      display: flex; align-items: center; gap: 5px;
-      font-family: 'Space Grotesk', sans-serif; font-weight: 400; font-size: 10px; line-height: 2;
+      display: flex; flex-direction: column; align-items: flex-start; gap: 1px;
+      font-family: 'Space Grotesk', sans-serif; font-weight: 400; font-size: 10px; line-height: 1.7;
       overflow: hidden;
     }
     .sim-fix-old {
@@ -4355,20 +4355,14 @@
       setTimeout(function() {
         var old = row.querySelector('.sim-fix-old');
         var nw  = row.querySelector('.sim-fix-new');
-        if (old) {
-          gsap.to(old, { opacity: 0, duration: 0.25, ease: 'power2.in', onComplete: function() {
-            old.classList.add('is-struck');
-            if (nw) {
-              setTimeout(function() {
-                nw.classList.add('is-visible');
-                if (i === rows.length - 1 && badge) {
-                  badge.textContent = '✓ 3/3 done';
-                  badge.style.cssText = 'color:#00e676;background:rgba(0,230,118,0.1);border-color:rgba(0,230,118,0.3)';
-                }
-              }, 120);
-            }
-          }});
-        }
+        if (old) old.classList.add('is-struck');
+        setTimeout(function() {
+          if (nw) nw.classList.add('is-visible');
+          if (i === rows.length - 1 && badge) {
+            badge.textContent = '✓ 3/3 done';
+            badge.style.cssText = 'color:#00e676;background:rgba(0,230,118,0.1);border-color:rgba(0,230,118,0.3)';
+          }
+        }, 300);
       }, i * 600);
     });
   }
@@ -4377,7 +4371,7 @@
     rows.forEach(function(row) {
       var old = row.querySelector('.sim-fix-old');
       var nw  = row.querySelector('.sim-fix-new');
-      if (old) { old.classList.remove('is-struck'); gsap.set(old, { opacity: 1 }); }
+      if (old) old.classList.remove('is-struck');
       if (nw)  nw.classList.remove('is-visible');
     });
     if (badge) {
