@@ -362,6 +362,18 @@
       padding-bottom: 0.15em;
     }
 
+    @keyframes ai-glow {
+      0%, 100% { text-shadow: 0 0 6px rgba(242,108,56,0.4), 0 0 14px rgba(215,47,88,0.3); }
+      50%       { text-shadow: 0 0 12px rgba(242,108,56,0.8), 0 0 28px rgba(215,47,88,0.6); }
+    }
+    .hero__ai {
+      background: var(--headline-grad);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 700;
+      animation: ai-glow 2.4s ease-in-out infinite;
+    }
+
     .hero__sub {
       font-size: clamp(13px, 1.2vw, 15px);
       color: var(--t2); line-height: 1.7;
@@ -2435,7 +2447,7 @@
       <div class="hero__left">
         <div class="hero__badge">
           <span class="hero__dot"></span>
-          Process Improvement &amp; AI Workflow Automation &middot; Philippines
+          Process Improvement &amp; <span class="hero__ai">AI</span> Workflow Automation &middot; Philippines
         </div>
         <h1 class="hero__h1">
           Your Manual Ops:<br>
