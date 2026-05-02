@@ -2280,6 +2280,7 @@
       border: 1px solid rgba(242,108,56,0.28);
       border-radius: 4px;
       padding: 1px 6px;
+      transition: color 0.3s, background 0.3s, border-color 0.3s;
       animation: audit-pulse 2s ease-in-out infinite;
     }
     @keyframes audit-pulse {
@@ -2365,10 +2366,11 @@
     }
     .sim-run-board__badge {
       font-family: 'Space Grotesk', sans-serif; font-weight: 400; font-size: 11px;
-      background: rgba(0,230,118,0.1);
-      color: #00e676;
-      border: 1px solid rgba(0,230,118,0.3);
+      background: rgba(242,108,56,0.08);
+      color: rgba(242,108,56,0.7);
+      border: 1px solid rgba(242,108,56,0.2);
       border-radius: 4px; padding: 1px 6px;
+      transition: color 0.3s, background 0.3s, border-color 0.3s;
       animation: audit-pulse 2s ease-in-out infinite;
     }
     .sim-run-board__body {
@@ -4536,17 +4538,23 @@
     else phase3();
   }
 
+  var INACTIVE_BADGE = 'color:rgba(242,108,56,0.7);background:rgba(242,108,56,0.08);border-color:rgba(242,108,56,0.2)';
+  var ACTIVE_BADGE   = 'color:#00e676;background:rgba(0,230,118,0.1);border-color:rgba(0,230,118,0.3)';
+
+  function setBadge(el, text, css) { if (el) { el.textContent = text; el.style.cssText = css; } }
+
   function phase1() {
     clearTimers();
     var auditBadge = document.querySelector('#sim-p1 .sim-audit-badge');
-    if (auditBadge) { auditBadge.textContent = '● Scanning'; auditBadge.style.cssText = ''; }
+    var fixBadge   = document.getElementById('sim-fix-badge');
+    var runBadge   = document.querySelector('#sim-p3 .sim-run-board__badge');
+    setBadge(auditBadge, '● Scanning', '');
+    setBadge(fixBadge,   '● Pending',  '');
+    setBadge(runBadge,   '● Inactive', INACTIVE_BADGE);
     setActive(0);
     if (miniLinesEl) {
       typeLines(miniLinesEl, LINES, function () {
-        if (auditBadge) {
-          auditBadge.textContent = '✓ Mapped';
-          auditBadge.style.cssText = 'color:#00e676;background:rgba(0,230,118,0.1);border-color:rgba(0,230,118,0.3)';
-        }
+        setBadge(auditBadge, '✓ Mapped', ACTIVE_BADGE);
         if (!isPaused) phaseTimer = setTimeout(phase2, 1000);
       });
     } else {
@@ -4556,12 +4564,16 @@
 
   function phase2() {
     clearTimers();
+    var runBadge = document.querySelector('#sim-p3 .sim-run-board__badge');
+    setBadge(runBadge, '● Inactive', INACTIVE_BADGE);
     setActive(1);
     if (!isPaused) phaseTimer = setTimeout(phase3, 4500);
   }
 
   function phase3() {
     clearTimers();
+    var runBadge = document.querySelector('#sim-p3 .sim-run-board__badge');
+    setBadge(runBadge, '● Active', ACTIVE_BADGE);
     setActive(2);
     if (!isPaused) phaseTimer = setTimeout(function () {
       // 2.5s story-complete hold, then dim all panels and restart
