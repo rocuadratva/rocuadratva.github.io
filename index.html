@@ -2501,16 +2501,16 @@
                     </div>
                     <div class="sim-fix-board__body">
                       <div class="sim-fix-row">
-                        <span class="sim-fix-old">leads by hand</span>
-                        <span class="sim-fix-new">→ CRM logged</span>
+                        <span class="sim-fix-old">doc drafted by hand</span>
+                        <span class="sim-fix-new">→ auto-created</span>
                       </div>
                       <div class="sim-fix-row">
-                        <span class="sim-fix-old">email follow-ups</span>
-                        <span class="sim-fix-new">→ scheduled</span>
+                        <span class="sim-fix-old">invoice chasing</span>
+                        <span class="sim-fix-new">→ auto-sent</span>
                       </div>
                       <div class="sim-fix-row">
-                        <span class="sim-fix-old">daily reports</span>
-                        <span class="sim-fix-new">→ auto-generated</span>
+                        <span class="sim-fix-old">intake re-typed</span>
+                        <span class="sim-fix-new">→ auto-filled</span>
                       </div>
                     </div>
                   </div>
@@ -4392,14 +4392,14 @@
   if (!p3 || !log) return;
 
   var EVENTS = [
-    ['Lead logged',        '→ CRM'       ],
-    ['Follow-up email',    '→ sent'      ],
-    ['Report generated',   '→ Drive'     ],
-    ['Lead logged',        '→ CRM'       ],
-    ['Follow-up email',    '→ sent'      ],
-    ['Report generated',   '→ Drive'     ],
-    ['Lead logged',        '→ CRM'       ],
-    ['Follow-up email',    '→ sent'      ],
+    ['Document drafted',   '→ ready'     ],
+    ['Invoice reminder',   '→ emailed'   ],
+    ['Intake form',        '→ saved'     ],
+    ['Document drafted',   '→ ready'     ],
+    ['Invoice reminder',   '→ emailed'   ],
+    ['Intake form',        '→ saved'     ],
+    ['Document drafted',   '→ ready'     ],
+    ['Invoice reminder',   '→ emailed'   ],
   ];
 
   var MAX   = 3;      // max lines visible at once
@@ -4463,10 +4463,10 @@
 
   var LINES = [
     { text: '⬡ Scanning workflow...',        cls: 'sim-line--cmd'  },
-    { text: '→ Leads entered by hand  ⚠',   cls: 'sim-line--warn' },
-    { text: '→ Follow-ups missed daily ⚠',  cls: 'sim-line--warn' },
-    { text: '→ Reports rebuilt daily   ⚠',  cls: 'sim-line--warn' },
-    { text: '✓ 3 revenue leaks mapped.',     cls: 'sim-line--done' }
+    { text: '→ Docs drafted by hand     ⚠',  cls: 'sim-line--warn' },
+    { text: '→ Invoices chased manually ⚠',  cls: 'sim-line--warn' },
+    { text: '→ Client intake re-typed   ⚠',  cls: 'sim-line--warn' },
+    { text: '✓ 3 time drains mapped.',        cls: 'sim-line--done' }
   ];
 
   var PHASE_DURS = [4.2, 4.5, 4.5];
