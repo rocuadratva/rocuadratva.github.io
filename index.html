@@ -4595,33 +4595,6 @@
     p.addEventListener('mouseleave', function () { if (isPaused) resumeLoop(); });
   });
 
-  // ── Cursor proximity tilt ──
-  if (showcase && window.innerWidth >= 768) {
-    showcase.addEventListener('mousemove', function (e) {
-      if (activeIdx < 0) return;
-      var ap = panels[activeIdx];
-      var r  = ap.getBoundingClientRect();
-      var dx = Math.max(-1, Math.min(1, (e.clientX - (r.left + r.width  / 2)) / (r.width  / 2)));
-      var dy = Math.max(-1, Math.min(1, (e.clientY - (r.top  + r.height / 2)) / (r.height / 2)));
-
-      gsap.to(ap, { rotationX: -dy * 7, rotationY: dx * 10, duration: 0.35, ease: 'power2.out', overwrite: 'auto' });
-
-      panels.forEach(function (p, i) {
-        if (i === activeIdx) return;
-        var baseY = i < activeIdx ? -22 : 22;
-        gsap.to(p, { rotationY: baseY + (i < activeIdx ? -dx * 5 : dx * 5), duration: 0.35, ease: 'power2.out', overwrite: 'auto' });
-      });
-    });
-
-    showcase.addEventListener('mouseleave', function () {
-      if (activeIdx < 0) return;
-      gsap.to(panels[activeIdx], { rotationX: 0, rotationY: 0, duration: 0.8, ease: 'power2.out', overwrite: 'auto' });
-      panels.forEach(function (p, i) {
-        if (i === activeIdx) return;
-        gsap.to(p, { rotationY: i < activeIdx ? -22 : 22, duration: 0.8, ease: 'power2.out', overwrite: 'auto' });
-      });
-    });
-  }
 
   setTimeout(phase1, 800);
 })();
