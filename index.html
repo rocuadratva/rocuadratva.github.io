@@ -2540,7 +2540,7 @@
                   <div class="sim-run-board">
                     <div class="sim-run-board__header">
                       <span class="sim-run-board__title">Live Automation</span>
-                      <span class="sim-run-board__badge">&#x25CF; LIVE · 24/7</span>
+                      <span class="sim-run-board__badge">&#x25CF; Active</span>
                     </div>
                     <div class="sim-run-board__body" id="sim-event-log"></div>
                   </div>
@@ -4350,19 +4350,26 @@
   var rows  = p2.querySelectorAll('.sim-fix-row');
 
   function activate() {
+    reset();
     rows.forEach(function(row, i) {
       setTimeout(function() {
         var old = row.querySelector('.sim-fix-old');
         var nw  = row.querySelector('.sim-fix-new');
-        if (old) old.classList.add('is-struck');
-        setTimeout(function() {
-          if (nw) nw.classList.add('is-visible');
-          if (i === rows.length - 1 && badge) {
-            badge.textContent = '✓ 3/3 done';
-            badge.style.cssText = 'color:#00e676;background:rgba(0,230,118,0.1);border-color:rgba(0,230,118,0.3)';
-          }
-        }, 220);
-      }, i * 550);
+        if (old) {
+          gsap.to(old, { opacity: 0, duration: 0.25, ease: 'power2.in', onComplete: function() {
+            old.classList.add('is-struck');
+            if (nw) {
+              setTimeout(function() {
+                nw.classList.add('is-visible');
+                if (i === rows.length - 1 && badge) {
+                  badge.textContent = '✓ 3/3 done';
+                  badge.style.cssText = 'color:#00e676;background:rgba(0,230,118,0.1);border-color:rgba(0,230,118,0.3)';
+                }
+              }, 120);
+            }
+          }});
+        }
+      }, i * 600);
     });
   }
 
@@ -4370,7 +4377,7 @@
     rows.forEach(function(row) {
       var old = row.querySelector('.sim-fix-old');
       var nw  = row.querySelector('.sim-fix-new');
-      if (old) old.classList.remove('is-struck');
+      if (old) { old.classList.remove('is-struck'); gsap.set(old, { opacity: 1 }); }
       if (nw)  nw.classList.remove('is-visible');
     });
     if (badge) {
@@ -4380,7 +4387,7 @@
   }
 
   new MutationObserver(function() {
-    p2.classList.contains('is-active') ? activate() : reset();
+    if (p2.classList.contains('is-active')) activate();
   }).observe(p2, { attributes: true, attributeFilter: ['class'] });
 })();
 
@@ -4537,9 +4544,15 @@
 
   function phase1() {
     clearTimers();
+    var auditBadge = document.querySelector('#sim-p1 .sim-audit-badge');
+    if (auditBadge) { auditBadge.textContent = '● Scanning'; auditBadge.style.cssText = ''; }
     setActive(0);
     if (miniLinesEl) {
       typeLines(miniLinesEl, LINES, function () {
+        if (auditBadge) {
+          auditBadge.textContent = '✓ Mapped';
+          auditBadge.style.cssText = 'color:#00e676;background:rgba(0,230,118,0.1);border-color:rgba(0,230,118,0.3)';
+        }
         if (!isPaused) phaseTimer = setTimeout(phase2, 1000);
       });
     } else {
@@ -4557,7 +4570,13 @@
     clearTimers();
     setActive(2);
     if (!isPaused) phaseTimer = setTimeout(function () {
-      if (!isPaused) phaseTimer = setTimeout(phase1, 600);
+      // 2.5s story-complete hold, then dim all panels and restart
+      if (!isPaused) phaseTimer = setTimeout(function () {
+        gsap.to(panels, { opacity: 0.2, duration: 0.4, ease: 'power2.in', onComplete: function () {
+          gsap.to(panels, { opacity: 1, duration: 0.3, ease: 'power2.out' });
+          if (!isPaused) phaseTimer = setTimeout(phase1, 300);
+        }});
+      }, 2500);
     }, 4500);
   }
 
