@@ -23,7 +23,7 @@
   <meta name="theme-color" content="#121212">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Space+Grotesk:wght@300;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Space+Grotesk:wght@300;400;700&display=swap" rel="stylesheet">
 
   <style>
     /* ─── RESET ─── */
@@ -2293,7 +2293,7 @@
       padding: 4px 7px;
       border-bottom: 1px solid rgba(242,108,56,0.12);
     }
-    .sim-mini-lines { padding: 10px 11px; min-height: 100px; line-height: 1.9; color: #909090; font-family: 'Courier New', monospace; font-size: 9px; }
+    .sim-mini-lines { padding: 10px 11px; min-height: 100px; line-height: 1.9; color: #909090; font-family: 'Space Grotesk', sans-serif; font-weight: 400; font-size: 9px; }
     /* ── Panel 2: Fix Board ── */
     .sim-fix-board {
       width: 100%;
@@ -2307,12 +2307,12 @@
       border-bottom: 1px solid rgba(242,108,56,0.12);
     }
     .sim-fix-board__title {
-      font-family: 'Courier New', monospace;
-      font-size: 10px; font-weight: 600; letter-spacing: 0.05em;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 10px; font-weight: 400;
       color: rgba(255,255,255,0.6);
     }
     .sim-fix-board__badge {
-      font-family: 'Courier New', monospace; font-size: 9px;
+      font-family: 'Space Grotesk', sans-serif; font-weight: 400; font-size: 9px;
       background: rgba(242,108,56,0.12);
       color: rgba(242,108,56,0.9);
       border: 1px solid rgba(242,108,56,0.28);
@@ -2325,7 +2325,7 @@
     }
     .sim-fix-row {
       display: flex; align-items: center; gap: 5px;
-      font-family: 'Courier New', monospace; font-size: 9px; line-height: 2;
+      font-family: 'Space Grotesk', sans-serif; font-weight: 400; font-size: 9px; line-height: 2;
       overflow: hidden;
     }
     .sim-fix-old {
@@ -2361,12 +2361,12 @@
       border-bottom: 1px solid rgba(242,108,56,0.12);
     }
     .sim-run-board__title {
-      font-family: 'Courier New', monospace;
-      font-size: 10px; font-weight: 600; letter-spacing: 0.05em;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 10px; font-weight: 400;
       color: rgba(255,255,255,0.6);
     }
     .sim-run-board__badge {
-      font-family: 'Courier New', monospace; font-size: 9px;
+      font-family: 'Space Grotesk', sans-serif; font-weight: 400; font-size: 9px;
       background: rgba(0,230,118,0.1);
       color: #00e676;
       border: 1px solid rgba(0,230,118,0.3);
@@ -2384,7 +2384,7 @@
     }
     .sim-event-line {
       display: flex; align-items: center; gap: 4px;
-      font-family: 'Courier New', monospace; font-size: 9px;
+      font-family: 'Space Grotesk', sans-serif; font-weight: 400; font-size: 9px;
       white-space: nowrap; overflow: hidden;
     }
     .sim-event-check { color: #00e676; flex-shrink: 0; }
@@ -2396,7 +2396,7 @@
       text-align: center; padding-top: 12px;
       border-top: 1px solid rgba(255,255,255,0.07); width: 100%;
     }
-    .sim-panel__step  { font-size: 11px; font-weight: 700; color: rgba(242,108,56,0.65); letter-spacing: 0.14em; font-family: 'Courier New', monospace; }
+    .sim-panel__step  { font-size: 11px; font-weight: 700; color: rgba(242,108,56,0.65); font-family: 'Space Grotesk', sans-serif; }
     .sim-panel__label { font-size: 16px; font-weight: 900; color: rgba(255,255,255,0.92); letter-spacing: 0.01em; }
     .sim-panel__desc  { font-size: 12px; color: rgba(255,255,255,0.4); line-height: 1.45; }
     @media (max-width: 600px) {
@@ -4501,11 +4501,10 @@
 
     panels.forEach(function (p, i) {
       var isActive = i === idx;
-      var tiltY    = i < idx ? -22 : i > idx ? 22 : 0;
       gsap.to(p, {
         z:         isActive ? 55 : -35,
         scale:     isActive ? 1.06 : 0.91,
-        rotationY: tiltY,
+        rotationY: 0,
         rotationX: 0,
         opacity:   isActive ? 1 : 0.25,
         filter:    'blur(0px)',
