@@ -4387,6 +4387,8 @@
   }).observe(p2, { attributes: true, attributeFilter: ['class'] });
 })();
 
+var eventLogStop = null;
+
 // Panel 3: scrolling event log — new automation event appears every second
 (function initEventLog() {
   if (typeof gsap === 'undefined') return;
@@ -4443,6 +4445,8 @@
   function stop() {
     if (timer) { clearInterval(timer); timer = null; }
   }
+
+  eventLogStop = stop;
 
   new MutationObserver(function() {
     p3.classList.contains('is-active') ? start() : stop();
@@ -4576,7 +4580,10 @@
     setBadge(runBadge, '● Active', ACTIVE_BADGE);
     setActive(2);
     if (!isPaused) phaseTimer = setTimeout(function () {
-      // 2.5s story-complete hold, then dim all panels and restart
+      // Panel 3 finished — stop event log and mark done
+      if (eventLogStop) eventLogStop();
+      setBadge(runBadge, '✓ Done', ACTIVE_BADGE);
+      // 6s complete-story hold, then fade to black and restart
       if (!isPaused) phaseTimer = setTimeout(function () {
         gsap.to(panels, { opacity: 0, duration: 0.8, ease: 'power2.in', onComplete: function () {
           phaseTimer = setTimeout(function () {
