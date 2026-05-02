@@ -2173,7 +2173,6 @@
     .sim-showcase { width: 100%; max-width: 720px; }
     .sim-panels {
       display: flex; align-items: stretch; width: 100%; gap: 0;
-      perspective: 1200px; perspective-origin: 50% 50%;
     }
     .sim-panel {
       flex: 1; min-width: 0;
@@ -4501,8 +4500,7 @@
     panels.forEach(function (p, i) {
       var isActive = i === idx;
       gsap.to(p, {
-        z:         isActive ? 55 : -35,
-        scale:     isActive ? 1.06 : 0.91,
+        scale:     1,
         rotationY: 0,
         rotationX: 0,
         opacity:   1,
@@ -4572,7 +4570,6 @@
     var ap = panels[activeIdx];
     if (ap && !breatheTween) {
       breatheTween = gsap.to(ap, {
-        scale: 1.13, z: 70,
         duration: 1.4, ease: 'sine.inOut',
         yoyo: true, repeat: -1, overwrite: 'auto'
       });
@@ -4584,7 +4581,7 @@
     isPaused = false;
     if (breatheTween) { breatheTween.kill(); breatheTween = null; }
     var ap = panels[activeIdx];
-    if (ap) gsap.to(ap, { scale: 1.06, z: 55, duration: 0.5, ease: 'power2.out', overwrite: 'auto' });
+    if (ap) gsap.to(ap, { scale: 1, duration: 0.5, ease: 'power2.out', overwrite: 'auto' });
     var idx = activeIdx;
     if (ap) ap.classList.remove('is-active');
     setTimeout(function () { advanceToPhase(idx); }, 60);
