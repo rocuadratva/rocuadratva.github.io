@@ -2496,21 +2496,21 @@
                 <div class="sim-panel__visual">
                   <div class="sim-fix-board">
                     <div class="sim-fix-board__header">
-                      <span class="sim-fix-board__title">Lean Process</span>
+                      <span class="sim-fix-board__title">Process Rebuilt</span>
                       <span class="sim-fix-board__badge" id="sim-fix-badge">&#x25CF; Pending</span>
                     </div>
                     <div class="sim-fix-board__body">
                       <div class="sim-fix-row">
-                        <span class="sim-fix-old">by hand</span>
-                        <span class="sim-fix-new">→ CRM</span>
+                        <span class="sim-fix-old">leads by hand</span>
+                        <span class="sim-fix-new">→ CRM logged</span>
                       </div>
                       <div class="sim-fix-row">
-                        <span class="sim-fix-old">follow-ups</span>
-                        <span class="sim-fix-new">→ auto</span>
+                        <span class="sim-fix-old">email follow-ups</span>
+                        <span class="sim-fix-new">→ scheduled</span>
                       </div>
                       <div class="sim-fix-row">
-                        <span class="sim-fix-old">rebuilt</span>
-                        <span class="sim-fix-new">→ built</span>
+                        <span class="sim-fix-old">weekly reports</span>
+                        <span class="sim-fix-new">→ auto-generated</span>
                       </div>
                     </div>
                   </div>
@@ -4392,14 +4392,14 @@
   if (!p3 || !log) return;
 
   var EVENTS = [
-    ['Lead logged',    '→ CRM'    ],
-    ['Follow-up sent', '→ client' ],
-    ['Report built',   '→ Drive'  ],
-    ['Lead logged',    '→ CRM'    ],
-    ['Follow-up',      '→ auto'   ],
-    ['Report',         '→ sent'   ],
-    ['Lead logged',    '→ CRM'    ],
-    ['Follow-up sent', '→ client' ],
+    ['Lead logged',        '→ CRM'       ],
+    ['Follow-up email',    '→ sent'      ],
+    ['Report generated',   '→ Drive'     ],
+    ['Lead logged',        '→ CRM'       ],
+    ['Follow-up email',    '→ sent'      ],
+    ['Report generated',   '→ Drive'     ],
+    ['Lead logged',        '→ CRM'       ],
+    ['Follow-up email',    '→ sent'      ],
   ];
 
   var MAX   = 3;      // max lines visible at once
