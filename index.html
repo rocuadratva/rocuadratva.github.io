@@ -4578,9 +4578,11 @@
     if (!isPaused) phaseTimer = setTimeout(function () {
       // 2.5s story-complete hold, then dim all panels and restart
       if (!isPaused) phaseTimer = setTimeout(function () {
-        gsap.to(panels, { opacity: 0.2, duration: 0.4, ease: 'power2.in', onComplete: function () {
-          gsap.to(panels, { opacity: 1, duration: 0.3, ease: 'power2.out' });
-          if (!isPaused) phaseTimer = setTimeout(phase1, 300);
+        gsap.to(panels, { opacity: 0, duration: 0.8, ease: 'power2.in', onComplete: function () {
+          phaseTimer = setTimeout(function () {
+            gsap.to(panels, { opacity: 1, duration: 0.6, ease: 'power2.out' });
+            if (!isPaused) phaseTimer = setTimeout(phase1, 500);
+          }, 400);
         }});
       }, 2500);
     }, 4500);
