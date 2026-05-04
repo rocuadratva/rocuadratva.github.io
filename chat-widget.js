@@ -53,14 +53,22 @@
     return tz.replace(/_/g, ' ');
   }
 
-  function formatSlot(iso, tz) {
+  function formatSlot(val, tz) {
     try {
-      return new Date(iso).toLocaleString('en-US', {
+      var d;
+      if (typeof val === 'number') {
+        // Unix timestamp: seconds if < 1e10, else milliseconds
+        d = new Date(val < 1e10 ? val * 1000 : val);
+      } else {
+        d = new Date(val);
+      }
+      if (isNaN(d.getTime())) return String(val);
+      return d.toLocaleString('en-US', {
         timeZone: tz || 'Asia/Manila',
         weekday: 'short', month: 'short', day: 'numeric',
         hour: 'numeric', minute: '2-digit', hour12: true
       });
-    } catch (e) { return iso; }
+    } catch (e) { return String(val); }
   }
 
   function pad(n) { return n < 10 ? '0' + n : '' + n; }
@@ -341,6 +349,7 @@
       })
         .then(function (res) { return res.json(); })
         .then(function (data) {
+          console.log('[chat-widget] check_slots response:', JSON.stringify(data));
           setWaiting(false);
           var slots = Array.isArray(data.slots) && data.slots.length ? data.slots : null;
           if (!slots) { showDatePicker(); return; }
