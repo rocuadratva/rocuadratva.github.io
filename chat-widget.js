@@ -228,7 +228,7 @@
 
   /* ── Flow ── */
   function startFlow() {
-    speakMsg('👋 Hi! I’m Roc, Raphael’s AI appointment setter — built with n8n + GHL. No forms, no back-and-forth. Just pick what you need and we’ll handle the rest.').then(function () {
+    speakMsg('👋 Hi! I\'m Roc, Raphael\'s AI appointment setter — built with n8n + GHL. No forms, no back-and-forth. Just pick what you need and we\'ll handle the rest.').then(function () {
       showIntentOptions();
     });
   }
@@ -256,22 +256,22 @@
 
   function askName() {
     state.step = 'name';
-    speakMsg('Great! What’s your full name?').then(function () {
+    speakMsg('Great! What\'s your full name?').then(function () {
       showInput('Your full name...');
     });
   }
 
   function askEmail() {
-    state.step = ‘email’;
-    speakMsg(‘Nice to meet you, ‘ + state.name + ‘! What’s your email address?’).then(function () {
-      showInput(‘your@email.com’);
+    state.step = 'email';
+    speakMsg('Nice to meet you, ' + state.name + '! What\'s your email address?').then(function () {
+      showInput('your@email.com');
     });
   }
 
   function askBookingNumber() {
-    state.step = ‘booking-number’;
-    speakMsg(‘Please provide your 6-digit booking number.’).then(function () {
-      showInput(‘e.g. 482910’);
+    state.step = 'booking-number';
+    speakMsg('Please provide your 6-digit booking number.').then(function () {
+      showInput('e.g. 482910');
     });
   }
 
@@ -283,9 +283,9 @@
     if (!detected) detected = 'Asia/Manila';
     state.timezone = detected;
     speakMsg('I detected your timezone as ' + getTzLabel(detected) + '. Is that correct?').then(function () {
-      renderOptions(['✅ Yes, that’s correct', '🌍 Choose a different timezone'], function (label) {
+      renderOptions(['✅ Yes, that\'s correct', '🌍 Choose a different timezone'], function (label) {
         if (label.indexOf('Yes') !== -1) {
-          appendMsg('Yes, that’s correct', 'user');
+          appendMsg('Yes, that\'s correct', 'user');
           askSlot();
         } else {
           appendMsg('Choose a different timezone', 'user');
@@ -455,23 +455,23 @@
     setWaiting(true);
 
     var payload;
-    if (state.intent === ‘book’) {
-      payload = { intent: ‘book’, name: state.name, email: state.email, slot: state.slot };
-    } else if (state.intent === ‘cancel’) {
-      payload = { intent: ‘cancel’, bookingNumber: state.bookingNumber };
+    if (state.intent === 'book') {
+      payload = { intent: 'book', name: state.name, email: state.email, slot: state.slot };
+    } else if (state.intent === 'cancel') {
+      payload = { intent: 'cancel', bookingNumber: state.bookingNumber };
     } else {
-      payload = { intent: ‘reschedule’, bookingNumber: state.bookingNumber, slot: state.slot };
+      payload = { intent: 'reschedule', bookingNumber: state.bookingNumber, slot: state.slot };
     }
 
     fetch(WEBHOOK_URL, {
-      method: ‘POST’,
-      headers: { ‘Content-Type’: ‘application/json’ },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     })
       .then(function (res) { return res.json(); })
       .then(function (data) {
         setWaiting(false);
-        speakMsgRich(data.reply || ‘All done! You’ll receive a confirmation shortly.’).then(function () {
+        speakMsgRich(data.reply || 'All done! You\'ll receive a confirmation shortly.').then(function () {
           return speakMsg('Need anything else?');
         }).then(function () {
           showIntentOptions();
@@ -492,23 +492,23 @@
     input.value = '';
     appendMsg(text, 'user');
 
-    if (state.step === ‘name’) {
+    if (state.step === 'name') {
       state.name = text;
       askEmail();
-    } else if (state.step === ‘email’) {
-      if (!text.includes(‘@’)) {
-        appendMsg(‘That doesn’t look like a valid email. Please try again.’, ‘ai’);
+    } else if (state.step === 'email') {
+      if (!text.includes('@')) {
+        appendMsg('That doesn\'t look like a valid email. Please try again.', 'ai');
         return;
       }
       state.email = text.toLowerCase();
       askTimezone();
-    } else if (state.step === ‘booking-number’) {
+    } else if (state.step === 'booking-number') {
       if (!/^\d{6}$/.test(text)) {
-        appendMsg(‘Please enter a valid 6-digit booking number.’, ‘ai’);
+        appendMsg('Please enter a valid 6-digit booking number.', 'ai');
         return;
       }
       state.bookingNumber = text;
-      if (state.intent === ‘reschedule’) {
+      if (state.intent === 'reschedule') {
         askTimezone();
       } else {
         askCancelConfirm();
