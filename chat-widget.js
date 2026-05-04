@@ -355,9 +355,10 @@
           if (!slots) { showDatePicker(); return; }
 
           var slotMap = {};
-          var labels = slots.slice(0, 5).map(function (iso) {
-            var label = formatSlot(iso, state.timezone);
-            slotMap[label] = iso;
+          var labels = slots.slice(0, 5).map(function (slot) {
+            var isoVal = (slot && slot.iso) ? slot.iso : slot;
+            var label = (slot && slot.label) ? slot.label : formatSlot(isoVal, state.timezone);
+            slotMap[label] = isoVal;
             return label;
           });
           labels.push('🕐 None of these work');
