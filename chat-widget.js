@@ -351,8 +351,13 @@
         .then(function (data) {
           console.log('[chat-widget] check_slots response:', JSON.stringify(data));
           setWaiting(false);
-          var slots = Array.isArray(data.slots) && data.slots.length ? data.slots : null;
-          if (!slots) { showDatePicker(); return; }
+          var now = Date.now();
+          var allSlots = Array.isArray(data.slots) ? data.slots : [];
+          var slots = allSlots.filter(function (slot) {
+            var isoVal = (slot && slot.iso) ? slot.iso : slot;
+            return new Date(isoVal).getTime() > now;
+          });
+          if (!slots.length) { showDatePicker(); return; }
 
           var slotMap = {};
           var labels = slots.slice(0, 5).map(function (slot) {
