@@ -12,7 +12,7 @@
     sessionStorage.setItem('rc_chat_sid', sessionId);
   }
 
-  var state = { open: false, waiting: false, step: 'intent', intent: '', name: '', email: '', slot: '', timezone: '' };
+  var state = { open: false, waiting: false, step: 'intent', intent: '', name: '', email: '', slot: '', timezone: '', bookingNumber: '' };
 
   var TIMEZONES = [
     { label: 'UTC−10 · Hawaii',                 value: 'Pacific/Honolulu' },
@@ -104,6 +104,7 @@
     '.rc-tz-select{width:100%;background:#2A2A2A;border:1px solid rgba(255,255,255,.15);border-radius:8px;color:#fff;font-family:inherit;font-size:13px;padding:9px 12px;outline:none;cursor:pointer;-webkit-appearance:none;appearance:none}',
     '.rc-tz-select:focus{border-color:#F26C38}',
     '.rc-tz-select option{background:#2A2A2A;color:#fff}',
+    '.rc-booking-num{font-weight:700;color:#F26C38;font-size:15px}',
     '@media(max-width:420px){#rc-panel{width:calc(100vw - 32px);right:-8px}}'
   ].join('');
   document.head.appendChild(style);
@@ -155,6 +156,14 @@
     scrollBottom();
   }
 
+  function appendMsgRich(text) {
+    var div = document.createElement('div');
+    div.className = 'rc-msg rc-msg--ai';
+    div.innerHTML = text.replace(/\b(\d{6})\b/g, '<strong class="rc-booking-num">$1</strong>');
+    messages.insertBefore(div, typing);
+    scrollBottom();
+  }
+
   /* typing delay before each of Roc's messages — scales with length, max 1.6s */
   function speakMsg(text) {
     return new Promise(function (resolve) {
@@ -164,6 +173,19 @@
       setTimeout(function () {
         typing.classList.remove('rc-show');
         appendMsg(text, 'ai');
+        resolve();
+      }, delay);
+    });
+  }
+
+  function speakMsgRich(text) {
+    return new Promise(function (resolve) {
+      typing.classList.add('rc-show');
+      scrollBottom();
+      var delay = Math.min(400 + text.length * 14, 1600);
+      setTimeout(function () {
+        typing.classList.remove('rc-show');
+        appendMsgRich(text);
         resolve();
       }, delay);
     });
@@ -213,7 +235,7 @@
 
   function showIntentOptions() {
     state.step = 'intent';
-    state.intent = ''; state.name = ''; state.email = ''; state.slot = ''; state.timezone = '';
+    state.intent = ''; state.name = ''; state.email = ''; state.slot = ''; state.timezone = ''; state.bookingNumber = '';
     hideInput();
     renderOptions(['📅 Book a Call', '❌ Cancel Appointment', '🔄 Reschedule'], function (label) {
       if (label.indexOf('Book') !== -1) {
@@ -223,11 +245,11 @@
       } else if (label.indexOf('Cancel') !== -1) {
         state.intent = 'cancel';
         appendMsg('Cancel Appointment', 'user');
-        askEmail();
+        askBookingNumber();
       } else {
         state.intent = 'reschedule';
         appendMsg('Reschedule', 'user');
-        askEmail();
+        askBookingNumber();
       }
     });
   }
@@ -240,12 +262,16 @@
   }
 
   function askEmail() {
-    state.step = 'email';
-    var prompt = state.intent === 'book'
-      ? 'Nice to meet you, ' + state.name + '! What’s your email address?'
-      : 'What’s the email address on your appointment?';
-    speakMsg(prompt).then(function () {
-      showInput('your@email.com');
+    state.step = ‘email’;
+    speakMsg(‘Nice to meet you, ‘ + state.name + ‘! What’s your email address?’).then(function () {
+      showInput(‘your@email.com’);
+    });
+  }
+
+  function askBookingNumber() {
+    state.step = ‘booking-number’;
+    speakMsg(‘Please provide your 6-digit booking number.’).then(function () {
+      showInput(‘e.g. 482910’);
     });
   }
 
@@ -311,7 +337,7 @@
       fetch(WEBHOOK_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ intent: 'get_slots', sessionId: sessionId, timezone: state.timezone })
+        body: JSON.stringify({ intent: 'check_slots' })
       })
         .then(function (res) { return res.json(); })
         .then(function (data) {
@@ -410,7 +436,7 @@
   function askCancelConfirm() {
     state.step = 'cancel-confirm';
     hideInput();
-    speakMsg('Ready to cancel the appointment linked to ' + state.email + '?').then(function () {
+    speakMsg('Ready to cancel booking number ' + state.bookingNumber + '?').then(function () {
       renderOptions(['✔ Yes, cancel it', '← No, go back'], function (label) {
         if (label.indexOf('Yes') !== -1) {
           appendMsg('Yes, cancel it', 'user');
@@ -428,19 +454,24 @@
     hideInput();
     setWaiting(true);
 
-    var payload = { sessionId: sessionId, intent: state.intent, email: state.email, timezone: state.timezone };
-    if (state.intent === 'book') { payload.name = state.name; payload.slot = state.slot; }
-    if (state.intent === 'reschedule') { payload.slot = state.slot; }
+    var payload;
+    if (state.intent === ‘book’) {
+      payload = { intent: ‘book’, name: state.name, email: state.email, slot: state.slot };
+    } else if (state.intent === ‘cancel’) {
+      payload = { intent: ‘cancel’, bookingNumber: state.bookingNumber };
+    } else {
+      payload = { intent: ‘reschedule’, bookingNumber: state.bookingNumber, slot: state.slot };
+    }
 
     fetch(WEBHOOK_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: ‘POST’,
+      headers: { ‘Content-Type’: ‘application/json’ },
       body: JSON.stringify(payload)
     })
       .then(function (res) { return res.json(); })
       .then(function (data) {
         setWaiting(false);
-        speakMsg(data.reply || 'All done! You’ll receive a confirmation shortly.').then(function () {
+        speakMsgRich(data.reply || ‘All done! You’ll receive a confirmation shortly.’).then(function () {
           return speakMsg('Need anything else?');
         }).then(function () {
           showIntentOptions();
@@ -461,16 +492,23 @@
     input.value = '';
     appendMsg(text, 'user');
 
-    if (state.step === 'name') {
+    if (state.step === ‘name’) {
       state.name = text;
       askEmail();
-    } else if (state.step === 'email') {
-      if (!text.includes('@')) {
-        appendMsg('That doesn’t look like a valid email. Please try again.', 'ai');
+    } else if (state.step === ‘email’) {
+      if (!text.includes(‘@’)) {
+        appendMsg(‘That doesn’t look like a valid email. Please try again.’, ‘ai’);
         return;
       }
       state.email = text.toLowerCase();
-      if (state.intent === 'book' || state.intent === 'reschedule') {
+      askTimezone();
+    } else if (state.step === ‘booking-number’) {
+      if (!/^\d{6}$/.test(text)) {
+        appendMsg(‘Please enter a valid 6-digit booking number.’, ‘ai’);
+        return;
+      }
+      state.bookingNumber = text;
+      if (state.intent === ‘reschedule’) {
         askTimezone();
       } else {
         askCancelConfirm();
