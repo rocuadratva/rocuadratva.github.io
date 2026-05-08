@@ -12,7 +12,7 @@
     sessionStorage.setItem('rc_chat_sid', sessionId);
   }
 
-  var state = { open: false, waiting: false, step: 'intent', intent: '', name: '', email: '', slot: '', timezone: '', bookingNumber: '' };
+  var state = { open: false, waiting: false, step: 'intent', intent: '', name: '', email: '', slot: '', timezone: '', bookingNumber: '', details: '' };
 
   var TIMEZONES = [
     { label: 'UTC−10 · Hawaii',                 value: 'Pacific/Honolulu' },
@@ -243,7 +243,7 @@
 
   function showIntentOptions() {
     state.step = 'intent';
-    state.intent = ''; state.name = ''; state.email = ''; state.slot = ''; state.timezone = ''; state.bookingNumber = '';
+    state.intent = ''; state.name = ''; state.email = ''; state.slot = ''; state.timezone = ''; state.bookingNumber = ''; state.details = '';
     hideInput();
     renderOptions(['📅 Book a Call', '❌ Cancel Appointment', '🔄 Reschedule'], function (label) {
       if (label.indexOf('Book') !== -1) {
@@ -377,7 +377,7 @@
               }
               state.slot = slotMap[label];
               appendMsg(label, 'user');
-              confirmAndSubmit();
+              askDetails();
             });
           });
         })
@@ -439,7 +439,7 @@
           pad(selectedDay.getMonth() + 1) + '-' +
           pad(selectedDay.getDate()) + 'T' +
           pad(t.hour) + ':00:00';
-        confirmAndSubmit();
+        askDetails();
       });
       container.appendChild(btn);
     });
@@ -464,6 +464,13 @@
     });
   }
 
+  function askDetails() {
+    state.step = 'details';
+    speakMsg('Briefly, what\'s this call about? (optional — press Enter to skip)').then(function () {
+      showInput('e.g. Discovery call about automation...');
+    });
+  }
+
   function confirmAndSubmit() {
     state.step = 'done';
     hideInput();
@@ -471,7 +478,7 @@
 
     var payload;
     if (state.intent === 'book') {
-      payload = { intent: 'book', name: state.name, email: state.email, slot: state.slot };
+      payload = { intent: 'book', name: state.name, email: state.email, slot: state.slot, details: state.details };
     } else if (state.intent === 'cancel') {
       payload = { intent: 'cancel', bookingNumber: state.bookingNumber };
     } else {
@@ -503,9 +510,10 @@
   /* ── Text input handler (name + email only) ── */
   function handleSubmit() {
     var text = input.value.trim();
-    if (!text || state.waiting) return;
+    if (state.waiting) return;
+    if (!text && state.step !== 'details') return;
     input.value = '';
-    appendMsg(text, 'user');
+    if (text) appendMsg(text, 'user');
 
     if (state.step === 'name') {
       state.name = text;
@@ -517,6 +525,9 @@
       }
       state.email = text.toLowerCase();
       askTimezone();
+    } else if (state.step === 'details') {
+      state.details = text;
+      confirmAndSubmit();
     } else if (state.step === 'booking-number') {
       if (!/^\d{6}$/.test(text)) {
         appendMsg('Please enter a valid 6-digit booking number.', 'ai');
